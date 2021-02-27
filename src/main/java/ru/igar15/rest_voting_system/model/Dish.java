@@ -2,17 +2,17 @@ package ru.igar15.rest_voting_system.model;
 
 public class Dish extends AbstractNamedEntity{
 
-    private long price;
+    private int price;
     private Menu menu;
 
     public Dish() {
     }
 
-    public long getPrice() {
+    public int getPrice() {
         return price;
     }
 
-    public void setPrice(long price) {
+    public void setPrice(int price) {
         this.price = price;
     }
 

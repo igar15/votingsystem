@@ -1,22 +1,22 @@
 package ru.igar15.rest_voting_system.model;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 public class Vote extends AbstractBaseEntity {
 
-    private LocalDateTime dateTime;
+    private LocalDate date;
     private User user;
     private Restaurant restaurant;
 
     public Vote() {
     }
 
-    public LocalDateTime getDateTime() {
-        return dateTime;
+    public LocalDate getDate() {
+        return date;
     }
 
-    public void setDateTime(LocalDateTime dateTime) {
-        this.dateTime = dateTime;
+    public void setDate(LocalDate date) {
+        this.date = date;
     }
 
     public User getUser() {

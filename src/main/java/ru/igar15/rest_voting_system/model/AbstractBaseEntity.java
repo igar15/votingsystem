@@ -2,16 +2,16 @@ package ru.igar15.rest_voting_system.model;
 
 public abstract class AbstractBaseEntity {
 
-    private Long id;
+    private Integer id;
 
     public AbstractBaseEntity() {
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 }
