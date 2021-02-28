@@ -16,6 +16,11 @@ public class Dish extends AbstractNamedEntity{
     public Dish() {
     }
 
+    public Dish(Integer id, String name, int price) {
+        super(id, name);
+        this.price = price;
+    }
+
     public int getPrice() {
         return price;
     }
@@ -30,5 +35,14 @@ public class Dish extends AbstractNamedEntity{
 
     public void setMenu(Menu menu) {
         this.menu = menu;
+    }
+
+    @Override
+    public String toString() {
+        return "Dish{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", price='" + price +
+                '}';
     }
 }

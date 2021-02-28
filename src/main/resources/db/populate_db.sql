@@ -16,8 +16,8 @@ VALUES ('USER', 100000),
        ('ADMIN', 100001);
 
 INSERT INTO restaurants (name, address)
-VALUES ('Rest_1', 'Rest_1_Address'),
-       ('Rest_2', 'Rest_2_Address');
+VALUES ('Rest_2', 'Rest_2_Address'),
+       ('Rest_1', 'Rest_1_Address');
 
 INSERT INTO menus (restaurant_id, date)
 VALUES (100003, '2021-02-25'),
@@ -26,8 +26,8 @@ VALUES (100003, '2021-02-25'),
        (100004, '2021-02-27');
 
 INSERT INTO dishes (menu_id, name, price)
-VALUES (100005, 'Rest_1_25-02_Dish_1', 250),
-       (100005, 'Rest_1_25-02_Dish_2', 300),
+VALUES (100005, 'Rest_1_25-02_Dish_2', 250),
+       (100005, 'Rest_1_25-02_Dish_1', 300),
        (100006, 'Rest_1_26-02_Dish_1', 350),
        (100006, 'Rest_1_26-02_Dish_2', 400),
        (100007, 'Rest_2_26-02_Dish_1', 200),

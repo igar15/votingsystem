@@ -38,8 +38,8 @@ public class MenuServiceTest extends AbstractServiceTest {
 
     @Test
     public void delete() {
-        service.delete(REST1_MENU1_ID, RESTAURANT1_ID);
-        assertThrows(NotFoundException.class, () -> service.get(REST1_MENU1_ID, RESTAURANT1_ID));
+        service.delete(MENU1_ID, RESTAURANT1_ID);
+        assertThrows(NotFoundException.class, () -> service.get(MENU1_ID, RESTAURANT1_ID));
     }
 
     @Test
@@ -49,13 +49,13 @@ public class MenuServiceTest extends AbstractServiceTest {
 
     @Test
     public void deleteFromAnotherRestaurant() {
-        assertThrows(NotFoundException.class, () -> service.delete(REST2_MENU1_ID, RESTAURANT1_ID));
+        assertThrows(NotFoundException.class, () -> service.delete(MENU1_ID, RESTAURANT2_ID));
     }
 
     @Test
     public void get() {
-        Menu menu = service.get(REST1_MENU1_ID, RESTAURANT1_ID);
-        MENU_MATCHER.assertMatch(menu, rest1Menu1);
+        Menu menu = service.get(MENU1_ID, RESTAURANT1_ID);
+        MENU_MATCHER.assertMatch(menu, menu1);
     }
 
     @Test
@@ -65,24 +65,24 @@ public class MenuServiceTest extends AbstractServiceTest {
 
     @Test
     public void getFromAnotherRestaurant() {
-        assertThrows(NotFoundException.class, () -> service.get(REST2_MENU1_ID, RESTAURANT1_ID));
+        assertThrows(NotFoundException.class, () -> service.get(MENU1_ID, RESTAURANT2_ID));
     }
 
     @Test
     public void getAll() {
         List<Menu> menus = service.getAll(RESTAURANT1_ID);
-        MENU_MATCHER.assertMatch(menus, rest1Menu2, rest1Menu1);
+        MENU_MATCHER.assertMatch(menus, menu2, menu1);
     }
 
     @Test
     public void update() {
         Menu updated = getUpdated();
         service.update(updated, RESTAURANT1_ID);
-        MENU_MATCHER.assertMatch(service.get(REST1_MENU1_ID, RESTAURANT1_ID), getUpdated());
+        MENU_MATCHER.assertMatch(service.get(MENU1_ID, RESTAURANT1_ID), getUpdated());
     }
 
     @Test
-    public void updateForAnotherRestaurant() {
-        assertThrows(NotFoundException.class, () -> service.update(rest1Menu1, RESTAURANT2_ID));
+    public void updateFromAnotherRestaurant() {
+        assertThrows(NotFoundException.class, () -> service.update(menu1, RESTAURANT2_ID));
     }
 }
