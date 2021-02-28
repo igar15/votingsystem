@@ -38,7 +38,7 @@ public class MenuService {
     }
 
     public List<Menu> getAll(int restaurantId) {
-        return menuRepository.findAllByRestaurant_Id(restaurantId);
+        return menuRepository.findAllByRestaurant_IdOrderByDateDesc(restaurantId);
     }
 
     public void update(Menu menu, int restaurantId) {
