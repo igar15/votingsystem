@@ -78,7 +78,6 @@ public class AppConfig {
         return dataSourceInitializer;
     }
 
-
     private Properties getHibernateProperties() {
         Properties properties = new Properties();
         properties.setProperty("hibernate.format_sql", environment.getProperty("hibernate.format_sql"));
