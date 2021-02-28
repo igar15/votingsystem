@@ -1,4 +1,4 @@
-package ru.igar15.rest_voting_system.service;
+package ru.igar15.rest_voting_system;
 
 import ru.igar15.rest_voting_system.TestMatcher;
 import ru.igar15.rest_voting_system.model.Role;

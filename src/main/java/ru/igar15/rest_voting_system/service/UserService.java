@@ -11,37 +11,37 @@ import java.util.List;
 @Service
 public class UserService {
 
-    private final UserRepository userRepository;
+    private final UserRepository repository;
 
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public UserService(UserRepository repository) {
+        this.repository = repository;
     }
 
     public User create(User user) {
         Assert.notNull(user, "user must not be null");
-        return userRepository.save(user);
+        return repository.save(user);
     }
 
     public void delete(int id) {
-        User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException("Not found user with id=" + id));
-        userRepository.delete(user);
+        User user = get(id);
+        repository.delete(user);
     }
 
     public User get(int id) {
-        return userRepository.findById(id).orElseThrow(() -> new NotFoundException("Not found user with id=" + id));
+        return repository.findById(id).orElseThrow(() -> new NotFoundException("Not found user with id=" + id));
     }
 
     public User getByEmail(String email) {
-        return userRepository.findByEmail(email).orElseThrow(() -> new NotFoundException("Not found user with email=" + email));
+        return repository.findByEmail(email).orElseThrow(() -> new NotFoundException("Not found user with email=" + email));
     }
 
     public List<User> getAll() {
-        return userRepository.findAllByOrderByNameAscEmailAsc();
+        return repository.findAllByOrderByNameAscEmailAsc();
     }
 
     public void update(User user) {
         Assert.notNull(user, "user must not be null");
-        get(user.getId());
-        userRepository.save(user);
+        get(user.id());
+        repository.save(user);
     }
 }

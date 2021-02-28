@@ -16,7 +16,7 @@ import ru.igar15.rest_voting_system.util.exception.NotFoundException;
 import java.util.List;
 
 import static org.junit.Assert.assertThrows;
-import static ru.igar15.rest_voting_system.service.UserTestData.*;
+import static ru.igar15.rest_voting_system.UserTestData.*;
 
 @ContextConfiguration(classes = AppConfig.class)
 @RunWith(SpringRunner.class)
@@ -24,61 +24,62 @@ import static ru.igar15.rest_voting_system.service.UserTestData.*;
 public class UserServiceTest {
 
     @Autowired
-    private UserService userService;
+    private UserService service;
 
     @Test
     public void create() {
-        User created = userService.create(getNew());
+        User created = service.create(getNew());
         int newId = created.id();
         User newUser = getNew();
         newUser.setId(newId);
         USER_MATCHER.assertMatch(created, newUser);
-        USER_MATCHER.assertMatch(userService.get(newId), newUser);
+        USER_MATCHER.assertMatch(service.get(newId), newUser);
     }
 
     @Test
     public void duplicateEmailCreate() {
-        assertThrows(DataAccessException.class, () -> userService.create(new User(null, "Duplicate", "user1@yandex.ru", "newPass", Role.USER)));
+        assertThrows(DataAccessException.class,
+                () -> service.create(new User(null, "Duplicate", "user1@yandex.ru", "newPass", Role.USER)));
     }
 
     @Test
     public void delete() {
-        userService.delete(USER1_ID);
-        assertThrows(NotFoundException.class, () -> userService.get(USER1_ID));
+        service.delete(USER1_ID);
+        assertThrows(NotFoundException.class, () -> service.get(USER1_ID));
     }
 
     @Test
     public void deleteNotFound() {
-        assertThrows(NotFoundException.class, () -> userService.delete(NOT_FOUND));
+        assertThrows(NotFoundException.class, () -> service.delete(NOT_FOUND));
     }
 
     @Test
     public void get() {
-        User user = userService.get(USER1_ID);
+        User user = service.get(USER1_ID);
         USER_MATCHER.assertMatch(user, user1);
     }
 
     @Test
     public void getNotFound() {
-        assertThrows(NotFoundException.class, () -> userService.get(NOT_FOUND));
+        assertThrows(NotFoundException.class, () -> service.get(NOT_FOUND));
     }
 
     @Test
     public void getByEmail() {
-        User user = userService.getByEmail("admin@gmail.com");
+        User user = service.getByEmail("admin@gmail.com");
         USER_MATCHER.assertMatch(user, admin);
     }
 
     @Test
     public void getAll() {
-        List<User> users = userService.getAll();
+        List<User> users = service.getAll();
         USER_MATCHER.assertMatch(users, admin, user1, user2);
     }
 
     @Test
     public void update() {
         User updated = getUpdated();
-        userService.update(updated);
-        USER_MATCHER.assertMatch(userService.get(USER1_ID), getUpdated());
+        service.update(updated);
+        USER_MATCHER.assertMatch(service.get(USER1_ID), getUpdated());
     }
 }
