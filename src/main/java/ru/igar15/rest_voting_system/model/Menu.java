@@ -42,7 +42,7 @@ public class Menu extends AbstractBaseEntity {
     public String toString() {
         return "Menu{" +
                 "id=" + id +
-                ", date='" + date +
+                ", date=" + date +
                 '}';
     }
 }

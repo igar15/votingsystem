@@ -41,8 +41,8 @@ public class Dish extends AbstractNamedEntity{
     public String toString() {
         return "Dish{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
-                ", price='" + price +
+                ", name=" + name +
+                ", price=" + price +
                 '}';
     }
 }
