@@ -26,9 +26,9 @@ public class VoteService {
         this.userRepository = userRepository;
     }
 
-    public Vote registerVote(int restaurantId, int userId) {
+    public Vote registerVote(int restaurantId, int userId, LocalTime time) {
         Optional<Vote> todayVote = voteRepository.findByDateAndUser_Id(LocalDate.now(), userId);
-        return todayVote.map(vote -> update(vote, restaurantId)).orElseGet(() -> create(restaurantId, userId));
+        return todayVote.map(vote -> update(vote, restaurantId, time)).orElseGet(() -> create(restaurantId, userId));
     }
 
     private Vote create(int restaurantId, int userId) {
@@ -40,8 +40,8 @@ public class VoteService {
         return voteRepository.save(vote);
     }
 
-    private Vote update(Vote vote, int restaurantId) {
-        if (isUpdateForbidden()) {
+    private Vote update(Vote vote, int restaurantId, LocalTime time) {
+        if (isUpdateForbidden(time)) {
             throw new VoteUpdateForbiddenException("It is too late to change your vote");
         }
         Restaurant restaurant = restaurantRepository.getOne(restaurantId);
@@ -49,7 +49,7 @@ public class VoteService {
         return voteRepository.save(vote);
     }
 
-    private boolean isUpdateForbidden() {
-        return LocalTime.now().isAfter(LocalTime.of(11, 0));
+    private boolean isUpdateForbidden(LocalTime time) {
+        return time.isAfter(LocalTime.of(11, 0));
     }
 }

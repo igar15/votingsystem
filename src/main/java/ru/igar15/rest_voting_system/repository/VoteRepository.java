@@ -1,5 +1,6 @@
 package ru.igar15.rest_voting_system.repository;
 
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,6 +13,7 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public interface VoteRepository extends JpaRepository<Vote, Integer> {
 
+    @EntityGraph(attributePaths = {"restaurant"})
     Optional<Vote> findByIdAndUser_Id(int id, int userId);
 
     Optional<Vote> findByDateAndUser_Id(LocalDate date, int userId);
