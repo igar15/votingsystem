@@ -8,6 +8,7 @@ import ru.igar15.rest_voting_system.repository.MenuRepository;
 import ru.igar15.rest_voting_system.repository.RestaurantRepository;
 import ru.igar15.rest_voting_system.util.exception.NotFoundException;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -39,6 +40,10 @@ public class MenuService {
 
     public List<Menu> getAll(int restaurantId) {
         return menuRepository.findAllByRestaurant_IdOrderByDateDesc(restaurantId);
+    }
+
+    public Menu getByDate(int restaurantId, LocalDate date) {
+        return menuRepository.findByRestaurant_IdAndDate(restaurantId, date).orElseThrow(() -> new NotFoundException("Not found menu with date=" + date));
     }
 
     public void update(Menu menu, int restaurantId) {

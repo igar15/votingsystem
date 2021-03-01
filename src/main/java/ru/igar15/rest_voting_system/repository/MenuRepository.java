@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.igar15.rest_voting_system.model.Menu;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,4 +16,6 @@ public interface MenuRepository extends JpaRepository<Menu, Integer> {
     Optional<Menu> findByIdAndRestaurant_Id(int id, int restaurantId);
 
     List<Menu> findAllByRestaurant_IdOrderByDateDesc(int restaurantId);
+
+    Optional<Menu> findByRestaurant_IdAndDate(int restaurantId, LocalDate date);
 }

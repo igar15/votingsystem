@@ -59,6 +59,17 @@ public class MenuServiceTest extends AbstractServiceTest {
     }
 
     @Test
+    public void getByDate() {
+        Menu menu = service.getByDate(RESTAURANT1_ID, LocalDate.of(2021, Month.FEBRUARY, 25));
+        MENU_MATCHER.assertMatch(menu, menu1);
+    }
+
+    @Test
+    public void getByDateNotFound() {
+        assertThrows(NotFoundException.class, () -> service.getByDate(RESTAURANT1_ID, LocalDate.of(2021, Month.FEBRUARY, 20)));
+    }
+
+    @Test
     public void getNotFound() {
         assertThrows(NotFoundException.class, () -> service.get(NOT_FOUND, RESTAURANT1_ID));
     }
