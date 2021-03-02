@@ -1,10 +1,7 @@
 package ru.igar15.rest_voting_system.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.*;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -21,7 +18,9 @@ import javax.sql.DataSource;
 import java.util.Properties;
 
 @Configuration
-@ComponentScan(basePackages = "ru.igar15.rest_voting_system")
+@ComponentScan(basePackages = "ru.igar15.rest_voting_system",
+        excludeFilters = {@ComponentScan.Filter(type = FilterType.REGEX, pattern = "ru.igar15.rest_voting_system.controller.*"),
+                          @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, value = WebConfig.class)})
 @PropertySource(value = "classpath:db/postgres.properties")
 @EnableTransactionManagement
 @EnableJpaRepositories(basePackages = "ru.igar15.rest_voting_system.repository")
