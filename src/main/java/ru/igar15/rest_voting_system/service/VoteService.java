@@ -26,13 +26,13 @@ public class VoteService {
         this.userRepository = userRepository;
     }
 
-    public Vote registerVote(int restaurantId, int userId, LocalTime time) {
-        Optional<Vote> todayVote = voteRepository.findByDateAndUser_Id(LocalDate.now(), userId);
-        return todayVote.map(vote -> update(vote, restaurantId, time)).orElseGet(() -> create(restaurantId, userId));
+    public Vote registerVote(int restaurantId, int userId, LocalDate date, LocalTime time) {
+        Optional<Vote> voteOptional = voteRepository.findByDateAndUser_Id(date, userId);
+        return voteOptional.map(vote -> update(vote, restaurantId, time)).orElseGet(() -> create(restaurantId, userId, date));
     }
 
-    private Vote create(int restaurantId, int userId) {
-        Vote vote = new Vote(LocalDate.now());
+    private Vote create(int restaurantId, int userId, LocalDate date) {
+        Vote vote = new Vote(date);
         Restaurant restaurant = restaurantRepository.getOne(restaurantId);
         User user = userRepository.getOne(userId);
         vote.setRestaurant(restaurant);

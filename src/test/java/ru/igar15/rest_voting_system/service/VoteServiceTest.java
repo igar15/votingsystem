@@ -6,12 +6,14 @@ import ru.igar15.rest_voting_system.model.Vote;
 import ru.igar15.rest_voting_system.repository.VoteRepository;
 import ru.igar15.rest_voting_system.util.exception.VoteUpdateForbiddenException;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.Month;
 
 import static org.junit.Assert.assertThrows;
-import static ru.igar15.rest_voting_system.RestaurantTestData.*;
+import static ru.igar15.rest_voting_system.RestaurantTestData.RESTAURANT1_ID;
+import static ru.igar15.rest_voting_system.RestaurantTestData.RESTAURANT2_ID;
 import static ru.igar15.rest_voting_system.UserTestData.USER1_ID;
-import static ru.igar15.rest_voting_system.VoteTestData.getNew;
 import static ru.igar15.rest_voting_system.VoteTestData.*;
 
 public class VoteServiceTest extends AbstractServiceTest {
@@ -23,29 +25,23 @@ public class VoteServiceTest extends AbstractServiceTest {
     private VoteRepository repository;
 
     @Test
-    public void registerNewVote() {
-        Vote created = service.registerVote(RESTAURANT1_ID, USER1_ID, LocalTime.now());
+    public void create() {
+        Vote created = service.registerVote(RESTAURANT1_ID, USER1_ID, LocalDate.now(), LocalTime.now());
         int newId = created.id();
         Vote newVote = getNew();
         newVote.setId(newId);
-        newVote.setRestaurant(restaurant1);
         VOTE_MATCHER.assertMatch(repository.findByIdAndUser_Id(newId, USER1_ID).get(), newVote);
     }
 
     @Test
-    public void updateVote() {
-        Vote created = service.registerVote(RESTAURANT1_ID, USER1_ID, BEFORE_ELEVEN);
-        int newId = created.id();
-        service.registerVote(RESTAURANT2_ID, USER1_ID, BEFORE_ELEVEN);
-        Vote expected = getNew();
-        expected.setId(newId);
-        expected.setRestaurant(restaurant2);
-        VOTE_MATCHER.assertMatch(repository.findByIdAndUser_Id(newId, USER1_ID).get(), expected);
+    public void update() {
+        service.registerVote(RESTAURANT2_ID, USER1_ID, LocalDate.of(2021, Month.FEBRUARY, 25), BEFORE_ELEVEN);
+        VOTE_MATCHER.assertMatch(repository.findByIdAndUser_Id(VOTE1_ID, USER1_ID).get(), getUpdated());
     }
 
     @Test
-    public void updateVoteTooLate() {
-        service.registerVote(RESTAURANT1_ID, USER1_ID, AFTER_ELEVEN);
-        assertThrows(VoteUpdateForbiddenException.class, () -> service.registerVote(RESTAURANT2_ID, USER1_ID, AFTER_ELEVEN));
+    public void updateFailed() {
+        assertThrows(VoteUpdateForbiddenException.class,
+                () -> service.registerVote(RESTAURANT2_ID, USER1_ID, LocalDate.of(2021, Month.FEBRUARY, 25), AFTER_ELEVEN));
     }
 }
