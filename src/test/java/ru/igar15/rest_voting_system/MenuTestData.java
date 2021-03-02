@@ -14,14 +14,14 @@ public class MenuTestData {
     public static final int MENU2_ID = START_SEQ + 6;
     public static final int NOT_FOUND = 10;
 
-    public static final Menu menu1 = new Menu(MENU1_ID, LocalDate.of(2021, Month.FEBRUARY, 25));
-    public static final Menu menu2 = new Menu(MENU2_ID, LocalDate.of(2021, Month.FEBRUARY, 26));
+    public static final Menu menu1 = new Menu(MENU1_ID, LocalDate.of(2021, Month.FEBRUARY, 25), true);
+    public static final Menu menu2 = new Menu(MENU2_ID, LocalDate.of(2021, Month.FEBRUARY, 26), true);
 
     public static Menu getNew() {
-        return new Menu(null, LocalDate.of(2021, Month.MARCH, 8));
+        return new Menu();
     }
 
     public static Menu getUpdated() {
-        return new Menu(MENU1_ID, LocalDate.of(2021, Month.MARCH, 9));
+        return new Menu(MENU1_ID, LocalDate.of(2021, Month.MARCH, 9), true);
     }
 }

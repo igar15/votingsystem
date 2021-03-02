@@ -8,7 +8,10 @@ import java.time.LocalDate;
 public class Menu extends AbstractBaseEntity {
 
     @Column(name = "date")
-    private LocalDate date;
+    private LocalDate date = LocalDate.now();
+
+    @Column(name = "published")
+    private boolean published = false;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id")
@@ -17,9 +20,10 @@ public class Menu extends AbstractBaseEntity {
     public Menu() {
     }
 
-    public Menu(Integer id, LocalDate date) {
+    public Menu(Integer id, LocalDate date, boolean published) {
         super(id);
         this.date = date;
+        this.published = published;
     }
 
     public LocalDate getDate() {
@@ -28,6 +32,14 @@ public class Menu extends AbstractBaseEntity {
 
     public void setDate(LocalDate date) {
         this.date = date;
+    }
+
+    public boolean isPublished() {
+        return published;
+    }
+
+    public void setPublished(boolean published) {
+        this.published = published;
     }
 
     public Restaurant getRestaurant() {

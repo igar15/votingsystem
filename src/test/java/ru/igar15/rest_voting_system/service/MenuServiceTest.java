@@ -33,7 +33,7 @@ public class MenuServiceTest extends AbstractServiceTest {
     @Test
     public void duplicateDateCreate() {
         assertThrows(DataAccessException.class,
-                () -> service.create(new Menu(null, LocalDate.of(2021, Month.FEBRUARY, 25)), RESTAURANT1_ID));
+                () -> service.create(new Menu(null, LocalDate.of(2021, Month.FEBRUARY, 25), false), RESTAURANT1_ID));
     }
 
     @Test
