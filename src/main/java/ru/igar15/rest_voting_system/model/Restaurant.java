@@ -3,11 +3,15 @@ package ru.igar15.rest_voting_system.model;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "restaurants")
 public class Restaurant extends AbstractNamedEntity {
 
+    @NotBlank
+    @Size(min = 10, max = 100)
     @Column(name = "address")
     private String address;
 

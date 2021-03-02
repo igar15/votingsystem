@@ -3,6 +3,10 @@ package ru.igar15.rest_voting_system.model;
 import org.springframework.util.CollectionUtils;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Collection;
 import java.util.Date;
 import java.util.EnumSet;
@@ -12,22 +16,28 @@ import java.util.Set;
 @Table(name = "users")
 public class User extends AbstractNamedEntity {
 
+    @Email
+    @NotBlank
+    @Size(max = 100)
     @Column(name = "email")
     private String email;
 
+    @NotBlank
+    @Size(min = 5, max = 100)
     @Column(name = "password")
     private String password;
 
     @Column(name = "enabled")
     private boolean enabled = true;
 
+    @NotNull
     @Column(name = "registered")
     private Date registered = new Date();
 
     @Enumerated(EnumType.STRING)
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
-    @Column(name = "role")
     @ElementCollection(fetch = FetchType.EAGER)
+    @Column(name = "role")
     private Set<Role> roles;
 
     public User() {

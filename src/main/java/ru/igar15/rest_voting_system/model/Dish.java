@@ -1,14 +1,18 @@
 package ru.igar15.rest_voting_system.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "dishes")
 public class Dish extends AbstractNamedEntity{
 
+    @Min(1)
     @Column(name = "price")
     private int price;
 
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "menu_id")
     private Menu menu;

@@ -1,18 +1,21 @@
 package ru.igar15.rest_voting_system.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "menus")
 public class Menu extends AbstractBaseEntity {
 
+    @NotNull
     @Column(name = "date")
     private LocalDate date = LocalDate.now();
 
     @Column(name = "published")
     private boolean published = false;
 
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id")
     private Restaurant restaurant;
