@@ -96,4 +96,12 @@ public class MenuServiceTest extends AbstractServiceTest {
     public void updateFromAnotherRestaurant() {
         assertThrows(NotFoundException.class, () -> service.update(menu1, RESTAURANT2_ID));
     }
+
+    @Test
+    public void changePublishedStatus() {
+        service.changePublishedStatus(MENU1_ID, RESTAURANT1_ID, false);
+        MENU_MATCHER.assertMatch(service.get(MENU1_ID, RESTAURANT1_ID), getChangedPublishedStatus(false));
+        service.changePublishedStatus(MENU1_ID, RESTAURANT1_ID, true);
+        MENU_MATCHER.assertMatch(service.get(MENU1_ID, RESTAURANT1_ID), getChangedPublishedStatus(true));
+    }
 }

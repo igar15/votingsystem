@@ -53,4 +53,10 @@ public class MenuService {
         menu.setRestaurant(restaurant);
         menuRepository.save(menu);
     }
+
+    public void changePublishedStatus(int id, int restaurantId, boolean published) {
+        Menu menu = get(id, restaurantId);
+        menu.setPublished(published);
+        menuRepository.save(menu);
+    }
 }

@@ -24,4 +24,8 @@ public class MenuTestData {
     public static Menu getUpdated() {
         return new Menu(MENU1_ID, LocalDate.of(2021, Month.MARCH, 9), true);
     }
+
+    public static Menu getChangedPublishedStatus(boolean published) {
+        return new Menu(MENU1_ID, LocalDate.of(2021, Month.FEBRUARY, 25), published);
+    }
 }
