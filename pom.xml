@@ -28,9 +28,9 @@
         <!--    Tests  -->
         <junit.version>4.13.2</junit.version>
         <assertj.version>3.19.0</assertj.version>
-        <springtest.version>5.3.3</springtest.version>
 
         <!--Spring Data JPA-->
+        <spring.version>5.3.4</spring.version>
         <springdatajpa.version>2.4.5</springdatajpa.version>
 
         <!--Spring Web MVC-->
@@ -169,7 +169,6 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
-            <version>${springtest.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -179,4 +178,16 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-framework-bom</artifactId>
+                <version>${spring.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 </project>
