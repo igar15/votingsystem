@@ -1,5 +1,7 @@
 package ru.igar15.rest_voting_system.service;
 
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -18,12 +20,14 @@ public class UserService {
         this.repository = repository;
     }
 
+    @CacheEvict(value = "users", allEntries = true)
     @Transactional
     public User create(User user) {
         Assert.notNull(user, "user must not be null");
         return repository.save(user);
     }
 
+    @CacheEvict(value = "users", allEntries = true)
     @Transactional
     public void delete(int id) {
         User user = get(id);
@@ -38,10 +42,12 @@ public class UserService {
         return repository.findByEmail(email).orElseThrow(() -> new NotFoundException("Not found user with email=" + email));
     }
 
+    @Cacheable("users")
     public List<User> getAll() {
         return repository.findAllByOrderByNameAscEmailAsc();
     }
 
+    @CacheEvict(value = "users", allEntries = true)
     @Transactional
     public void update(User user) {
         Assert.notNull(user, "user must not be null");

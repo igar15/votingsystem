@@ -1,14 +1,10 @@
 package ru.igar15.rest_voting_system.service;
 
+import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.CacheManager;
 import org.springframework.dao.DataAccessException;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.jdbc.SqlConfig;
-import org.springframework.test.context.junit4.SpringRunner;
-import ru.igar15.rest_voting_system.config.AppConfig;
 import ru.igar15.rest_voting_system.model.Role;
 import ru.igar15.rest_voting_system.model.User;
 import ru.igar15.rest_voting_system.util.exception.NotFoundException;
@@ -22,6 +18,14 @@ public class UserServiceTest extends AbstractServiceTest {
 
     @Autowired
     private UserService service;
+
+    @Autowired
+    private CacheManager cacheManager;
+
+    @Before
+    public void setup() {
+        cacheManager.getCache("users").clear();
+    }
 
     @Test
     public void create() {
