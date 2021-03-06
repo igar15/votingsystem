@@ -70,6 +70,13 @@ public class MenuServiceTest extends AbstractServiceTest {
     }
 
     @Test
+    public void getToday() {
+        Menu createdToday = service.create(getNew(), RESTAURANT1_ID);
+        Menu todayMenu = service.getToday(RESTAURANT1_ID);
+        MENU_MATCHER.assertMatch(todayMenu, createdToday);
+    }
+
+    @Test
     public void getNotFound() {
         assertThrows(NotFoundException.class, () -> service.get(NOT_FOUND, RESTAURANT1_ID));
     }

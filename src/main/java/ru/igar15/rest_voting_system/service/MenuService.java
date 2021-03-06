@@ -49,6 +49,10 @@ public class MenuService {
         return menuRepository.findByRestaurant_IdAndDate(restaurantId, date).orElseThrow(() -> new NotFoundException("Not found menu with date=" + date));
     }
 
+    public Menu getToday(int restaurantId) {
+        return getByDate(restaurantId, LocalDate.now());
+    }
+
     @Transactional
     public void update(Menu menu, int restaurantId) {
         Assert.notNull(menu, "menu must not be null");
