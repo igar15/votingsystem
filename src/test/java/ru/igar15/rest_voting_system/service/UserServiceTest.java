@@ -1,9 +1,7 @@
 package ru.igar15.rest_voting_system.service;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.CacheManager;
 import org.springframework.dao.DataAccessException;
 import ru.igar15.rest_voting_system.model.Role;
 import ru.igar15.rest_voting_system.model.User;
@@ -18,14 +16,6 @@ public class UserServiceTest extends AbstractServiceTest {
 
     @Autowired
     private UserService service;
-
-    @Autowired
-    private CacheManager cacheManager;
-
-    @Before
-    public void setup() {
-        cacheManager.getCache("users").clear();
-    }
 
     @Test
     public void create() {
