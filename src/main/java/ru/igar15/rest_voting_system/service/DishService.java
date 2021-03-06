@@ -1,6 +1,7 @@
 package ru.igar15.rest_voting_system.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import ru.igar15.rest_voting_system.model.Dish;
 import ru.igar15.rest_voting_system.model.Menu;
@@ -21,6 +22,7 @@ public class DishService {
         this.menuRepository = menuRepository;
     }
 
+    @Transactional
     public Dish create(Dish dish, int menuId) {
         Assert.notNull(dish, "dish must not be null");
         Menu menu = menuRepository.getOne(menuId);
@@ -28,6 +30,7 @@ public class DishService {
         return dishRepository.save(dish);
     }
 
+    @Transactional
     public void delete(int id, int menuId) {
         Dish dish = get(id, menuId);
         dishRepository.delete(dish);
@@ -41,6 +44,7 @@ public class DishService {
         return dishRepository.findAllByMenu_IdOrderByNameAsc(menuId);
     }
 
+    @Transactional
     public void update(Dish dish, int menuId) {
         Assert.notNull(dish, "dish must not be null");
         get(dish.id(), menuId);

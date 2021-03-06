@@ -1,6 +1,7 @@
 package ru.igar15.rest_voting_system.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import ru.igar15.rest_voting_system.model.Restaurant;
 import ru.igar15.rest_voting_system.repository.RestaurantRepository;
@@ -17,11 +18,13 @@ public class RestaurantService {
         this.repository = repository;
     }
 
+    @Transactional
     public Restaurant create(Restaurant restaurant) {
         Assert.notNull(restaurant, "restaurant must not be null");
         return repository.save(restaurant);
     }
 
+    @Transactional
     public void delete(int id) {
         Restaurant restaurant = get(id);
         repository.delete(restaurant);
@@ -35,6 +38,7 @@ public class RestaurantService {
         return repository.findAllByOrderByNameAscAddressAsc();
     }
 
+    @Transactional
     public void update(Restaurant restaurant) {
         Assert.notNull(restaurant, "restaurant must not be null");
         get(restaurant.id());

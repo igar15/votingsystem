@@ -1,6 +1,7 @@
 package ru.igar15.rest_voting_system.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import ru.igar15.rest_voting_system.model.User;
 import ru.igar15.rest_voting_system.repository.UserRepository;
@@ -17,11 +18,13 @@ public class UserService {
         this.repository = repository;
     }
 
+    @Transactional
     public User create(User user) {
         Assert.notNull(user, "user must not be null");
         return repository.save(user);
     }
 
+    @Transactional
     public void delete(int id) {
         User user = get(id);
         repository.delete(user);
@@ -39,6 +42,7 @@ public class UserService {
         return repository.findAllByOrderByNameAscEmailAsc();
     }
 
+    @Transactional
     public void update(User user) {
         Assert.notNull(user, "user must not be null");
         get(user.id());

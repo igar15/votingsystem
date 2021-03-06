@@ -1,6 +1,7 @@
 package ru.igar15.rest_voting_system.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.igar15.rest_voting_system.model.Restaurant;
 import ru.igar15.rest_voting_system.model.User;
 import ru.igar15.rest_voting_system.model.Vote;
@@ -26,6 +27,7 @@ public class VoteService {
         this.userRepository = userRepository;
     }
 
+    @Transactional
     public Vote registerVote(int restaurantId, int userId, LocalDate date, LocalTime time) {
         Optional<Vote> voteOptional = voteRepository.findByDateAndUser_Id(date, userId);
         return voteOptional.map(vote -> update(vote, restaurantId, time)).orElseGet(() -> create(restaurantId, userId, date));
