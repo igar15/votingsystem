@@ -1,5 +1,7 @@
 package ru.igar15.rest_voting_system.service;
 
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -23,6 +25,7 @@ public class MenuService {
         this.restaurantRepository = restaurantRepository;
     }
 
+    @CacheEvict(value = "menusToday", key = "#restaurantId + '_' + T(java.time.LocalDate).now().toString()")
     @Transactional
     public Menu create(Menu menu, int restaurantId) {
         Assert.notNull(menu, "menu must not be null");
@@ -31,6 +34,7 @@ public class MenuService {
         return menuRepository.save(menu);
     }
 
+    @CacheEvict(value = "menusToday", key = "#restaurantId + '_' + T(java.time.LocalDate).now().toString()")
     @Transactional
     public void delete(int id, int restaurantId) {
         Menu menu = get(id, restaurantId);
@@ -49,10 +53,12 @@ public class MenuService {
         return menuRepository.findByRestaurant_IdAndDate(restaurantId, date).orElseThrow(() -> new NotFoundException("Not found menu with date=" + date));
     }
 
+    @Cacheable(value = "menusToday", key = "#restaurantId + '_' + T(java.time.LocalDate).now().toString()")
     public Menu getToday(int restaurantId) {
         return getByDate(restaurantId, LocalDate.now());
     }
 
+    @CacheEvict(value = "menusToday", key = "#restaurantId + '_' + T(java.time.LocalDate).now().toString()")
     @Transactional
     public void update(Menu menu, int restaurantId) {
         Assert.notNull(menu, "menu must not be null");
@@ -62,6 +68,7 @@ public class MenuService {
         menuRepository.save(menu);
     }
 
+    @CacheEvict(value = "menusToday", key = "#restaurantId + '_' + T(java.time.LocalDate).now().toString()")
     @Transactional
     public void changePublishedStatus(int id, int restaurantId, boolean published) {
         Menu menu = get(id, restaurantId);
