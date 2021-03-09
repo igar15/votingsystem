@@ -30,13 +30,13 @@ public class VoteServiceTest extends AbstractServiceTest {
         int newId = created.id();
         Vote newVote = getNew();
         newVote.setId(newId);
-        VOTE_MATCHER.assertMatch(repository.findByIdAndUser_Id(newId, USER1_ID).get(), newVote);
+        VOTE_MATCHER.assertMatch(repository.find(newId, USER1_ID).get(), newVote);
     }
 
     @Test
     public void update() {
         service.registerVote(RESTAURANT2_ID, USER1_ID, LocalDate.of(2021, Month.FEBRUARY, 25), BEFORE_ELEVEN);
-        VOTE_MATCHER.assertMatch(repository.findByIdAndUser_Id(VOTE1_ID, USER1_ID).get(), getUpdated());
+        VOTE_MATCHER.assertMatch(repository.find(VOTE1_ID, USER1_ID).get(), getUpdated());
     }
 
     @Test

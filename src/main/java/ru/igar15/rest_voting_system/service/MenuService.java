@@ -42,15 +42,15 @@ public class MenuService {
     }
 
     public Menu get(int id, int restaurantId) {
-        return menuRepository.findByIdAndRestaurant_Id(id, restaurantId).orElseThrow(() -> new NotFoundException("Not found menu with id=" + id));
+        return menuRepository.find(id, restaurantId).orElseThrow(() -> new NotFoundException("Not found menu with id=" + id));
     }
 
     public List<Menu> getAll(int restaurantId) {
-        return menuRepository.findAllByRestaurant_IdOrderByDateDesc(restaurantId);
+        return menuRepository.findAll(restaurantId);
     }
 
     public Menu getByDate(int restaurantId, LocalDate date) {
-        return menuRepository.findByRestaurant_IdAndDate(restaurantId, date).orElseThrow(() -> new NotFoundException("Not found menu with date=" + date));
+        return menuRepository.findByDate(restaurantId, date).orElseThrow(() -> new NotFoundException("Not found menu with date=" + date));
     }
 
     @Cacheable(value = "menusToday", key = "#restaurantId + '_' + T(java.time.LocalDate).now().toString()")

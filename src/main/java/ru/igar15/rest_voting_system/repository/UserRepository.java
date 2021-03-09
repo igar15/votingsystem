@@ -13,6 +13,7 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public interface UserRepository extends JpaRepository<User, Integer> {
 
+    @EntityGraph(attributePaths = "roles")
     Optional<User> findByEmail(String email);
 
     @EntityGraph(attributePaths = "roles")

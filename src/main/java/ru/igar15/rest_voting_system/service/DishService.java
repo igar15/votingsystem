@@ -37,11 +37,11 @@ public class DishService {
     }
 
     public Dish get(int id, int menuId) {
-        return dishRepository.findByIdAndMenu_Id(id, menuId).orElseThrow(() -> new NotFoundException("Not found dish with id=" + id));
+        return dishRepository.find(id, menuId).orElseThrow(() -> new NotFoundException("Not found dish with id=" + id));
     }
 
     public List<Dish> getAll(int menuId) {
-        return dishRepository.findAllByMenu_IdOrderByNameAsc(menuId);
+        return dishRepository.findAll(menuId);
     }
 
     @Transactional

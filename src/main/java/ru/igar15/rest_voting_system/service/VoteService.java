@@ -29,7 +29,7 @@ public class VoteService {
 
     @Transactional
     public Vote registerVote(int restaurantId, int userId, LocalDate date, LocalTime time) {
-        Optional<Vote> voteOptional = voteRepository.findByDateAndUser_Id(date, userId);
+        Optional<Vote> voteOptional = voteRepository.findByDate(date, userId);
         return voteOptional.map(vote -> update(vote, restaurantId, time)).orElseGet(() -> create(restaurantId, userId, date));
     }
 
