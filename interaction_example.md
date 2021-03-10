@@ -26,8 +26,9 @@ In this case frontend sends HTTP POST request to create today's lunch menu for t
 Show Picture 3
 
 #### 4. The menu has been created    
-Once created, the menu is displayed on the page (no dishes have been added to the menu at the moment).  
-If menu's published status is 'false', the page displays buttons for adding/updating/deleting dishes to the menu.  
+Once created, the menu is displayed on the page (no dishes have been added to the menu at the moment). 
+The created menu published status is 'false', so the menu is not available for viewing by users.  
+Since menu's published status is 'false', the page displays buttons for adding/updating/deleting dishes to the menu.  
 Show Picture 4  
 
 #### 5. Admin creates a dish for the menu  
