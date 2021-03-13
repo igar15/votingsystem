@@ -1,6 +1,7 @@
 package ru.igar15.rest_voting_system.model;
 
-import org.springframework.data.jpa.repository.EntityGraph;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.util.CollectionUtils;
 
 import javax.persistence.*;

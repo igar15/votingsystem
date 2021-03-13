@@ -13,10 +13,10 @@ public abstract class AbstractNamedEntity extends AbstractBaseEntity {
     @Column(name = "name")
     protected String name;
 
-    public AbstractNamedEntity() {
+    protected AbstractNamedEntity() {
     }
 
-    public AbstractNamedEntity(Integer id, String name) {
+    protected AbstractNamedEntity(Integer id, String name) {
         super(id);
         this.name = name;
     }

@@ -8,12 +8,13 @@ ALTER SEQUENCE global_seq RESTART WITH 100000;
 
 INSERT INTO users (name, email, password)
 VALUES ('User_1', 'user1@yandex.ru', 'password'),
-       ('User_2', 'user2@yandex.ru', 'password'),
-       ('Admin', 'admin@gmail.com', 'admin');
+       ('Admin', 'admin@gmail.com', 'admin'),
+       ('User_2', 'user2@yandex.ru', 'password');
 
 INSERT INTO user_roles (role, user_id)
 VALUES ('USER', 100000),
-       ('ADMIN', 100001);
+       ('ADMIN', 100001),
+       ('USER', 100002);
 
 INSERT INTO restaurants (name, address)
 VALUES ('Rest_2', 'Rest_2_Address'),

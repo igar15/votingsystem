@@ -36,6 +36,7 @@ public class UserServiceTest extends AbstractServiceTest {
     @Test
     public void delete() {
         service.delete(USER1_ID);
+        System.out.println();
         assertThrows(NotFoundException.class, () -> service.get(USER1_ID));
     }
 
