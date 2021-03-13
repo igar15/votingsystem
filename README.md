@@ -27,7 +27,7 @@ This is the REST API implementation of voting system for deciding where to have 
 
 ### <a href="domain_model.md">Application domain model schema</a>
 
-### <a href="interaction_diagram.md">The schematic example of interaction between frontend and backend</a>
+### <a href="interaction_example.md">The schematic example of interaction between frontend and backend</a>
 
 ### API documentation:
 - GET /restaurants - get list of restaurants
