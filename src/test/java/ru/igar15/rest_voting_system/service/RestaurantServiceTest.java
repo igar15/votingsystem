@@ -1,9 +1,7 @@
 package ru.igar15.rest_voting_system.service;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.CacheManager;
 import org.springframework.dao.DataAccessException;
 import ru.igar15.rest_voting_system.model.Restaurant;
 import ru.igar15.rest_voting_system.util.exception.NotFoundException;
@@ -17,14 +15,6 @@ public class RestaurantServiceTest extends AbstractServiceTest {
 
     @Autowired
     private RestaurantService service;
-
-    @Autowired
-    private CacheManager cacheManager;
-
-    @Before
-    public void setup() {
-        cacheManager.getCache("restaurants").clear();
-    }
 
     @Test
     public void create() {
@@ -61,6 +51,7 @@ public class RestaurantServiceTest extends AbstractServiceTest {
     @Test
     public void get() {
         Restaurant restaurant = service.get(RESTAURANT1_ID);
+        service.get(RESTAURANT1_ID);
         RESTAURANT_MATCHER.assertMatch(restaurant, restaurant1);
     }
 
