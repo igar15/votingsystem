@@ -1,6 +1,5 @@
 package ru.igar15.rest_voting_system;
 
-import ru.igar15.rest_voting_system.TestMatcher;
 import ru.igar15.rest_voting_system.model.Role;
 import ru.igar15.rest_voting_system.model.User;
 
@@ -10,7 +9,7 @@ import java.util.Date;
 import static ru.igar15.rest_voting_system.model.AbstractBaseEntity.START_SEQ;
 
 public class UserTestData {
-    public static final TestMatcher<User> USER_MATCHER = TestMatcher.usingIgnoringFieldsComparator("registered", "roles");
+    public static final TestMatcher<User> USER_MATCHER = TestMatcher.usingIgnoringFieldsComparator("registered");
 
     public static final int USER1_ID = START_SEQ;
     public static final int ADMIN_ID = START_SEQ + 1;
