@@ -16,6 +16,7 @@ import java.util.Optional;
 
 @Service
 public class VoteService {
+    private static final LocalTime BOUNDARY_TIME = LocalTime.of(11, 0);
 
     private final VoteRepository voteRepository;
     private final RestaurantRepository restaurantRepository;
@@ -52,6 +53,6 @@ public class VoteService {
     }
 
     private boolean isUpdateForbidden(LocalTime time) {
-        return time.isAfter(LocalTime.of(11, 0));
+        return time.isAfter(BOUNDARY_TIME);
     }
 }

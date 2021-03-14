@@ -7,7 +7,10 @@ import ru.igar15.rest_voting_system.model.Role;
 import ru.igar15.rest_voting_system.model.User;
 import ru.igar15.rest_voting_system.util.exception.NotFoundException;
 
+import javax.validation.ConstraintViolationException;
+import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.Assert.assertThrows;
 import static ru.igar15.rest_voting_system.UserTestData.*;
@@ -73,5 +76,12 @@ public class UserServiceTest extends AbstractServiceTest {
         User updated = getUpdated();
         service.update(updated);
         USER_MATCHER.assertMatch(service.get(USER1_ID), getUpdated());
+    }
+
+    @Test
+    public void createWithException() {
+        validateRootCause(ConstraintViolationException.class, () -> service.create(new User(null, "  ", "mail@yandex.ru", "password", Role.USER)));
+        validateRootCause(ConstraintViolationException.class, () -> service.create(new User(null, "User", "  ", "password", Role.USER)));
+        validateRootCause(ConstraintViolationException.class, () -> service.create(new User(null, "User", "mail@yandex.ru", "  ", Role.USER)));
     }
 }

@@ -6,6 +6,7 @@ import org.springframework.dao.DataAccessException;
 import ru.igar15.rest_voting_system.model.Restaurant;
 import ru.igar15.rest_voting_system.util.exception.NotFoundException;
 
+import javax.validation.ConstraintViolationException;
 import java.util.List;
 
 import static org.junit.Assert.assertThrows;
@@ -71,5 +72,11 @@ public class RestaurantServiceTest extends AbstractServiceTest {
         Restaurant updated = getUpdated();
         service.update(updated);
         RESTAURANT_MATCHER.assertMatch(service.get(RESTAURANT1_ID), getUpdated());
+    }
+
+    @Test
+    public void createWithException() {
+        validateRootCause(ConstraintViolationException.class, () -> service.create(new Restaurant(null, " ", "restaurant_address")));
+        validateRootCause(ConstraintViolationException.class, () -> service.create(new Restaurant(null, "restaurant_name", " ")));
     }
 }

@@ -7,9 +7,22 @@ import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.igar15.rest_voting_system.config.AppConfig;
 import ru.igar15.rest_voting_system.config.BeanPropsOverrideConfig;
+import ru.igar15.rest_voting_system.util.ValidationUtil;
+
+import static org.junit.Assert.assertThrows;
 
 @ContextConfiguration(classes = {AppConfig.class, BeanPropsOverrideConfig.class})
 @RunWith(SpringRunner.class)
 @Sql(scripts = "classpath:db/populate_db.sql", config = @SqlConfig(encoding = "UTF-8"))
 public abstract class AbstractServiceTest {
+
+    public <T extends Throwable> void validateRootCause(Class<T> rootExceptionClass, Runnable runnable) {
+        assertThrows(rootExceptionClass, () -> {
+            try {
+                runnable.run();
+            } catch (Exception e) {
+                throw ValidationUtil.getRootCause(e);
+            }
+        });
+    }
 }
