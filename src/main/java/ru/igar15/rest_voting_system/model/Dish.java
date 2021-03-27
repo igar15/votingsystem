@@ -8,7 +8,7 @@ import javax.validation.constraints.Size;
 import java.util.Objects;
 
 @Embeddable
-public class Dish{
+public class Dish {
 
     @NotBlank
     @Size(min = 2, max = 100)
