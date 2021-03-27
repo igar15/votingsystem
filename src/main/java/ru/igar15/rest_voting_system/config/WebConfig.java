@@ -6,6 +6,6 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @Configuration
 @EnableWebMvc
-@ComponentScan("ru.igar15.rest_voting_system.controller")
+@ComponentScan("ru.igar15.rest_voting_system.web")
 public class WebConfig {
 }
