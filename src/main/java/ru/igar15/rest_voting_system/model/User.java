@@ -1,6 +1,8 @@
 package ru.igar15.rest_voting_system.model;
 
 import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.util.CollectionUtils;
 
 import javax.persistence.*;
@@ -40,6 +42,8 @@ public class User extends AbstractNamedEntity {
     @ElementCollection(fetch = FetchType.EAGER)
     @Column(name = "role")
     @BatchSize(size = 200)
+    @JoinColumn(name = "user_id") //https://stackoverflow.com/a/62848296/548473
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<Role> roles;
 
     public User() {

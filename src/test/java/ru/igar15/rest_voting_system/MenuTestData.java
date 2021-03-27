@@ -27,6 +27,6 @@ public class MenuTestData {
     }
 
     public static Menu getUpdated() {
-        return new Menu(MENU1_ID, LocalDate.of(2021, Month.MARCH, 9), List.of(dish1Menu1, new Dish("dish3Menu1", 500)));
+        return new Menu(MENU1_ID, LocalDate.of(2021, Month.MARCH, 9), List.of(dish1Menu1, new Dish("newDish", 500)));
     }
 }

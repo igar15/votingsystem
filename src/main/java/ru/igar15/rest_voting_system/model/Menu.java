@@ -1,11 +1,11 @@
 package ru.igar15.rest_voting_system.model;
 
+import org.hibernate.annotations.*;
 import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
@@ -23,6 +23,7 @@ public class Menu extends AbstractBaseEntity {
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Restaurant restaurant;
 
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -30,7 +31,8 @@ public class Menu extends AbstractBaseEntity {
     @Valid
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "dishes", joinColumns = @JoinColumn(name = "menu_id"))
-    @JoinColumn(name = "menu_id")
+    @BatchSize(size = 200)
+    @JoinColumn(name = "menu_id") //https://stackoverflow.com/a/62848296/548473
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Dish> dishes;
 
