@@ -2,10 +2,14 @@ package ru.igar15.rest_voting_system.model;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @Entity
@@ -16,21 +20,31 @@ public class Menu extends AbstractBaseEntity {
     @Column(name = "date")
     private LocalDate date = LocalDate.now();
 
-    @Column(name = "published")
-    private boolean published = false;
-
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id")
     private Restaurant restaurant;
 
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    @NotNull
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "dishes", joinColumns = @JoinColumn(name = "menu_id"))
+    @JoinColumn(name = "menu_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private List<Dish> dishes;
+
     public Menu() {
     }
 
-    public Menu(Integer id, LocalDate date, boolean published) {
+    public Menu(Integer id, LocalDate date) {
         super(id);
         this.date = date;
-        this.published = published;
+    }
+
+    public Menu(Integer id, LocalDate date, List<Dish> dishes) {
+        super(id);
+        this.date = date;
+        this.dishes = dishes;
     }
 
     public LocalDate getDate() {
@@ -41,20 +55,20 @@ public class Menu extends AbstractBaseEntity {
         this.date = date;
     }
 
-    public boolean isPublished() {
-        return published;
-    }
-
-    public void setPublished(boolean published) {
-        this.published = published;
-    }
-
     public Restaurant getRestaurant() {
         return restaurant;
     }
 
     public void setRestaurant(Restaurant restaurant) {
         this.restaurant = restaurant;
+    }
+
+    public List<Dish> getDishes() {
+        return dishes;
+    }
+
+    public void setDishes(List<Dish> dishes) {
+        this.dishes = dishes;
     }
 
     @Override

@@ -1,32 +1,38 @@
 package ru.igar15.rest_voting_system.model;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+import java.util.Objects;
 
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-@Entity
-@Table(name = "dishes")
-public class Dish extends AbstractNamedEntity{
+@Embeddable
+public class Dish{
+
+    @NotBlank
+    @Size(min = 2, max = 100)
+    @Column(name = "name")
+    private String name;
 
     @Min(1)
     @Column(name = "price")
     private int price;
 
-    @NotNull
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "menu_id")
-    private Menu menu;
-
     public Dish() {
     }
 
-    public Dish(Integer id, String name, int price) {
-        super(id, name);
+    public Dish(String name, int price) {
+        this.name = name;
         this.price = price;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public int getPrice() {
@@ -37,19 +43,24 @@ public class Dish extends AbstractNamedEntity{
         this.price = price;
     }
 
-    public Menu getMenu() {
-        return menu;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Dish dish = (Dish) o;
+        return price == dish.price &&
+                Objects.equals(name, dish.name);
     }
 
-    public void setMenu(Menu menu) {
-        this.menu = menu;
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, price);
     }
 
     @Override
     public String toString() {
         return "Dish{" +
-                "id=" + id +
-                ", name=" + name +
+                "name=" + name +
                 ", price=" + price +
                 '}';
     }

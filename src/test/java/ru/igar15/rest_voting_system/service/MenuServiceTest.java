@@ -3,11 +3,15 @@ package ru.igar15.rest_voting_system.service;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import ru.igar15.rest_voting_system.RestaurantTestData;
+import ru.igar15.rest_voting_system.model.Dish;
 import ru.igar15.rest_voting_system.model.Menu;
+import ru.igar15.rest_voting_system.repository.MenuRepository;
 import ru.igar15.rest_voting_system.util.exception.NotFoundException;
 
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertThrows;
@@ -19,6 +23,9 @@ public class MenuServiceTest extends AbstractServiceTest {
 
     @Autowired
     private MenuService service;
+
+    @Autowired
+    private MenuRepository repository;
 
     @Autowired
     private RestaurantService restaurantService;
@@ -35,8 +42,18 @@ public class MenuServiceTest extends AbstractServiceTest {
 
     @Test
     public void duplicateDateCreate() {
+        Menu menu = getNew();
+        menu.setDate(LocalDate.of(2021, Month.FEBRUARY, 25));
         assertThrows(DataAccessException.class,
-                () -> service.create(new Menu(null, LocalDate.of(2021, Month.FEBRUARY, 25), false), RESTAURANT1_ID));
+                () -> service.create(menu, RESTAURANT1_ID));
+    }
+
+    @Test
+    public void duplicateDishNameCreate() {
+        Menu menu = getNew();
+        menu.setDishes(List.of(new Dish("dishName1", 100), new Dish("dishName1", 200)));
+        assertThrows(DataAccessException.class,
+                () -> service.create(menu, RESTAURANT1_ID));
     }
 
     @Test
@@ -107,11 +124,22 @@ public class MenuServiceTest extends AbstractServiceTest {
         assertThrows(NotFoundException.class, () -> service.update(menu1, RESTAURANT2_ID));
     }
 
-    @Test
-    public void changePublishedStatus() {
-        service.changePublishedStatus(MENU1_ID, RESTAURANT1_ID, false);
-        MENU_MATCHER.assertMatch(service.get(MENU1_ID, RESTAURANT1_ID), getChangedPublishedStatus(false));
-        service.changePublishedStatus(MENU1_ID, RESTAURANT1_ID, true);
-        MENU_MATCHER.assertMatch(service.get(MENU1_ID, RESTAURANT1_ID), getChangedPublishedStatus(true));
-    }
+//    @Test
+//    public void embeddableTest() {
+//        Menu menu = getNew();
+//        menu.setRestaurant(RestaurantTestData.restaurant1);
+//        menu.setDishes(new ArrayList<>());
+//        Dish dish1 = new Dish("dish1", 20);
+//        Dish dish2 = new Dish("dish2", 30);
+//        Dish dish3 = new Dish("dish3", 20);
+//        menu.getDishes().add(dish1);
+//        menu.getDishes().add(dish2);
+//        menu.getDishes().add(dish3);
+//        repository.save(menu);
+//        System.out.println();
+//        Menu one = repository.find(menu.id(), RESTAURANT1_ID).get();
+//        one.getDishes().remove(dish1);
+//        repository.save(one);
+//        System.out.println();
+//    }
 }

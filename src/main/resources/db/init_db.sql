@@ -40,14 +40,12 @@ CREATE TABLE menus
     id            INTEGER PRIMARY KEY DEFAULT nextval('global_seq'),
     restaurant_id INTEGER            NOT NULL,
     date          DATE DEFAULT now() NOT NULL,
-    published     BOOL DEFAULT FALSE NOT NULL,
     FOREIGN KEY (restaurant_id) REFERENCES restaurants (id) ON DELETE CASCADE
 );
 CREATE UNIQUE INDEX menus_unique_restaurant_date_idx ON menus (restaurant_id, date);
 
 CREATE TABLE dishes
 (
-    id      INTEGER PRIMARY KEY DEFAULT nextval('global_seq'),
     menu_id INTEGER  NOT NULL,
     name    VARCHAR  NOT NULL,
     price   INTEGER  NOT NULL,
