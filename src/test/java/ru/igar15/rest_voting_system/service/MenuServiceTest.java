@@ -1,6 +1,6 @@
 package ru.igar15.rest_voting_system.service;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import ru.igar15.rest_voting_system.model.Dish;
@@ -12,7 +12,7 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.util.List;
 
-import static org.junit.Assert.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static ru.igar15.rest_voting_system.MenuTestData.*;
 import static ru.igar15.rest_voting_system.RestaurantTestData.RESTAURANT1_ID;
 import static ru.igar15.rest_voting_system.RestaurantTestData.RESTAURANT2_ID;

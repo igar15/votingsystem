@@ -1,6 +1,6 @@
 package ru.igar15.rest_voting_system.service;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.igar15.rest_voting_system.model.Vote;
 import ru.igar15.rest_voting_system.repository.VoteRepository;
@@ -10,7 +10,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.Month;
 
-import static org.junit.Assert.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static ru.igar15.rest_voting_system.RestaurantTestData.RESTAURANT1_ID;
 import static ru.igar15.rest_voting_system.RestaurantTestData.RESTAURANT2_ID;
 import static ru.igar15.rest_voting_system.UserTestData.USER_ID;

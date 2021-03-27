@@ -1,19 +1,19 @@
 package ru.igar15.rest_voting_system.service;
 
-import org.junit.runner.RunWith;
-import org.springframework.test.context.ContextConfiguration;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
+import ru.igar15.rest_voting_system.TimingExtension;
 import ru.igar15.rest_voting_system.config.AppConfig;
 import ru.igar15.rest_voting_system.config.BeanPropsOverrideConfig;
 import ru.igar15.rest_voting_system.util.ValidationUtil;
 
-import static org.junit.Assert.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@ContextConfiguration(classes = {AppConfig.class, BeanPropsOverrideConfig.class})
-@RunWith(SpringRunner.class)
+@SpringJUnitConfig(classes = {AppConfig.class, BeanPropsOverrideConfig.class})
 @Sql(scripts = "classpath:db/populate_db.sql", config = @SqlConfig(encoding = "UTF-8"))
+@ExtendWith(TimingExtension.class)
 public abstract class AbstractServiceTest {
 
     public <T extends Throwable> void validateRootCause(Class<T> rootExceptionClass, Runnable runnable) {
