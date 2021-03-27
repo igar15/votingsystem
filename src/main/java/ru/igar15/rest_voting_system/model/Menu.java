@@ -6,9 +6,9 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -27,6 +27,7 @@ public class Menu extends AbstractBaseEntity {
 
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @NotNull
+    @Valid
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "dishes", joinColumns = @JoinColumn(name = "menu_id"))
     @JoinColumn(name = "menu_id")
@@ -34,6 +35,10 @@ public class Menu extends AbstractBaseEntity {
     private List<Dish> dishes;
 
     public Menu() {
+    }
+
+    public Menu(List<Dish> dishes) {
+        this.dishes = dishes;
     }
 
     public Menu(Integer id, LocalDate date) {

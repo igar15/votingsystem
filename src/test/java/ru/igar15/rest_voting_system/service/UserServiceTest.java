@@ -8,9 +8,7 @@ import ru.igar15.rest_voting_system.model.User;
 import ru.igar15.rest_voting_system.util.exception.NotFoundException;
 
 import javax.validation.ConstraintViolationException;
-import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 import static org.junit.Assert.assertThrows;
 import static ru.igar15.rest_voting_system.UserTestData.*;
@@ -31,16 +29,15 @@ public class UserServiceTest extends AbstractServiceTest {
     }
 
     @Test
-    public void duplicateEmailCreate() {
+    public void duplicateMailCreate() {
         assertThrows(DataAccessException.class,
-                () -> service.create(new User(null, "Duplicate", "user1@yandex.ru", "newPass", Role.USER)));
+                () -> service.create(new User(null, "Duplicate", "user@yandex.ru", "newPass", Role.USER)));
     }
 
     @Test
     public void delete() {
-        service.delete(USER1_ID);
-        System.out.println();
-        assertThrows(NotFoundException.class, () -> service.get(USER1_ID));
+        service.delete(USER_ID);
+        assertThrows(NotFoundException.class, () -> service.get(USER_ID));
     }
 
     @Test
@@ -68,14 +65,14 @@ public class UserServiceTest extends AbstractServiceTest {
     @Test
     public void getAll() {
         List<User> users = service.getAll();
-        USER_MATCHER.assertMatch(users, admin, user1, user2);
+        USER_MATCHER.assertMatch(users, admin, user);
     }
 
     @Test
     public void update() {
         User updated = getUpdated();
         service.update(updated);
-        USER_MATCHER.assertMatch(service.get(USER1_ID), getUpdated());
+        USER_MATCHER.assertMatch(service.get(USER_ID), getUpdated());
     }
 
     @Test

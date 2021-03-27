@@ -3,15 +3,13 @@ package ru.igar15.rest_voting_system.service;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
-import ru.igar15.rest_voting_system.RestaurantTestData;
 import ru.igar15.rest_voting_system.model.Dish;
 import ru.igar15.rest_voting_system.model.Menu;
-import ru.igar15.rest_voting_system.repository.MenuRepository;
 import ru.igar15.rest_voting_system.util.exception.NotFoundException;
 
+import javax.validation.ConstraintViolationException;
 import java.time.LocalDate;
 import java.time.Month;
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertThrows;
@@ -23,12 +21,6 @@ public class MenuServiceTest extends AbstractServiceTest {
 
     @Autowired
     private MenuService service;
-
-    @Autowired
-    private MenuRepository repository;
-
-    @Autowired
-    private RestaurantService restaurantService;
 
     @Test
     public void create() {
@@ -124,22 +116,10 @@ public class MenuServiceTest extends AbstractServiceTest {
         assertThrows(NotFoundException.class, () -> service.update(menu1, RESTAURANT2_ID));
     }
 
-//    @Test
-//    public void embeddableTest() {
-//        Menu menu = getNew();
-//        menu.setRestaurant(RestaurantTestData.restaurant1);
-//        menu.setDishes(new ArrayList<>());
-//        Dish dish1 = new Dish("dish1", 20);
-//        Dish dish2 = new Dish("dish2", 30);
-//        Dish dish3 = new Dish("dish3", 20);
-//        menu.getDishes().add(dish1);
-//        menu.getDishes().add(dish2);
-//        menu.getDishes().add(dish3);
-//        repository.save(menu);
-//        System.out.println();
-//        Menu one = repository.find(menu.id(), RESTAURANT1_ID).get();
-//        one.getDishes().remove(dish1);
-//        repository.save(one);
-//        System.out.println();
-//    }
+    @Test
+    public void createWithException() {
+        validateRootCause(ConstraintViolationException.class, () -> service.create(new Menu(), RESTAURANT1_ID));
+        validateRootCause(ConstraintViolationException.class, () -> service.create(new Menu(List.of(new Dish("", 300))), RESTAURANT1_ID));
+        validateRootCause(ConstraintViolationException.class, () -> service.create(new Menu(List.of(new Dish("dish1", 0))), RESTAURANT1_ID));
+    }
 }
