@@ -29,7 +29,12 @@ public class RestaurantServiceTest extends AbstractServiceTest {
 
     @Test
     public void duplicateNameCreate() {
-        service.create(new Restaurant(null, "zRestaurant1", "newAddress"));
+        Restaurant duplicateNameRestaurant = new Restaurant(null, "zRestaurant1", "notDuplicateAddress");
+        Restaurant created = service.create(duplicateNameRestaurant);
+        int newId = created.id();
+        duplicateNameRestaurant.setId(newId);
+        RESTAURANT_MATCHER.assertMatch(created, duplicateNameRestaurant);
+        RESTAURANT_MATCHER.assertMatch(service.get(newId), duplicateNameRestaurant);
     }
 
     @Test
@@ -52,7 +57,6 @@ public class RestaurantServiceTest extends AbstractServiceTest {
     @Test
     public void get() {
         Restaurant restaurant = service.get(RESTAURANT1_ID);
-        service.get(RESTAURANT1_ID);
         RESTAURANT_MATCHER.assertMatch(restaurant, restaurant1);
     }
 
