@@ -40,7 +40,12 @@ In this case frontend sends HTTP POST/PUT request to create/update the today's l
 ![6_admin_view_menu_exists_not_published_dishes_exist](https://user-images.githubusercontent.com/60218699/112734027-55890500-8f54-11eb-8e71-374e9c237ec8.png)
 
 #### 7. The menu has been created on backend  
-![7_admin_view_menu_exists_published](https://user-images.githubusercontent.com/60218699/112734030-5d48a980-8f54-11eb-9fd4-181f58f84591.png)
+Menu has been created and returned to the frontend.  
+To change the menu admin presses "Change Menu" button.  
+In this case frontend shows admin a frontend's form to update menu.  
+To delete the menu admin presses "Delete Menu" button.  
+In this case frontend sends HTTP DELETE request to delete the menu.  
+![7_admin_view_menu_exists_published](https://user-images.githubusercontent.com/60218699/112750096-2368b900-8fcf-11eb-8000-a8865bc82e12.png)
 To change the menu admin presses "Change Menu" button.  
 In this case frontend shows admin a frontend's form to update menu.  
 
