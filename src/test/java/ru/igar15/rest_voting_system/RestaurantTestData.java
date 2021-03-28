@@ -5,7 +5,7 @@ import ru.igar15.rest_voting_system.model.Restaurant;
 import static ru.igar15.rest_voting_system.model.AbstractBaseEntity.START_SEQ;
 
 public class RestaurantTestData {
-    public static final TestMatcher<Restaurant> RESTAURANT_MATCHER = TestMatcher.usingIgnoringFieldsComparator();
+    public static final TestMatcher<Restaurant> RESTAURANT_MATCHER = TestMatcher.usingIgnoringFieldsComparator(Restaurant.class);
 
     public static final int RESTAURANT1_ID = START_SEQ + 2;
     public static final int RESTAURANT2_ID = START_SEQ + 3;

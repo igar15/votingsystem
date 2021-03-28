@@ -11,7 +11,7 @@ import static ru.igar15.rest_voting_system.RestaurantTestData.restaurant2;
 import static ru.igar15.rest_voting_system.model.AbstractBaseEntity.START_SEQ;
 
 public class VoteTestData {
-    public static final TestMatcher<Vote> VOTE_MATCHER = TestMatcher.usingIgnoringFieldsComparator("user");
+    public static final TestMatcher<Vote> VOTE_MATCHER = TestMatcher.usingIgnoringFieldsComparator(Vote.class, "user");
 
     public static final int VOTE1_ID = START_SEQ + 8;
 

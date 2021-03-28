@@ -11,7 +11,7 @@ import static ru.igar15.rest_voting_system.DishTestData.*;
 import static ru.igar15.rest_voting_system.model.AbstractBaseEntity.START_SEQ;
 
 public class MenuTestData {
-    public static final TestMatcher<Menu> MENU_MATCHER = TestMatcher.usingIgnoringFieldsComparator("restaurant");
+    public static final TestMatcher<Menu> MENU_MATCHER = TestMatcher.usingIgnoringFieldsComparator(Menu.class, "restaurant");
 
     public static final int MENU1_ID = START_SEQ + 4;
     public static final int MENU2_ID = START_SEQ + 5;
