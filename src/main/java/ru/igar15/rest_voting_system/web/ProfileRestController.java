@@ -1,4 +1,4 @@
-package ru.igar15.rest_voting_system.web.user;
+package ru.igar15.rest_voting_system.web;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,25 +23,25 @@ public class ProfileRestController {
 
     @GetMapping
     public User get() {
-        int id = authUserId();
-        log.info("get {}", id);
-        return service.get(id);
+        int userId = authUserId();
+        log.info("get {}", userId);
+        return service.get(userId);
     }
 
     @DeleteMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete() {
-        int id = authUserId();
-        log.info("delete {}", id);
-        service.delete(id);
+        int userId = authUserId();
+        log.info("delete {}", userId);
+        service.delete(userId);
     }
 
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void update(@RequestBody User user) {
-        int id = authUserId();
-        log.info("update {} with id={}", user, id);
-        assureIdConsistent(user, id);
+        int userId = authUserId();
+        log.info("update {} with userId={}", user, userId);
+        assureIdConsistent(user, userId);
         service.update(user);
     }
 }

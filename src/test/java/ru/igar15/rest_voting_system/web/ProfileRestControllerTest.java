@@ -1,23 +1,18 @@
-package ru.igar15.rest_voting_system.web.user;
+package ru.igar15.rest_voting_system.web;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import ru.igar15.rest_voting_system.UserTestData;
 import ru.igar15.rest_voting_system.model.User;
 import ru.igar15.rest_voting_system.service.UserService;
-import ru.igar15.rest_voting_system.web.AbstractControllerTest;
 import ru.igar15.rest_voting_system.web.json.JsonUtil;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.igar15.rest_voting_system.UserTestData.*;
-import static ru.igar15.rest_voting_system.web.user.ProfileRestController.*;
+import static ru.igar15.rest_voting_system.web.ProfileRestController.REST_URL;
 
 class ProfileRestControllerTest extends AbstractControllerTest {
 
