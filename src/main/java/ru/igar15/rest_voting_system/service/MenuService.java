@@ -50,6 +50,7 @@ public class MenuService {
     }
 
     public Menu getByDate(int restaurantId, LocalDate date) {
+        Assert.notNull(date, "date must not be null");
         return menuRepository.findByDate(restaurantId, date).orElseThrow(() -> new NotFoundException("Not found menu with date=" + date));
     }
 
