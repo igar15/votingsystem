@@ -29,12 +29,12 @@ public class VoteService {
     }
 
     @Transactional
-    public Vote registerVote(int restaurantId, int userId, LocalDate date, LocalTime time) {
+    public Vote registerVote(int userId, int restaurantId, LocalDate date, LocalTime time) {
         Optional<Vote> voteOptional = voteRepository.findByDate(date, userId);
-        return voteOptional.map(vote -> update(vote, restaurantId, time)).orElseGet(() -> create(restaurantId, userId, date));
+        return voteOptional.map(vote -> update(vote, restaurantId, time)).orElseGet(() -> create(userId, restaurantId, date));
     }
 
-    private Vote create(int restaurantId, int userId, LocalDate date) {
+    private Vote create(int userId, int restaurantId, LocalDate date) {
         Vote vote = new Vote(date);
         Restaurant restaurant = restaurantRepository.getOne(restaurantId);
         User user = userRepository.getOne(userId);
