@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.igar15.rest_voting_system.model.Vote;
 import ru.igar15.rest_voting_system.service.VoteService;
 
+import java.time.Clock;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -26,11 +27,14 @@ public class VoteRestController {
     @Autowired
     private VoteService service;
 
+    @Autowired
+    private Clock clock;
+
     @PostMapping
     public ResponseEntity<Vote> registerVote(@RequestParam int restaurantId) {
         int userId = authUserId();
         log.info("register vote from {} for restaurant {}", userId, restaurantId);
-        Vote registered = service.registerVote(userId, restaurantId, LocalDate.now(), LocalTime.now());
+        Vote registered = service.registerVote(userId, restaurantId, LocalDate.now(clock), LocalTime.now(clock));
         return ResponseEntity.ok().body(registered);
     }
 }

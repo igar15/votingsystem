@@ -19,7 +19,7 @@ import java.util.Properties;
 
 @Configuration
 @ComponentScan(basePackages = "ru.igar15.rest_voting_system",
-        excludeFilters = {@ComponentScan.Filter(type = FilterType.REGEX, pattern = "ru.igar15.rest_voting_system.controller.*"),
+        excludeFilters = {@ComponentScan.Filter(type = FilterType.REGEX, pattern = "ru.igar15.rest_voting_system.web.*"),
                           @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, value = WebConfig.class)})
 @PropertySource(value = "classpath:db/postgres.properties")
 @EnableTransactionManagement
