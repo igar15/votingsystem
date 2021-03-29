@@ -20,7 +20,7 @@
         </encoder>
     </appender>
 
-    <logger name="ru.igar15.rest_voting_system" level="debug"/>
+    <logger name="ru.igar15.votingsystem" level="debug"/>
 
     <root level="info">
         <appender-ref ref="file"/>

@@ -48,7 +48,7 @@
     </properties>
 
     <build>
-        <finalName>rest-voting-system</finalName>
+        <finalName>votingsystem</finalName>
         <defaultGoal>package</defaultGoal>
         <plugins>
             <plugin>
