@@ -2,9 +2,7 @@ package ru.igar15.rest_voting_system;
 
 import ru.igar15.rest_voting_system.model.Vote;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.Month;
+import java.time.*;
 
 import static ru.igar15.rest_voting_system.RestaurantTestData.restaurant1;
 import static ru.igar15.rest_voting_system.RestaurantTestData.restaurant2;
@@ -28,5 +26,28 @@ public class VoteTestData {
         Vote vote = new Vote(VOTE1_ID, LocalDate.of(2021, Month.FEBRUARY, 25));
         vote.setRestaurant(restaurant2);
         return vote;
+    }
+
+    public static class MockClock extends Clock {
+        private LocalDateTime currentDateTime = LocalDateTime.now();
+
+        @Override
+        public ZoneId getZone() {
+            return ZoneId.of("UTC");
+        }
+
+        @Override
+        public Clock withZone(ZoneId zone) {
+            return this;
+        }
+
+        @Override
+        public Instant instant() {
+            return currentDateTime.toInstant(ZoneOffset.UTC);
+        }
+
+        public void setCurrentDateTime(LocalDateTime currentDateTime) {
+            this.currentDateTime = currentDateTime;
+        }
     }
 }
