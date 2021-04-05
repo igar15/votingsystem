@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration scan="true" scanPeriod="30 seconds">
 
+    <property name="DEV_HOME" value="c:/logs" />
+
     <!-- To enable JMX Management -->
     <jmxConfigurator/>
 
     <appender name="file" class="ch.qos.logback.core.FileAppender">
-        <file>log/rest_voting_system.log</file>
+        <file>${DEV_HOME}/rest_voting_system.log</file>
 
         <encoder>
             <charset>UTF-8</charset>
