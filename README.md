@@ -1,4 +1,4 @@
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/7cbbfc11cdca4502899c50db977bbfe3)](https://www.codacy.com/gh/igar15/restaurant-voting-system/dashboard)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/ddae95adbea54bed8afcc56f40b906ff)](https://www.codacy.com/gh/igar15/restaurant-voting-system/dashboard)
 [![Build Status](https://api.travis-ci.com/igar15/restaurant-voting-system.svg?branch=master)](https://travis-ci.com//igar15/restaurant-voting-system)
 
 Restaurant Voting System Project 
