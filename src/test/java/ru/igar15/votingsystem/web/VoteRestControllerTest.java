@@ -87,6 +87,7 @@ class VoteRestControllerTest extends AbstractControllerTest {
 
     private Vote findVoteWithRestaurant(int voteId, int userId) {
         Vote vote = voteRepository.find(voteId, userId).get();
+        // The transaction is not closed yet, so it needs to be manually unproxy
         vote.setRestaurant(Hibernate.unproxy(vote.getRestaurant(), Restaurant.class));
         return vote;
     }

@@ -26,7 +26,7 @@ public class VoteTestData {
     }
 
     public static Vote getUpdated() {
-        Vote vote = new Vote(VOTE1_ID, LocalDate.of(2021, Month.FEBRUARY, 25));
+        Vote vote = new Vote(VOTE1_ID, VOTE_TEST_DATE);
         vote.setRestaurant(restaurant2);
         return vote;
     }
