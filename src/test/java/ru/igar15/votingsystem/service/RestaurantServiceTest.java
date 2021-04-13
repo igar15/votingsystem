@@ -29,18 +29,18 @@ public class RestaurantServiceTest extends AbstractServiceTest {
 
     @Test
     public void duplicateNameCreate() {
-        Restaurant duplicateNameRestaurant = new Restaurant(null, "zRestaurant1", "notDuplicateAddress");
-        Restaurant created = service.create(duplicateNameRestaurant);
+        Restaurant duplicateName = new Restaurant(null, "Якитория", "Тверская, 45");
+        Restaurant created = service.create(duplicateName);
         int newId = created.id();
-        duplicateNameRestaurant.setId(newId);
-        RESTAURANT_MATCHER.assertMatch(created, duplicateNameRestaurant);
-        RESTAURANT_MATCHER.assertMatch(service.get(newId), duplicateNameRestaurant);
+        duplicateName.setId(newId);
+        RESTAURANT_MATCHER.assertMatch(created, duplicateName);
+        RESTAURANT_MATCHER.assertMatch(service.get(newId), duplicateName);
     }
 
     @Test
     public void duplicateNameAddressCreate() {
         assertThrows(DataAccessException.class,
-                () -> service.create(new Restaurant(null, "zRestaurant1", "Restaurant1Address")));
+                () -> service.create(new Restaurant(null, "Якитория", "Новый Арбат, 22")));
     }
 
     @Test

@@ -22,11 +22,12 @@ public class MenuTestData {
 
     public static Menu getNew() {
         Menu menu = new Menu();
-        menu.setDishes(List.of(new Dish("dishName1", 100), new Dish("dishName2", 200)));
+        menu.setDishes(List.of(new Dish("New1", 100), new Dish("New2", 200)));
         return menu;
     }
 
     public static Menu getUpdated() {
-        return new Menu(MENU1_ID, LocalDate.of(2021, Month.MARCH, 9), List.of(dish1Menu1, new Dish("newDish", 500)));
+        return new Menu(MENU1_ID, LocalDate.of(2021, Month.MARCH, 9),
+                List.of(dish1Menu1, new Dish("New", 500)));
     }
 }

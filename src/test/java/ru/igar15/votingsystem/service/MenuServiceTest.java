@@ -35,7 +35,7 @@ public class MenuServiceTest extends AbstractServiceTest {
     @Test
     public void duplicateDateCreate() {
         Menu menu = getNew();
-        menu.setDate(LocalDate.of(2021, Month.FEBRUARY, 25));
+        menu.setDate(menu1.getDate());
         assertThrows(DataAccessException.class,
                 () -> service.create(menu, RESTAURANT1_ID));
     }
@@ -43,7 +43,7 @@ public class MenuServiceTest extends AbstractServiceTest {
     @Test
     public void duplicateDishNameCreate() {
         Menu menu = getNew();
-        menu.setDishes(List.of(new Dish("dishName1", 100), new Dish("dishName1", 200)));
+        menu.setDishes(List.of(new Dish("name", 100), new Dish("name", 200)));
         assertThrows(DataAccessException.class,
                 () -> service.create(menu, RESTAURANT1_ID));
     }
