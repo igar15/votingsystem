@@ -35,7 +35,6 @@ public class MenuService {
     }
 
     @CacheEvict(value = "menusToday", key = "#restaurantId + '_' + T(java.time.LocalDate).now().toString()")
-    @Transactional
     public void delete(int id, int restaurantId) {
         Menu menu = get(id, restaurantId);
         menuRepository.delete(menu);

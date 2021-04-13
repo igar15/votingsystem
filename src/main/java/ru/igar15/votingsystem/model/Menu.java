@@ -1,11 +1,11 @@
 package ru.igar15.votingsystem.model;
 
-import org.hibernate.annotations.*;
 import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.*;
 
-import javax.persistence.*;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
@@ -20,12 +20,6 @@ public class Menu extends AbstractBaseEntity {
     @Column(name = "date")
     private LocalDate date = LocalDate.now();
 
-    @NotNull
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "restaurant_id")
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private Restaurant restaurant;
-
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @NotNull
     @Valid
@@ -36,11 +30,13 @@ public class Menu extends AbstractBaseEntity {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Dish> dishes;
 
-    public Menu() {
-    }
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "restaurant_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Restaurant restaurant;
 
-    public Menu(List<Dish> dishes) {
-        this.dishes = dishes;
+    public Menu() {
     }
 
     public Menu(Integer id, LocalDate date) {
@@ -51,6 +47,10 @@ public class Menu extends AbstractBaseEntity {
     public Menu(Integer id, LocalDate date, List<Dish> dishes) {
         super(id);
         this.date = date;
+        this.dishes = dishes;
+    }
+
+    public Menu(List<Dish> dishes) {
         this.dishes = dishes;
     }
 
