@@ -2,23 +2,22 @@ package ru.igar15.votingsystem.web;
 
 import org.hibernate.Hibernate;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import ru.igar15.votingsystem.TestUtil;
 import ru.igar15.votingsystem.VoteTestData;
-import ru.igar15.votingsystem.config.WebConfig;
 import ru.igar15.votingsystem.model.Restaurant;
 import ru.igar15.votingsystem.model.Vote;
 import ru.igar15.votingsystem.repository.VoteRepository;
 import ru.igar15.votingsystem.util.exception.VoteUpdateForbiddenException;
 
-import java.time.Clock;
-import java.time.LocalDateTime;
-import java.time.Month;
+import java.time.*;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -29,25 +28,23 @@ import static ru.igar15.votingsystem.VoteTestData.*;
 import static ru.igar15.votingsystem.util.ValidationUtil.getRootCause;
 import static ru.igar15.votingsystem.web.VoteRestController.REST_URL;
 
+@ExtendWith(MockitoExtension.class)
 class VoteRestControllerTest extends AbstractControllerTest {
 
-    @Configuration
-    @Import(WebConfig.class)
-    static class ClockConfig {
-        @Bean
-        public Clock clock() {
-            return new VoteTestData.MockClock();
-        }
-    }
+    @Autowired
+    @InjectMocks
+    private VoteRestController controller;
 
     @Autowired
     private VoteRepository voteRepository;
 
-    @Autowired
+    @Mock
     private Clock clock;
 
     @Test
     void create() throws Exception{
+        setupClock(clock, LocalDateTime.now());
+
         ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL)
                 .param("restaurantId", String.valueOf(RESTAURANT1_ID)))
                 .andExpect(status().isOk());
@@ -61,7 +58,8 @@ class VoteRestControllerTest extends AbstractControllerTest {
 
     @Test
     void update() throws Exception {
-        ((MockClock) clock).setCurrentDateTime(LocalDateTime.of(2021, Month.FEBRUARY, 25, 10, 15));
+        setupClock(clock, LocalDateTime.of(VOTE_TEST_DATE, BEFORE_ELEVEN));
+
         perform(MockMvcRequestBuilders.post(REST_URL)
                 .param("restaurantId", String.valueOf(RESTAURANT2_ID)))
                 .andExpect(status().isOk());
@@ -70,7 +68,8 @@ class VoteRestControllerTest extends AbstractControllerTest {
 
     @Test
     void updateFailed() throws Exception {
-        ((MockClock) clock).setCurrentDateTime(LocalDateTime.of(2021, Month.FEBRUARY, 25, 11, 15));
+        setupClock(clock, LocalDateTime.of(VOTE_TEST_DATE, AFTER_ELEVEN));
+
         assertThrows(VoteUpdateForbiddenException.class, () -> {
             try {
                 perform(MockMvcRequestBuilders.post(REST_URL)
@@ -79,6 +78,11 @@ class VoteRestControllerTest extends AbstractControllerTest {
                 throw getRootCause(e);
             }
         });
+    }
+
+    private void setupClock(Clock clock, LocalDateTime dateTime) {
+        Mockito.when(clock.getZone()).thenReturn(ZoneId.of("UTC"));
+        Mockito.when(clock.instant()).thenReturn(dateTime.toInstant(ZoneOffset.UTC));
     }
 
     private Vote findVoteWithRestaurant(int voteId, int userId) {
