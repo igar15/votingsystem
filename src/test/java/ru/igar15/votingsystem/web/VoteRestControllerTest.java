@@ -10,20 +10,25 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import ru.igar15.votingsystem.TestUtil;
 import ru.igar15.votingsystem.VoteTestData;
 import ru.igar15.votingsystem.model.Restaurant;
 import ru.igar15.votingsystem.model.Vote;
 import ru.igar15.votingsystem.repository.VoteRepository;
 import ru.igar15.votingsystem.util.exception.VoteUpdateForbiddenException;
 
-import java.time.*;
+import java.time.Clock;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.igar15.votingsystem.RestaurantTestData.RESTAURANT1_ID;
 import static ru.igar15.votingsystem.RestaurantTestData.RESTAURANT2_ID;
+import static ru.igar15.votingsystem.TestUtil.readFromJson;
+import static ru.igar15.votingsystem.TestUtil.userHttpBasic;
 import static ru.igar15.votingsystem.UserTestData.USER_ID;
+import static ru.igar15.votingsystem.UserTestData.user;
 import static ru.igar15.votingsystem.VoteTestData.*;
 import static ru.igar15.votingsystem.util.ValidationUtil.getRootCause;
 import static ru.igar15.votingsystem.web.VoteRestController.REST_URL;
@@ -46,10 +51,11 @@ class VoteRestControllerTest extends AbstractControllerTest {
         setupClock(clock, LocalDateTime.now());
 
         ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL)
+                .with(userHttpBasic(user))
                 .param("restaurantId", String.valueOf(RESTAURANT1_ID)))
                 .andExpect(status().isOk());
 
-        Vote created = TestUtil.readFromJson(action, Vote.class);
+        Vote created = readFromJson(action, Vote.class);
         int newId = created.id();
         Vote newVote = VoteTestData.getNew();
         newVote.setId(newId);
@@ -57,10 +63,18 @@ class VoteRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    void createUnAuth() throws Exception{
+        perform(MockMvcRequestBuilders.post(REST_URL)
+                .param("restaurantId", String.valueOf(RESTAURANT1_ID)))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
     void update() throws Exception {
         setupClock(clock, LocalDateTime.of(VOTE_TEST_DATE, BEFORE_ELEVEN));
 
         perform(MockMvcRequestBuilders.post(REST_URL)
+                .with(userHttpBasic(user))
                 .param("restaurantId", String.valueOf(RESTAURANT2_ID)))
                 .andExpect(status().isOk());
         VOTE_MATCHER.assertMatch(findVoteWithRestaurant(VOTE1_ID, USER_ID), VoteTestData.getUpdated());
@@ -73,6 +87,7 @@ class VoteRestControllerTest extends AbstractControllerTest {
         assertThrows(VoteUpdateForbiddenException.class, () -> {
             try {
                 perform(MockMvcRequestBuilders.post(REST_URL)
+                        .with(userHttpBasic(user))
                         .param("restaurantId", String.valueOf(RESTAURANT2_ID)));
             } catch (Exception e) {
                 throw getRootCause(e);

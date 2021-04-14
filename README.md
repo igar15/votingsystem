@@ -24,8 +24,8 @@ This is the REST API implementation of voting system for deciding where to have 
     - If it is before 11:00 we assume that he changed his mind.
     - If it is after 11:00 then it is too late, vote can't be changed
 * Each restaurant provides a new menu each day.
-* If user is not logged in he can only view restaurants and their menus.  
-* User must be logged in to work with his profile and vote for the restaurant.  
+* If user is not authorized, he can only view restaurants and their menus.  
+* User must be authorized to work with his profile and vote for the restaurant.  
 
 ### <a href="domain_model.md">Application domain model schema</a>
 

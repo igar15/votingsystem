@@ -15,6 +15,8 @@ import ru.igar15.votingsystem.config.WebConfig;
 
 import javax.annotation.PostConstruct;
 
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+
 @SpringJUnitWebConfig(classes = {AppConfig.class, BeanPropsOverrideConfig.class, WebConfig.class})
 @Transactional
 public class AbstractControllerTest {
@@ -36,6 +38,7 @@ public class AbstractControllerTest {
         mockMvc = MockMvcBuilders
                 .webAppContextSetup(webApplicationContext)
                 .addFilter(CHARACTER_ENCODING_FILTER)
+                .apply(springSecurity())
                 .build();
     }
 
