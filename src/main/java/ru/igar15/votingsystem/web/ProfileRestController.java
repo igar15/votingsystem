@@ -8,6 +8,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import ru.igar15.votingsystem.model.User;
 import ru.igar15.votingsystem.service.UserService;
+import ru.igar15.votingsystem.to.UserTo;
 
 import static ru.igar15.votingsystem.util.ValidationUtil.assureIdConsistent;
 import static ru.igar15.votingsystem.web.SecurityUtil.authUserId;
@@ -38,10 +39,10 @@ public class ProfileRestController {
 
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@RequestBody User user) {
+    public void update(@RequestBody UserTo userTo) {
         int userId = authUserId();
-        log.info("update {} with userId={}", user, userId);
-        assureIdConsistent(user, userId);
-        service.update(user);
+        log.info("update {} with id={}", userTo, userId);
+        assureIdConsistent(userTo, userId);
+        service.update(userTo);
     }
 }

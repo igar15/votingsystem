@@ -1,18 +1,24 @@
 package ru.igar15.votingsystem.service;
 
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import ru.igar15.votingsystem.AuthorizedUser;
 import ru.igar15.votingsystem.model.User;
 import ru.igar15.votingsystem.repository.UserRepository;
+import ru.igar15.votingsystem.to.UserTo;
+import ru.igar15.votingsystem.util.UserUtil;
 import ru.igar15.votingsystem.util.exception.NotFoundException;
 
 import java.util.List;
 
 @Service
+@Scope(proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class UserService implements UserDetailsService {
 
     private final UserRepository repository;
@@ -47,6 +53,13 @@ public class UserService implements UserDetailsService {
         Assert.notNull(user, "user must not be null");
         get(user.id());
         repository.save(user);
+    }
+
+    @Transactional
+    public void update(UserTo userTo) {
+        Assert.notNull(userTo, "user must not be null");
+        User user = get(userTo.id());
+        UserUtil.updateFromTo(user, userTo);
     }
 
     @Override

@@ -1,13 +1,26 @@
 package ru.igar15.votingsystem.to;
 
-public class UserTo {
+import ru.igar15.votingsystem.HasId;
+
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+
+public class UserTo implements HasId {
 
     private Integer id;
 
+    @NotBlank
+    @Size(min = 2, max = 100)
     private String name;
 
+    @Email
+    @NotBlank
+    @Size(max = 100)
     private String email;
 
+    @NotBlank
+    @Size(min = 5, max = 100)
     private String password;
 
     public UserTo() {
@@ -20,10 +33,12 @@ public class UserTo {
         this.password = password;
     }
 
+    @Override
     public Integer getId() {
         return id;
     }
 
+    @Override
     public void setId(Integer id) {
         this.id = id;
     }
