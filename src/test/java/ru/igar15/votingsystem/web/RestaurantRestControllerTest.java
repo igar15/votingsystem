@@ -5,16 +5,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import ru.igar15.votingsystem.TestUtil;
 import ru.igar15.votingsystem.model.Restaurant;
 import ru.igar15.votingsystem.service.RestaurantService;
 import ru.igar15.votingsystem.util.exception.NotFoundException;
 import ru.igar15.votingsystem.web.json.JsonUtil;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.igar15.votingsystem.RestaurantTestData.*;
+import static ru.igar15.votingsystem.TestUtil.readFromJson;
 
 class RestaurantRestControllerTest extends AbstractControllerTest {
     private static final String REST_URL = RestaurantRestController.REST_URL + '/';
@@ -55,7 +56,7 @@ class RestaurantRestControllerTest extends AbstractControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(newRestaurant)))
                 .andExpect(status().isCreated());
-        Restaurant created = TestUtil.readFromJson(action, Restaurant.class);
+        Restaurant created = readFromJson(action, Restaurant.class);
         int newId = created.id();
         newRestaurant.setId(newId);
         RESTAURANT_MATCHER.assertMatch(created, newRestaurant);

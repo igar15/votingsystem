@@ -1,7 +1,11 @@
 package ru.igar15.votingsystem.service;
 
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+import ru.igar15.votingsystem.AuthorizedUser;
 import ru.igar15.votingsystem.model.User;
 import ru.igar15.votingsystem.repository.UserRepository;
 import ru.igar15.votingsystem.util.exception.NotFoundException;
@@ -9,7 +13,7 @@ import ru.igar15.votingsystem.util.exception.NotFoundException;
 import java.util.List;
 
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
 
     private final UserRepository repository;
 
@@ -43,5 +47,12 @@ public class UserService {
         Assert.notNull(user, "user must not be null");
         get(user.id());
         repository.save(user);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        User user = repository.findByEmail(email.toLowerCase())
+                .orElseThrow(() -> new UsernameNotFoundException("User " + email + " is not found"));
+        return new AuthorizedUser(user);
     }
 }
