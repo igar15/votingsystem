@@ -7,6 +7,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.igar15.votingsystem.model.Menu;
@@ -28,18 +29,21 @@ public class MenuRestController {
     @Autowired
     private MenuService service;
 
+    @Secured("ROLE_ADMIN")
     @GetMapping("/{restaurantId}/menus")
     public List<Menu> getAll(@PathVariable int restaurantId) {
         log.info("getAll for restaurant {}", restaurantId);
         return service.getAll(restaurantId);
     }
 
+    @Secured("ROLE_ADMIN")
     @GetMapping("/{restaurantId}/menus/{menuId}")
     public Menu get(@PathVariable int restaurantId, @PathVariable int menuId) {
         log.info("get menu {} for restaurant {}", menuId, restaurantId);
         return service.get(menuId, restaurantId);
     }
 
+    @Secured("ROLE_ADMIN")
     @GetMapping("/{restaurantId}/menus/by")
     public Menu getByDate(@PathVariable int restaurantId,
                           @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
@@ -53,6 +57,7 @@ public class MenuRestController {
         return service.getToday(restaurantId);
     }
 
+    @Secured("ROLE_ADMIN")
     @DeleteMapping("/{restaurantId}/menus/{menuId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable int restaurantId, @PathVariable int menuId) {
@@ -60,6 +65,7 @@ public class MenuRestController {
         service.delete(menuId, restaurantId);
     }
 
+    @Secured("ROLE_ADMIN")
     @PostMapping(value = "/{restaurantId}/menus", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Menu> createWithLocation(@RequestBody Menu menu, @PathVariable int restaurantId) {
         log.info("create {} for restaurant {}", menu, restaurantId);
@@ -71,6 +77,7 @@ public class MenuRestController {
         return ResponseEntity.created(uriOfNewResource).body(created);
     }
 
+    @Secured("ROLE_ADMIN")
     @PutMapping(value = "/{restaurantId}/menus/{menuId}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void update(@RequestBody Menu menu, @PathVariable int restaurantId, @PathVariable int menuId) {

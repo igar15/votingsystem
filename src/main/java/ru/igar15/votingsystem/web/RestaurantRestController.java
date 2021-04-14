@@ -3,9 +3,11 @@ package ru.igar15.votingsystem.web;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.igar15.votingsystem.model.Restaurant;
@@ -26,6 +28,9 @@ public class RestaurantRestController {
     @Autowired
     private RestaurantService service;
 
+    @Autowired
+    private ApplicationContext context;
+
     @GetMapping
     public List<Restaurant> getAll() {
         log.info("getAll");
@@ -38,6 +43,7 @@ public class RestaurantRestController {
         return service.get(id);
     }
 
+    @Secured("ROLE_ADMIN")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable int id) {
@@ -45,6 +51,7 @@ public class RestaurantRestController {
         service.delete(id);
     }
 
+    @Secured("ROLE_ADMIN")
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Restaurant> createWithLocation(@RequestBody Restaurant restaurant) {
         log.info("create {}", restaurant);
@@ -56,6 +63,7 @@ public class RestaurantRestController {
         return ResponseEntity.created(uriOfNewResource).body(created);
     }
 
+    @Secured("ROLE_ADMIN")
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void update(@RequestBody Restaurant restaurant, @PathVariable int id) {
