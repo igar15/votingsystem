@@ -1,5 +1,6 @@
 package ru.igar15.votingsystem.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -27,6 +28,7 @@ public class User extends AbstractNamedEntity {
 
     @NotBlank
     @Size(min = 5, max = 100)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Column(name = "password")
     private String password;
 
@@ -34,6 +36,7 @@ public class User extends AbstractNamedEntity {
     private boolean enabled = true;
 
     @NotNull
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @Column(name = "registered")
     private Date registered = new Date();
 
