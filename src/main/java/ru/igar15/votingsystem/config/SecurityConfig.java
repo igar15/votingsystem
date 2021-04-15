@@ -33,6 +33,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                     .antMatchers(HttpMethod.GET,"/rest/restaurants/**").permitAll()
+                    .antMatchers("/rest/profile/register").anonymous()
                     .anyRequest().authenticated()
                 .and()
                 .httpBasic();

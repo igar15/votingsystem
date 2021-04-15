@@ -3,6 +3,7 @@ package ru.igar15.votingsystem.web;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import ru.igar15.votingsystem.model.User;
 import ru.igar15.votingsystem.service.UserService;
@@ -13,6 +14,7 @@ import ru.igar15.votingsystem.web.json.JsonUtil;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static ru.igar15.votingsystem.TestUtil.readFromJson;
 import static ru.igar15.votingsystem.TestUtil.userHttpBasic;
 import static ru.igar15.votingsystem.UserTestData.*;
 import static ru.igar15.votingsystem.web.ProfileRestController.REST_URL;
@@ -49,6 +51,23 @@ class ProfileRestControllerTest extends AbstractControllerTest {
     void deleteUnAuth() throws Exception {
         perform(MockMvcRequestBuilders.delete(REST_URL))
                 .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void register() throws Exception {
+        UserTo newTo = new UserTo(null, "newName", "newemail@ya.ru", "newPassword");
+        User newUser = UserUtil.createNewFromTo(newTo);
+        ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL + "/register")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(newTo)))
+                .andDo(print())
+                .andExpect(status().isCreated());
+
+        User created = readFromJson(action, User.class);
+        int newId = created.getId();
+        newUser.setId(newId);
+        USER_MATCHER.assertMatch(created, newUser);
+        USER_MATCHER.assertMatch(userService.get(newId), newUser);
     }
 
     @Test
