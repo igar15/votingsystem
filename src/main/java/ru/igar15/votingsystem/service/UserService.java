@@ -5,6 +5,7 @@ import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -17,19 +18,23 @@ import ru.igar15.votingsystem.util.exception.NotFoundException;
 
 import java.util.List;
 
+import static ru.igar15.votingsystem.util.UserUtil.prepareToSave;
+
 @Service
 @Scope(proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class UserService implements UserDetailsService {
 
     private final UserRepository repository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository repository) {
+    public UserService(UserRepository repository, PasswordEncoder passwordEncoder) {
         this.repository = repository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public User create(User user) {
         Assert.notNull(user, "user must not be null");
-        return repository.save(user);
+        return prepareAndSave(user);
     }
 
     public void delete(int id) {
@@ -52,14 +57,14 @@ public class UserService implements UserDetailsService {
     public void update(User user) {
         Assert.notNull(user, "user must not be null");
         get(user.id());
-        repository.save(user);
+        prepareAndSave(user);
     }
 
     @Transactional
     public void update(UserTo userTo) {
         Assert.notNull(userTo, "user must not be null");
         User user = get(userTo.id());
-        UserUtil.updateFromTo(user, userTo);
+        prepareAndSave(UserUtil.updateFromTo(user, userTo));
     }
 
     @Override
@@ -67,5 +72,9 @@ public class UserService implements UserDetailsService {
         User user = repository.findByEmail(email.toLowerCase())
                 .orElseThrow(() -> new UsernameNotFoundException("User " + email + " is not found"));
         return new AuthorizedUser(user);
+    }
+
+    private User prepareAndSave(User user) {
+        return repository.save(prepareToSave(user, passwordEncoder));
     }
 }
