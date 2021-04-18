@@ -32,13 +32,42 @@ This is the REST API implementation of voting system for deciding where to have 
 ### <a href="interaction_example.md">The schematic example of interaction between frontend and backend</a>
 
 ### API documentation:
-- GET /restaurants - get list of restaurants
-- GET /restaurants/restaurantId - get a restaurant with id = restaurantId
-- POST /restaurants/ - create a new restaurant
-- PUT /restaurants/restaurantId - update a restaurant with id = restaurantId
-- DELETE /restaurants/restaurantId - delete a restaurant with id = restaurantId
-- ..............................
+#### Users
+- POST /rest/profile/register (register a new user)
+- GET /rest/profile (get user profile)
+- PUT /rest/profile (update user profile)
+- DELETE /rest/profile (delete user profile)
+#### Restaurants
+- POST /rest/restaurants (create a new restaurant)
+- GET /rest/restaurants (get list of restaurants)
+- GET /restaurants/{restaurantId} (get restaurant with id = restaurantId)
+- PUT /rest/restaurants/{restaurantId} (update restaurant with id = restaurantId)
+- DELETE /rest/restaurants/{restaurantId} (delete restaurant with id = restaurantId)
+#### Menus
+- POST /rest/restaurants/{restaurantId}/menus/today (create today menu for restaurant with id = restaurantId)
+- GET /rest/restaurants/{restaurantId}/menus/today (get today menu for restaurant with id = restaurantId)
+- PUT /rest/restaurants/{restaurantId}/menus/{menuId} (update menu with id = menuId for restaurant with id = restaurantId)
+- DELETE /rest/restaurants/{restaurantId}/menus/{menuId} (delete menu with id = menuId for restaurant with id = restaurantId)
+#### Votes
+- POST /rest/votes?restaurantId={restaurantId} (register vote from user for restaurant with id = restaurantId)
 
 ### Curl commands to test API:
-- curl -v http://localhost:8082/rest-voting-system/restaurants
-- ....
+#### register a new User
+`curl -s -i -X POST -d '{"name":"New User","email":"test@mail.ru","password":"test-password"}' -H 'Content-Type:application/json;charset=UTF-8' http://localhost:8080/votingsystem/rest/profile/register`
+#### get User profile
+`curl -s http://localhost:8080/votingsystem/rest/profile --user test@mail.ru:test-password`
+#### update User profile
+`curl -s -X PUT -d '{"name":"Updated User","email":"updated@mail.ru","password":"updated-password"}' -H 'Content-Type: application/json' http://localhost:8080/votingsystem/rest/profile --user test@mail.ru:test-password`
+#### delete User profile
+`curl -s -X DELETE http://localhost:8080/votingsystem/rest/profile --user updated@mail.ru:updated-password`
+#### create a new Restaurant
+`curl -s -i -X POST -d '{"name":"New Restaurant","address":"New address"}' -H 'Content-Type:application/json;charset=UTF-8' http://localhost:8080/votingsystem/rest/restaurants --user admin@gmail.com:admin`
+#### get all Restaurants 
+`curl -s http://localhost:8080/votingsystem/rest/restaurants`
+#### get Restaurant with id=100003
+`curl -s http://localhost:8080/votingsystem/rest/restaurants/100003`
+#### update Restaurant with id=100003
+`curl -s -X PUT -d '{"name":"Updated Restaurant","address":"Updated address"}' -H 'Content-Type: application/json' http://localhost:8080/votingsystem/rest/restaurants/100003 --user admin@gmail.com:admin`
+#### delete Restaurant with id=100003
+`curl -s -X DELETE http://localhost:8080/votingsystem/rest/restaurants/100003 --user admin@gmail.com:admin`
+

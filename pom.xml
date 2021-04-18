@@ -11,7 +11,7 @@
     <version>1.0-SNAPSHOT</version>
 
     <name>Restaurant Voting System</name>
-    <url>http://igar15.ru/voting</url>
+    <url>http://igar15.ru/votingsystem</url>
 
     <properties>
         <java.version>15</java.version>

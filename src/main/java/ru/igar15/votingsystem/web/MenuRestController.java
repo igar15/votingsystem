@@ -78,6 +78,19 @@ public class MenuRestController {
     }
 
     @Secured("ROLE_ADMIN")
+    @PostMapping(value = "/{restaurantId}/menus/today", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Menu> createTodayWithLocation(@RequestBody Menu menu, @PathVariable int restaurantId) {
+        log.info("create today {} for restaurant {}", menu, restaurantId);
+        checkNew(menu);
+        menu.setDate(LocalDate.now());
+        Menu created = service.create(menu, restaurantId);
+        URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path(REST_URL + "/" + restaurantId + "/menus/today")
+                .build().toUri();
+        return ResponseEntity.created(uriOfNewResource).body(created);
+    }
+
+    @Secured("ROLE_ADMIN")
     @PutMapping(value = "/{restaurantId}/menus/{menuId}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void update(@RequestBody Menu menu, @PathVariable int restaurantId, @PathVariable int menuId) {
