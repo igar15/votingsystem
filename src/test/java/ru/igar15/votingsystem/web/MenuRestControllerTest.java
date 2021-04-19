@@ -11,6 +11,8 @@ import ru.igar15.votingsystem.service.MenuService;
 import ru.igar15.votingsystem.util.exception.NotFoundException;
 import ru.igar15.votingsystem.web.json.JsonUtil;
 
+import java.time.LocalDate;
+
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -120,6 +122,16 @@ class MenuRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    void deleteToday() throws Exception {
+        Menu createdToday = menuService.create(MenuTestData.getNew(), RESTAURANT1_ID);
+        perform(MockMvcRequestBuilders.delete(REST_URL + RESTAURANT1_ID + "/menus/today")
+                .with(userHttpBasic(admin)))
+                .andExpect(status().isNoContent())
+                .andDo(print());
+        assertThrows(NotFoundException.class, () -> menuService.get(createdToday.id(), RESTAURANT1_ID));
+    }
+
+    @Test
     void deleteNotAdmin() throws Exception {
         perform(MockMvcRequestBuilders.delete(REST_URL + RESTAURANT1_ID + "/menus/" + MENU1_ID)
                 .with(userHttpBasic(user)))
@@ -151,6 +163,23 @@ class MenuRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    void createTodayWithLocation() throws Exception {
+        Menu newMenu = MenuTestData.getNew();
+        ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL + RESTAURANT1_ID + "/menus/today")
+                .with(userHttpBasic(admin))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(newMenu)))
+                .andExpect(status().isCreated());
+
+        Menu created = readFromJson(action, Menu.class);
+        int newId = created.id();
+        newMenu.setId(newId);
+        MENU_MATCHER.assertMatch(created, newMenu);
+        MENU_MATCHER.assertMatch(menuService.get(newId, RESTAURANT1_ID), newMenu);
+        MENU_MATCHER.assertMatch(menuService.getToday(RESTAURANT1_ID), newMenu);
+    }
+
+    @Test
     void createNotAdmin() throws Exception {
         Menu newMenu = MenuTestData.getNew();
         perform(MockMvcRequestBuilders.post(REST_URL + RESTAURANT1_ID + "/menus")
@@ -167,6 +196,19 @@ class MenuRestControllerTest extends AbstractControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(newMenu)))
                 .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void updateToday() throws Exception {
+        Menu createdToday = menuService.create(MenuTestData.getNew(), RESTAURANT1_ID);
+        Menu updated = MenuTestData.getUpdated();
+        perform(MockMvcRequestBuilders.put(REST_URL + RESTAURANT1_ID + "/menus/today")
+                .with(userHttpBasic(admin))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(updated)))
+                .andExpect(status().isNoContent());
+
+        MENU_MATCHER.assertMatch(menuService.get(createdToday.id(), RESTAURANT1_ID), new Menu(createdToday.id(), LocalDate.now(), updated.getDishes()));
     }
 
     @Test

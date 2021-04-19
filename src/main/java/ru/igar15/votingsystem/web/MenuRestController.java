@@ -66,6 +66,14 @@ public class MenuRestController {
     }
 
     @Secured("ROLE_ADMIN")
+    @DeleteMapping("/{restaurantId}/menus/today")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteToday(@PathVariable int restaurantId) {
+        log.info("delete today menu for restaurant {}", restaurantId);
+        service.deleteToday(restaurantId);
+    }
+
+    @Secured("ROLE_ADMIN")
     @PostMapping(value = "/{restaurantId}/menus", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Menu> createWithLocation(@RequestBody Menu menu, @PathVariable int restaurantId) {
         log.info("create {} for restaurant {}", menu, restaurantId);
@@ -97,5 +105,13 @@ public class MenuRestController {
         log.info("update {} for restaurant {}", menu, restaurantId);
         assureIdConsistent(menu, menuId);
         service.update(menu, restaurantId);
+    }
+
+    @Secured("ROLE_ADMIN")
+    @PutMapping(value = "/{restaurantId}/menus/today", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void updateToday(@RequestBody Menu menu, @PathVariable int restaurantId) {
+        log.info("update today {} for restaurant {}", menu, restaurantId);
+        service.updateToday(menu, restaurantId);
     }
 }

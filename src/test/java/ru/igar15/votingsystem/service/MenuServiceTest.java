@@ -55,6 +55,13 @@ public class MenuServiceTest extends AbstractServiceTest {
     }
 
     @Test
+    public void deleteToday() {
+        Menu createdToday = service.create(getNew(), RESTAURANT1_ID);
+        service.deleteToday(RESTAURANT1_ID);
+        assertThrows(NotFoundException.class, () -> service.get(createdToday.id(), RESTAURANT1_ID));
+    }
+
+    @Test
     public void deleteNotFound() {
         assertThrows(NotFoundException.class, () -> service.delete(NOT_FOUND, RESTAURANT1_ID));
     }
@@ -109,6 +116,15 @@ public class MenuServiceTest extends AbstractServiceTest {
         Menu updated = getUpdated();
         service.update(updated, RESTAURANT1_ID);
         MENU_MATCHER.assertMatch(service.get(MENU1_ID, RESTAURANT1_ID), getUpdated());
+    }
+
+    @Test
+    public void updateToday() {
+        Menu createdToday = service.create(getNew(), RESTAURANT1_ID);
+        Menu updated = getUpdated();
+        service.updateToday(updated, RESTAURANT1_ID);
+        createdToday.setDishes(updated.getDishes());
+        MENU_MATCHER.assertMatch(service.getToday(RESTAURANT1_ID), createdToday);
     }
 
     @Test
