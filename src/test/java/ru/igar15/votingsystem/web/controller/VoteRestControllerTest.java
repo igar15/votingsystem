@@ -1,4 +1,4 @@
-package ru.igar15.votingsystem.web;
+package ru.igar15.votingsystem.web.controller;
 
 import org.hibernate.Hibernate;
 import org.junit.jupiter.api.Test;
@@ -31,7 +31,7 @@ import static ru.igar15.votingsystem.UserTestData.USER_ID;
 import static ru.igar15.votingsystem.UserTestData.user;
 import static ru.igar15.votingsystem.VoteTestData.*;
 import static ru.igar15.votingsystem.util.ValidationUtil.getRootCause;
-import static ru.igar15.votingsystem.web.VoteRestController.REST_URL;
+import static ru.igar15.votingsystem.web.controller.VoteRestController.REST_URL;
 
 @ExtendWith(MockitoExtension.class)
 class VoteRestControllerTest extends AbstractControllerTest {

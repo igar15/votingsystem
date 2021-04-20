@@ -1,4 +1,4 @@
-package ru.igar15.votingsystem.web;
+package ru.igar15.votingsystem.web.controller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

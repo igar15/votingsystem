@@ -1,4 +1,4 @@
-package ru.igar15.votingsystem.web;
+package ru.igar15.votingsystem.web.controller;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static ru.igar15.votingsystem.TestUtil.readFromJson;
 import static ru.igar15.votingsystem.TestUtil.userHttpBasic;
 import static ru.igar15.votingsystem.UserTestData.*;
-import static ru.igar15.votingsystem.web.ProfileRestController.REST_URL;
+import static ru.igar15.votingsystem.web.controller.ProfileRestController.REST_URL;
 
 class ProfileRestControllerTest extends AbstractControllerTest {
 

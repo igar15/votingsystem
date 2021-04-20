@@ -1,4 +1,4 @@
-package ru.igar15.votingsystem.web;
+package ru.igar15.votingsystem.web.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig;
