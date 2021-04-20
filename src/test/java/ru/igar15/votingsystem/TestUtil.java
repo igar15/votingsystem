@@ -11,6 +11,10 @@ import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 public class TestUtil {
+    // Suppresses default constructor, ensuring non-instantiability.
+    private TestUtil() {
+    }
+
     public static String getContent(MvcResult result) throws UnsupportedEncodingException {
         return result.getResponse().getContentAsString();
     }
