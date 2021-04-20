@@ -137,5 +137,6 @@ public class MenuServiceTest extends AbstractServiceTest {
         validateRootCause(ConstraintViolationException.class, () -> service.create(new Menu(), RESTAURANT1_ID));
         validateRootCause(ConstraintViolationException.class, () -> service.create(new Menu(List.of(new Dish("", 300))), RESTAURANT1_ID));
         validateRootCause(ConstraintViolationException.class, () -> service.create(new Menu(List.of(new Dish("dish1", 0))), RESTAURANT1_ID));
+        validateRootCause(ConstraintViolationException.class, () -> service.create(new Menu(List.of()), RESTAURANT1_ID));
     }
 }

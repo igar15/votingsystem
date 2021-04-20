@@ -9,6 +9,7 @@ import ru.igar15.votingsystem.model.Menu;
 import ru.igar15.votingsystem.model.Restaurant;
 import ru.igar15.votingsystem.repository.MenuRepository;
 import ru.igar15.votingsystem.repository.RestaurantRepository;
+import ru.igar15.votingsystem.to.MenuTo;
 import ru.igar15.votingsystem.util.exception.NotFoundException;
 
 import java.time.LocalDate;
@@ -81,5 +82,13 @@ public class MenuService {
         Assert.notNull(menu, "menu must not be null");
         Menu dbMenu = getByDate(restaurantId, LocalDate.now());
         dbMenu.setDishes(menu.getDishes());
+    }
+
+    @CacheEvict(value = "menusToday", key = "#restaurantId + '_' + T(java.time.LocalDate).now().toString()")
+    @Transactional
+    public void updateToday(MenuTo menuTo, int restaurantId) {
+        Assert.notNull(menuTo, "menuTo must not be null");
+        Menu menu = getByDate(restaurantId, LocalDate.now());
+        menu.setDishes(menuTo.getDishes());
     }
 }

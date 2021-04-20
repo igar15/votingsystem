@@ -7,6 +7,9 @@ import ru.igar15.votingsystem.model.User;
 import ru.igar15.votingsystem.to.UserTo;
 
 public class UserUtil {
+    // Suppresses default constructor, ensuring non-instantiability.
+    private UserUtil() {
+    }
 
     public static User createNewFromTo(UserTo userTo) {
         return new User(null, userTo.getName(), userTo.getEmail().toLowerCase(), userTo.getPassword(), Role.USER);

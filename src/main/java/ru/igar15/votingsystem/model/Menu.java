@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.*;
 import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.List;
@@ -21,7 +22,7 @@ public class Menu extends AbstractBaseEntity {
     private LocalDate date = LocalDate.now();
 
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    @NotNull
+    @NotEmpty
     @Valid
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "dishes", joinColumns = @JoinColumn(name = "menu_id"))

@@ -5,6 +5,9 @@ import org.springframework.lang.NonNull;
 import ru.igar15.votingsystem.HasId;
 
 public class ValidationUtil {
+    // Suppresses default constructor, ensuring non-instantiability.
+    private ValidationUtil() {
+    }
 
     //  https://stackoverflow.com/a/65442410/548473
     @NonNull

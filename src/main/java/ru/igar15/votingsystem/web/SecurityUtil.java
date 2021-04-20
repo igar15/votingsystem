@@ -7,7 +7,7 @@ import ru.igar15.votingsystem.AuthorizedUser;
 import static java.util.Objects.requireNonNull;
 
 public class SecurityUtil {
-
+    // Suppresses default constructor, ensuring non-instantiability.
     private SecurityUtil() {
     }
 
