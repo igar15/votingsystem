@@ -20,29 +20,29 @@ import java.net.URI;
 @RequestMapping(value = MenuRestController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class MenuRestController {
     private final Logger log = LoggerFactory.getLogger(getClass());
-    static final String REST_URL = "/rest/restaurants";
+    static final String REST_URL = "/rest/restaurants/{restaurantId}/menus/today";
 
     @Autowired
     private MenuService service;
 
-    @GetMapping("/{restaurantId}/menus/today")
+    @GetMapping
     public Menu getToday(@PathVariable int restaurantId) {
-        log.info("get today menu for restaurant {}", restaurantId);
+        log.info("get today's menu for restaurant {}", restaurantId);
         return service.getToday(restaurantId);
     }
 
     @Secured("ROLE_ADMIN")
-    @DeleteMapping("/{restaurantId}/menus/today")
+    @DeleteMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteToday(@PathVariable int restaurantId) {
-        log.info("delete today menu for restaurant {}", restaurantId);
+        log.info("delete today's menu for restaurant {}", restaurantId);
         service.deleteToday(restaurantId);
     }
 
     @Secured("ROLE_ADMIN")
-    @PostMapping(value = "/{restaurantId}/menus/today", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Menu> createTodayWithLocation(@RequestBody MenuTo menuTo, @PathVariable int restaurantId) {
-        log.info("create today {} for restaurant {}", menuTo, restaurantId);
+        log.info("create today's {} for restaurant {}", menuTo, restaurantId);
         Menu created = service.create(MenuUtil.createNewFromTo(menuTo), restaurantId);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_URL + "/" + restaurantId + "/menus/today")
@@ -51,10 +51,10 @@ public class MenuRestController {
     }
 
     @Secured("ROLE_ADMIN")
-    @PutMapping(value = "/{restaurantId}/menus/today", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateToday(@RequestBody MenuTo menuTo, @PathVariable int restaurantId) {
-        log.info("update today {} for restaurant {}", menuTo, restaurantId);
+        log.info("update today's {} for restaurant {}", menuTo, restaurantId);
         service.updateToday(menuTo, restaurantId);
     }
 }

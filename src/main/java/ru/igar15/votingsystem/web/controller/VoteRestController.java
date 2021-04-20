@@ -33,7 +33,7 @@ public class VoteRestController {
     @PostMapping
     public ResponseEntity<Vote> registerVote(@RequestParam int restaurantId) {
         int userId = authUserId();
-        log.info("register vote from {} for restaurant {}", userId, restaurantId);
+        log.info("register today's vote from user {} for restaurant {}", userId, restaurantId);
         Vote registered = service.registerVote(userId, restaurantId, LocalDate.now(clock), LocalTime.now(clock));
         return ResponseEntity.ok().body(registered);
     }

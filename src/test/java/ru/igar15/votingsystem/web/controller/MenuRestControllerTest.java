@@ -29,7 +29,7 @@ import static ru.igar15.votingsystem.UserTestData.admin;
 import static ru.igar15.votingsystem.UserTestData.user;
 
 class MenuRestControllerTest extends AbstractControllerTest {
-    private static final String REST_URL = MenuRestController.REST_URL + '/';
+    private static final String REST_URL = "/rest/restaurants/" + RESTAURANT1_ID + "/menus/today";
 
     @Autowired
     private MenuService menuService;
@@ -37,7 +37,7 @@ class MenuRestControllerTest extends AbstractControllerTest {
     @Test
     void getToday() throws Exception {
         Menu createdToday = createTodayMenu();
-        perform(MockMvcRequestBuilders.get(REST_URL + RESTAURANT1_ID + "/menus/today"))
+        perform(MockMvcRequestBuilders.get(REST_URL))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -47,7 +47,7 @@ class MenuRestControllerTest extends AbstractControllerTest {
     @Test
     void deleteToday() throws Exception {
         Menu createdToday = createTodayMenu();
-        perform(MockMvcRequestBuilders.delete(REST_URL + RESTAURANT1_ID + "/menus/today")
+        perform(MockMvcRequestBuilders.delete(REST_URL)
                 .with(userHttpBasic(admin)))
                 .andExpect(status().isNoContent())
                 .andDo(print());
@@ -56,14 +56,14 @@ class MenuRestControllerTest extends AbstractControllerTest {
 
     @Test
     void deleteTodayNotAdmin() throws Exception {
-        perform(MockMvcRequestBuilders.delete(REST_URL + RESTAURANT1_ID + "/menus/today")
+        perform(MockMvcRequestBuilders.delete(REST_URL)
                 .with(userHttpBasic(user)))
                 .andExpect(status().isForbidden());
     }
 
     @Test
     void deleteTodayUnAuth() throws Exception {
-        perform(MockMvcRequestBuilders.delete(REST_URL + RESTAURANT1_ID + "/menus/today"))
+        perform(MockMvcRequestBuilders.delete(REST_URL))
                 .andExpect(status().isUnauthorized());
     }
 
@@ -71,7 +71,7 @@ class MenuRestControllerTest extends AbstractControllerTest {
     void createTodayWithLocation() throws Exception {
         MenuTo newTo = getNewMenuTo();
         Menu newMenu = MenuUtil.createNewFromTo(newTo);
-        ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL + RESTAURANT1_ID + "/menus/today")
+        ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL)
                 .with(userHttpBasic(admin))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(newTo)))
@@ -87,7 +87,7 @@ class MenuRestControllerTest extends AbstractControllerTest {
 
     @Test
     void createTodayNotAdmin() throws Exception {
-        perform(MockMvcRequestBuilders.post(REST_URL + RESTAURANT1_ID + "/menus/today")
+        perform(MockMvcRequestBuilders.post(REST_URL)
                 .with(userHttpBasic(user))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(getNewMenuTo())))
@@ -96,7 +96,7 @@ class MenuRestControllerTest extends AbstractControllerTest {
 
     @Test
     void createTodayUnAuth() throws Exception {
-        perform(MockMvcRequestBuilders.post(REST_URL + RESTAURANT1_ID + "/menus/today")
+        perform(MockMvcRequestBuilders.post(REST_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(getNewMenuTo())))
                 .andExpect(status().isUnauthorized());
@@ -106,7 +106,7 @@ class MenuRestControllerTest extends AbstractControllerTest {
     void updateToday() throws Exception {
         Menu createdToday = createTodayMenu();
         MenuTo updatedTo = getUpdatedMenuTo();
-        perform(MockMvcRequestBuilders.put(REST_URL + RESTAURANT1_ID + "/menus/today")
+        perform(MockMvcRequestBuilders.put(REST_URL)
                 .with(userHttpBasic(admin))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(updatedTo)))
@@ -117,7 +117,7 @@ class MenuRestControllerTest extends AbstractControllerTest {
 
     @Test
     void updateTodayNotAdmin() throws Exception {
-        perform(MockMvcRequestBuilders.put(REST_URL + RESTAURANT1_ID + "/menus/today")
+        perform(MockMvcRequestBuilders.put(REST_URL)
                 .with(userHttpBasic(user))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(getUpdatedMenuTo())))
@@ -126,7 +126,7 @@ class MenuRestControllerTest extends AbstractControllerTest {
 
     @Test
     void updateTodayUnAuth() throws Exception {
-        perform(MockMvcRequestBuilders.put(REST_URL + RESTAURANT1_ID + "/menus/today")
+        perform(MockMvcRequestBuilders.put(REST_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(getUpdatedMenuTo())))
                 .andExpect(status().isUnauthorized());

@@ -35,7 +35,7 @@ public class RestaurantRestController {
 
     @GetMapping("/{id}")
     public Restaurant get(@PathVariable int id) {
-        log.info("get restaurant {}", id);
+        log.info("get {}", id);
         return service.get(id);
     }
 
@@ -43,7 +43,7 @@ public class RestaurantRestController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable int id) {
-        log.info("delete restaurant {}", id);
+        log.info("delete {}", id);
         service.delete(id);
     }
 
