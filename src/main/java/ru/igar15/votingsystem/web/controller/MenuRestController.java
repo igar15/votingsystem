@@ -45,8 +45,8 @@ public class MenuRestController {
         log.info("create today's {} for restaurant {}", menuTo, restaurantId);
         Menu created = service.create(MenuUtil.createNewFromTo(menuTo), restaurantId);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path(REST_URL + "/" + restaurantId + "/menus/today")
-                .build().toUri();
+                .path(REST_URL)
+                .buildAndExpand(restaurantId).toUri();
         return ResponseEntity.created(uriOfNewResource).body(created);
     }
 
