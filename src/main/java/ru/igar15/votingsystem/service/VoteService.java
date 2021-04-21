@@ -35,7 +35,7 @@ public class VoteService {
     }
 
     private Vote create(int userId, int restaurantId, LocalDate date) {
-        Vote vote = new Vote(date);
+        Vote vote = new Vote(null, date);
         Restaurant restaurant = restaurantRepository.getOne(restaurantId);
         User user = userRepository.getOne(userId);
         vote.setRestaurant(restaurant);

@@ -19,8 +19,8 @@ public class VoteTestData {
     public static final LocalTime BEFORE_ELEVEN = LocalTime.of(10, 25);
     public static final LocalTime AFTER_ELEVEN = LocalTime.of(11, 5);
 
-    public static Vote getNew() {
-        Vote vote = new Vote(LocalDate.now());
+    public static Vote getNewWithRestaurant() {
+        Vote vote = new Vote(null, LocalDate.now());
         vote.setRestaurant(restaurant1);
         return vote;
     }

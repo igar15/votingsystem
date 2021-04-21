@@ -57,7 +57,7 @@ class VoteRestControllerTest extends AbstractControllerTest {
 
         Vote created = readFromJson(action, Vote.class);
         int newId = created.id();
-        Vote newVote = VoteTestData.getNew();
+        Vote newVote = getNewWithRestaurant();
         newVote.setId(newId);
         VOTE_MATCHER.assertMatch(findVoteWithRestaurant(newId, USER_ID), newVote);
     }
@@ -77,7 +77,7 @@ class VoteRestControllerTest extends AbstractControllerTest {
                 .with(userHttpBasic(user))
                 .param("restaurantId", String.valueOf(RESTAURANT2_ID)))
                 .andExpect(status().isOk());
-        VOTE_MATCHER.assertMatch(findVoteWithRestaurant(VOTE1_ID, USER_ID), VoteTestData.getUpdated());
+        VOTE_MATCHER.assertMatch(findVoteWithRestaurant(VOTE1_ID, USER_ID), getUpdated());
     }
 
     @Test
@@ -101,7 +101,7 @@ class VoteRestControllerTest extends AbstractControllerTest {
     }
 
     private Vote findVoteWithRestaurant(int voteId, int userId) {
-        Vote vote = voteRepository.find(voteId, userId).get();
+        Vote vote = voteRepository.find(voteId, userId);
         // The transaction is not closed yet, so it needs to be manually unproxy
         vote.setRestaurant(Hibernate.unproxy(vote.getRestaurant(), Restaurant.class));
         return vote;

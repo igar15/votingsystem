@@ -24,8 +24,8 @@ public class Menu extends AbstractBaseEntity {
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @NotEmpty
     @Valid
-    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "dishes", joinColumns = @JoinColumn(name = "menu_id"))
+    @ElementCollection(fetch = FetchType.EAGER)
     @BatchSize(size = 200)
     @JoinColumn(name = "menu_id") //https://stackoverflow.com/a/62848296/548473
     @OnDelete(action = OnDeleteAction.CASCADE)
@@ -40,18 +40,9 @@ public class Menu extends AbstractBaseEntity {
     public Menu() {
     }
 
-    public Menu(Integer id, LocalDate date) {
-        super(id);
-        this.date = date;
-    }
-
     public Menu(Integer id, LocalDate date, List<Dish> dishes) {
         super(id);
         this.date = date;
-        this.dishes = dishes;
-    }
-
-    public Menu(List<Dish> dishes) {
         this.dishes = dishes;
     }
 

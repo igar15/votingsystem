@@ -19,9 +19,6 @@ public class RestaurantTestData {
     }
 
     public static Restaurant getUpdated() {
-        Restaurant updated = new Restaurant(restaurant1);
-        updated.setName("UpdatedName");
-        updated.setAddress("UpdatedAddress");
-        return updated;
+        return new Restaurant(restaurant1.getId(), "UpdatedName", "UpdatedAddress");
     }
 }

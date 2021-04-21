@@ -21,9 +21,7 @@ public class MenuTestData {
     public static final Menu menu2 = new Menu(MENU2_ID, LocalDate.of(2021, Month.FEBRUARY, 26), List.of(dish1Menu2, dish2Menu2));
 
     public static Menu getNew() {
-        Menu menu = new Menu();
-        menu.setDishes(List.of(new Dish("New1", 100), new Dish("New2", 200)));
-        return menu;
+        return new Menu(null, LocalDate.now(), List.of(new Dish("New1", 100), new Dish("New2", 200)));
     }
 
     public static Menu getUpdated() {

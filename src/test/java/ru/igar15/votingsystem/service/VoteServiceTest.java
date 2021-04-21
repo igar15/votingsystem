@@ -8,12 +8,11 @@ import ru.igar15.votingsystem.util.exception.VoteUpdateForbiddenException;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.Month;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static ru.igar15.votingsystem.RestaurantTestData.RESTAURANT1_ID;
-import static ru.igar15.votingsystem.RestaurantTestData.RESTAURANT2_ID;
+import static ru.igar15.votingsystem.RestaurantTestData.*;
 import static ru.igar15.votingsystem.UserTestData.USER_ID;
+import static ru.igar15.votingsystem.VoteTestData.getUpdated;
 import static ru.igar15.votingsystem.VoteTestData.*;
 
 public class VoteServiceTest extends AbstractServiceTest {
@@ -27,21 +26,21 @@ public class VoteServiceTest extends AbstractServiceTest {
     @Test
     public void create() {
         Vote created = service.registerVote(USER_ID, RESTAURANT1_ID, LocalDate.now(), LocalTime.now());
-        int newId = created.id();
-        Vote newVote = getNew();
+        Vote newVote = getNewWithRestaurant();
+        int newId = created.getId();
         newVote.setId(newId);
-        VOTE_MATCHER.assertMatch(repository.find(newId, USER_ID).get(), newVote);
+        VOTE_MATCHER.assertMatch(repository.find(newId, USER_ID), newVote);
     }
 
     @Test
     public void update() {
-        service.registerVote(USER_ID, RESTAURANT2_ID, LocalDate.of(2021, Month.FEBRUARY, 25), BEFORE_ELEVEN);
-        VOTE_MATCHER.assertMatch(repository.find(VOTE1_ID, USER_ID).get(), getUpdated());
+        service.registerVote(USER_ID, RESTAURANT2_ID, VOTE_TEST_DATE, BEFORE_ELEVEN);
+        VOTE_MATCHER.assertMatch(repository.find(VOTE1_ID, USER_ID), getUpdated());
     }
 
     @Test
     public void updateFailed() {
         assertThrows(VoteUpdateForbiddenException.class,
-                () -> service.registerVote(USER_ID, RESTAURANT2_ID, LocalDate.of(2021, Month.FEBRUARY, 25), AFTER_ELEVEN));
+                () -> service.registerVote(USER_ID, RESTAURANT2_ID, VOTE_TEST_DATE, AFTER_ELEVEN));
     }
 }

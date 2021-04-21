@@ -27,10 +27,6 @@ public class Restaurant extends AbstractNamedEntity {
         this.address = address;
     }
 
-    public Restaurant(Restaurant restaurant) {
-        this(restaurant.getId(), restaurant.getName(), restaurant.getAddress());
-    }
-
     public String getAddress() {
         return address;
     }

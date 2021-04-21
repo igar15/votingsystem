@@ -17,7 +17,7 @@ public interface VoteRepository extends JpaRepository<Vote, Integer> {
 
     @EntityGraph(attributePaths = {"restaurant"})
     @Query("SELECT v FROM Vote v WHERE v.id = :id AND v.user.id = :userId")
-    Optional<Vote> find(@Param("id") int id, @Param("userId") int userId);
+    Vote find(@Param("id") int id, @Param("userId") int userId);
 
     @Query("SELECT v FROM Vote v WHERE v.date = :date AND v.user.id = :userId")
     Optional<Vote> findByDate(@Param("date") LocalDate date, @Param("userId") int userId);

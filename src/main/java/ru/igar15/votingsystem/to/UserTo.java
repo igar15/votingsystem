@@ -20,7 +20,7 @@ public class UserTo implements HasId {
     private String email;
 
     @NotBlank
-    @Size(min = 5, max = 100)
+    @Size(min = 5, max = 32)
     private String password;
 
     public UserTo() {

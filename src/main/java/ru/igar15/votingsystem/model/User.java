@@ -28,6 +28,7 @@ public class User extends AbstractNamedEntity {
 
     @NotBlank
     @Size(min = 5, max = 100)
+    // https://stackoverflow.com/a/12505165/548473
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Column(name = "password")
     private String password;
@@ -42,8 +43,8 @@ public class User extends AbstractNamedEntity {
 
     @Enumerated(EnumType.STRING)
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
-    @ElementCollection(fetch = FetchType.EAGER)
     @Column(name = "role")
+    @ElementCollection(fetch = FetchType.EAGER)
     @BatchSize(size = 200)
     @JoinColumn(name = "user_id") //https://stackoverflow.com/a/62848296/548473
     @OnDelete(action = OnDeleteAction.CASCADE)
