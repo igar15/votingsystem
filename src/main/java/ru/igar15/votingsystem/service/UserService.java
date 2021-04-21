@@ -47,6 +47,7 @@ public class UserService implements UserDetailsService {
     }
 
     public User getByEmail(String email) {
+        Assert.notNull(email, "email must not be null");
         return repository.findByEmail(email).orElseThrow(() -> new NotFoundException("Not found user with email=" + email));
     }
 
