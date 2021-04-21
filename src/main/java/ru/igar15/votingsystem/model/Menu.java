@@ -1,10 +1,9 @@
 package ru.igar15.votingsystem.model;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.*;
+import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
 import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
@@ -12,7 +11,6 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.List;
 
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @Entity
 @Table(name = "menus")
 public class Menu extends AbstractBaseEntity {
@@ -21,7 +19,6 @@ public class Menu extends AbstractBaseEntity {
     @Column(name = "date")
     private LocalDate date = LocalDate.now();
 
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @NotEmpty
     @Valid
     @CollectionTable(name = "dishes", joinColumns = @JoinColumn(name = "menu_id"))
