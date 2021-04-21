@@ -74,7 +74,10 @@ public class MenuServiceTest extends AbstractServiceTest {
     @Test
     public void getToday() {
         Menu createdToday = service.create(getNew(), RESTAURANT1_ID);
-        MENU_MATCHER.assertMatch(service.getToday(RESTAURANT1_ID), createdToday);
+        int newId = createdToday.id();
+        Menu newMenu = getNew();
+        newMenu.setId(newId);
+        MENU_MATCHER.assertMatch(service.getToday(RESTAURANT1_ID), newMenu);
     }
 
     @Test

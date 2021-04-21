@@ -21,14 +21,4 @@ public class UserTestData {
     public static User getNew() {
         return new User(null, "New", "new@gmail.com", "newPass", false, new Date(), Collections.singleton(Role.USER));
     }
-
-    public static User getUpdated() {
-        User updated = new User(user);
-        updated.setEmail("update@gmail.com");
-        updated.setName("UpdatedName");
-        updated.setPassword("newPass");
-        updated.setEnabled(false);
-        updated.setRoles(Collections.singletonList(Role.ADMIN));
-        return updated;
-    }
 }
