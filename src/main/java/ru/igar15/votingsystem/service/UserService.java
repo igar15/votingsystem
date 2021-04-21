@@ -55,15 +55,9 @@ public class UserService implements UserDetailsService {
         return repository.findAllByOrderByNameAscEmailAsc();
     }
 
-    public void update(User user) {
-        Assert.notNull(user, "user must not be null");
-        get(user.id());
-        prepareAndSave(user);
-    }
-
     @Transactional
     public void update(UserTo userTo) {
-        Assert.notNull(userTo, "user must not be null");
+        Assert.notNull(userTo, "userTo must not be null");
         User user = get(userTo.id());
         prepareAndSave(UserUtil.updateFromTo(user, userTo));
     }

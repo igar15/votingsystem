@@ -55,7 +55,7 @@ class ProfileRestControllerTest extends AbstractControllerTest {
 
     @Test
     void register() throws Exception {
-        UserTo newTo = new UserTo(null, "newName", "newemail@ya.ru", "newPassword");
+        UserTo newTo = getTo();
         User newUser = UserUtil.createNewFromTo(newTo);
         ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL + "/register")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -72,7 +72,7 @@ class ProfileRestControllerTest extends AbstractControllerTest {
 
     @Test
     void update() throws Exception {
-        UserTo updatedTo = new UserTo(null, "newName", "newemail@ya.ru", "newPassword");
+        UserTo updatedTo = getTo();
         perform(MockMvcRequestBuilders.put(REST_URL)
                 .with(userHttpBasic(user))
                 .contentType(MediaType.APPLICATION_JSON)
@@ -85,11 +85,15 @@ class ProfileRestControllerTest extends AbstractControllerTest {
 
     @Test
     void updateUnAuth() throws Exception {
-        User updated = getUpdated();
+        UserTo updatedTo = getTo();
         perform(MockMvcRequestBuilders.put(REST_URL)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(JsonUtil.writeValue(updated)))
+                .content(JsonUtil.writeValue(updatedTo)))
                 .andDo(print())
                 .andExpect(status().isUnauthorized());
+    }
+
+    private UserTo getTo() {
+        return new UserTo(null, "newName", "newemail@ya.ru", "newPassword");
     }
 }

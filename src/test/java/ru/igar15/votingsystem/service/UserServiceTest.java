@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import ru.igar15.votingsystem.model.Role;
 import ru.igar15.votingsystem.model.User;
+import ru.igar15.votingsystem.to.UserTo;
+import ru.igar15.votingsystem.util.UserUtil;
 import ru.igar15.votingsystem.util.exception.NotFoundException;
 
 import javax.validation.ConstraintViolationException;
@@ -69,10 +71,10 @@ public class UserServiceTest extends AbstractServiceTest {
     }
 
     @Test
-    public void update() {
-        User updated = getUpdated();
-        service.update(updated);
-        USER_MATCHER.assertMatch(service.get(USER_ID), getUpdated());
+    public void updateFromTo() {
+        UserTo updatedTo = new UserTo(USER_ID, "newName", "newemail@ya.ru", "newPassword");
+        service.update(updatedTo);
+        USER_MATCHER.assertMatch(service.get(USER_ID), UserUtil.updateFromTo(new User(user), updatedTo));
     }
 
     @Test
