@@ -43,7 +43,7 @@ public class MenuRestController {
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Menu> createTodayWithLocation(@RequestBody MenuTo menuTo, @PathVariable int restaurantId) {
         log.info("create today's {} for restaurant {}", menuTo, restaurantId);
-        Menu created = service.create(MenuUtil.createNewFromTo(menuTo), restaurantId);
+        Menu created = service.create(MenuUtil.createNewTodayFromTo(menuTo), restaurantId);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_URL)
                 .buildAndExpand(restaurantId).toUri();

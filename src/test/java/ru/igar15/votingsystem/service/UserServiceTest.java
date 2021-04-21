@@ -71,7 +71,7 @@ public class UserServiceTest extends AbstractServiceTest {
     }
 
     @Test
-    public void updateFromTo() {
+    public void update() {
         UserTo updatedTo = new UserTo(USER_ID, "newName", "newemail@ya.ru", "newPassword");
         service.update(updatedTo);
         USER_MATCHER.assertMatch(service.get(USER_ID), UserUtil.updateFromTo(new User(user), updatedTo));

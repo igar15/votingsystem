@@ -13,7 +13,6 @@ import ru.igar15.votingsystem.to.MenuTo;
 import ru.igar15.votingsystem.util.exception.NotFoundException;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @Service
 public class MenuService {
@@ -34,26 +33,10 @@ public class MenuService {
         menu.setRestaurant(restaurant);
         return menuRepository.save(menu);
     }
-
-    @CacheEvict(value = "menusToday", key = "#restaurantId + '_' + T(java.time.LocalDate).now().toString()")
-    public void delete(int id, int restaurantId) {
-        Menu menu = get(id, restaurantId);
-        menuRepository.delete(menu);
-    }
-
     @CacheEvict(value = "menusToday", key = "#restaurantId + '_' + T(java.time.LocalDate).now().toString()")
     public void deleteToday(int restaurantId) {
         Menu menu = getByDate(restaurantId, LocalDate.now());
         menuRepository.delete(menu);
-    }
-
-
-    public Menu get(int id, int restaurantId) {
-        return menuRepository.find(id, restaurantId).orElseThrow(() -> new NotFoundException("Not found menu with id=" + id));
-    }
-
-    public List<Menu> getAll(int restaurantId) {
-        return menuRepository.findAll(restaurantId);
     }
 
     public Menu getByDate(int restaurantId, LocalDate date) {
@@ -64,24 +47,6 @@ public class MenuService {
     @Cacheable(value = "menusToday", key = "#restaurantId + '_' + T(java.time.LocalDate).now().toString()")
     public Menu getToday(int restaurantId) {
         return getByDate(restaurantId, LocalDate.now());
-    }
-
-    @CacheEvict(value = "menusToday", key = "#restaurantId + '_' + T(java.time.LocalDate).now().toString()")
-    @Transactional
-    public void update(Menu menu, int restaurantId) {
-        Assert.notNull(menu, "menu must not be null");
-        get(menu.id(), restaurantId);
-        Restaurant restaurant = restaurantRepository.getOne(restaurantId);
-        menu.setRestaurant(restaurant);
-        menuRepository.save(menu);
-    }
-
-    @CacheEvict(value = "menusToday", key = "#restaurantId + '_' + T(java.time.LocalDate).now().toString()")
-    @Transactional
-    public void updateToday(Menu menu, int restaurantId) {
-        Assert.notNull(menu, "menu must not be null");
-        Menu dbMenu = getByDate(restaurantId, LocalDate.now());
-        dbMenu.setDishes(menu.getDishes());
     }
 
     @CacheEvict(value = "menusToday", key = "#restaurantId + '_' + T(java.time.LocalDate).now().toString()")

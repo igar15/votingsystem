@@ -46,12 +46,12 @@ class MenuRestControllerTest extends AbstractControllerTest {
 
     @Test
     void deleteToday() throws Exception {
-        Menu createdToday = createTodayMenu();
+        createTodayMenu();
         perform(MockMvcRequestBuilders.delete(REST_URL)
                 .with(userHttpBasic(admin)))
                 .andExpect(status().isNoContent())
                 .andDo(print());
-        assertThrows(NotFoundException.class, () -> menuService.get(createdToday.id(), RESTAURANT1_ID));
+        assertThrows(NotFoundException.class, () -> menuService.getToday(RESTAURANT1_ID));
     }
 
     @Test
@@ -70,7 +70,7 @@ class MenuRestControllerTest extends AbstractControllerTest {
     @Test
     void createTodayWithLocation() throws Exception {
         MenuTo newTo = getNewMenuTo();
-        Menu newMenu = MenuUtil.createNewFromTo(newTo);
+        Menu newMenu = MenuUtil.createNewTodayFromTo(newTo);
         ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL)
                 .with(userHttpBasic(admin))
                 .contentType(MediaType.APPLICATION_JSON)
@@ -81,7 +81,6 @@ class MenuRestControllerTest extends AbstractControllerTest {
         int newId = created.getId();
         newMenu.setId(newId);
         MENU_MATCHER.assertMatch(created, newMenu);
-        MENU_MATCHER.assertMatch(menuService.get(newId, RESTAURANT1_ID), newMenu);
         MENU_MATCHER.assertMatch(menuService.getToday(RESTAURANT1_ID), newMenu);
     }
 
@@ -112,7 +111,7 @@ class MenuRestControllerTest extends AbstractControllerTest {
                 .content(JsonUtil.writeValue(updatedTo)))
                 .andExpect(status().isNoContent());
 
-        MENU_MATCHER.assertMatch(menuService.get(createdToday.getId(), RESTAURANT1_ID), new Menu(createdToday.id(), LocalDate.now(), updatedTo.getDishes()));
+        MENU_MATCHER.assertMatch(menuService.getToday(RESTAURANT1_ID), new Menu(createdToday.id(), LocalDate.now(), updatedTo.getDishes()));
     }
 
     @Test

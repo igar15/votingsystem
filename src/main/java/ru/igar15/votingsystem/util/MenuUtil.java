@@ -10,7 +10,7 @@ public class MenuUtil {
     private MenuUtil() {
     }
 
-    public static Menu createNewFromTo(MenuTo menuTo) {
+    public static Menu createNewTodayFromTo(MenuTo menuTo) {
         return new Menu(null, LocalDate.now(), menuTo.getDishes());
     }
 }
