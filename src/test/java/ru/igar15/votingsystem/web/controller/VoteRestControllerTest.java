@@ -10,18 +10,15 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import ru.igar15.votingsystem.VoteTestData;
 import ru.igar15.votingsystem.model.Restaurant;
 import ru.igar15.votingsystem.model.Vote;
 import ru.igar15.votingsystem.repository.VoteRepository;
-import ru.igar15.votingsystem.util.exception.VoteUpdateForbiddenException;
 
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.igar15.votingsystem.RestaurantTestData.RESTAURANT1_ID;
 import static ru.igar15.votingsystem.RestaurantTestData.RESTAURANT2_ID;
@@ -30,7 +27,6 @@ import static ru.igar15.votingsystem.TestUtil.userHttpBasic;
 import static ru.igar15.votingsystem.UserTestData.USER_ID;
 import static ru.igar15.votingsystem.UserTestData.user;
 import static ru.igar15.votingsystem.VoteTestData.*;
-import static ru.igar15.votingsystem.util.ValidationUtil.getRootCause;
 import static ru.igar15.votingsystem.web.controller.VoteRestController.REST_URL;
 
 @ExtendWith(MockitoExtension.class)
@@ -84,15 +80,10 @@ class VoteRestControllerTest extends AbstractControllerTest {
     void updateFailed() throws Exception {
         setupClock(clock, LocalDateTime.of(VOTE_TEST_DATE, AFTER_ELEVEN));
 
-        assertThrows(VoteUpdateForbiddenException.class, () -> {
-            try {
-                perform(MockMvcRequestBuilders.post(REST_URL)
-                        .with(userHttpBasic(user))
-                        .param("restaurantId", String.valueOf(RESTAURANT2_ID)));
-            } catch (Exception e) {
-                throw getRootCause(e);
-            }
-        });
+        perform(MockMvcRequestBuilders.post(REST_URL)
+                .with(userHttpBasic(user))
+                .param("restaurantId", String.valueOf(RESTAURANT2_ID)))
+                .andExpect(status().isUnprocessableEntity());
     }
 
     private void setupClock(Clock clock, LocalDateTime dateTime) {

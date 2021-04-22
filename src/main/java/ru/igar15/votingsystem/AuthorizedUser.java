@@ -7,7 +7,6 @@ import ru.igar15.votingsystem.util.UserUtil;
 import java.io.Serial;
 
 public class AuthorizedUser extends org.springframework.security.core.userdetails.User {
-
     @Serial
     private static final long serialVersionUID = 1L;
 
@@ -15,14 +14,15 @@ public class AuthorizedUser extends org.springframework.security.core.userdetail
 
     public AuthorizedUser(User user) {
         super(user.getEmail(), user.getPassword(), user.isEnabled(), true, true, true, user.getRoles());
-        this.userTo = UserUtil.asTo(user);
+        setTo(UserUtil.asTo(user));
     }
 
     public int getId() {
         return userTo.getId();
     }
 
-    public void update(UserTo newTo) {
+    public void setTo(UserTo newTo) {
+        newTo.setPassword(null);
         userTo = newTo;
     }
 
