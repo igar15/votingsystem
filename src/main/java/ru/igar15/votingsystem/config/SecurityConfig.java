@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import ru.igar15.votingsystem.RestAuthenticationEntryPoint;
 import ru.igar15.votingsystem.service.UserService;
 
 @Configuration
@@ -19,6 +20,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private RestAuthenticationEntryPoint restAuthenticationEntryPoint;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -36,7 +40,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers("/rest/profile/register").anonymous()
                     .anyRequest().authenticated()
                 .and()
-                .httpBasic();
+                .httpBasic()
+                .authenticationEntryPoint(restAuthenticationEntryPoint);
     }
 
     @Bean
