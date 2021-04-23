@@ -5,18 +5,18 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import ru.igar15.votingsystem.AuthorizedUser;
 import ru.igar15.votingsystem.model.Vote;
 import ru.igar15.votingsystem.service.VoteService;
 
 import java.time.Clock;
 import java.time.LocalDate;
 import java.time.LocalTime;
-
-import static ru.igar15.votingsystem.web.SecurityUtil.authUserId;
 
 @RestController
 @RequestMapping(value = VoteRestController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -31,10 +31,9 @@ public class VoteRestController {
     private Clock clock;
 
     @PostMapping
-    public ResponseEntity<Vote> registerVote(@RequestParam int restaurantId) {
-        int userId = authUserId();
-        log.info("register today's vote from user {} for restaurant {}", userId, restaurantId);
-        Vote registered = service.registerVote(userId, restaurantId, LocalDate.now(clock), LocalTime.now(clock));
+    public ResponseEntity<Vote> registerVote(@RequestParam int restaurantId, @AuthenticationPrincipal AuthorizedUser authUser) {
+        log.info("register today's vote from user {} for restaurant {}", authUser.getId(), restaurantId);
+        Vote registered = service.registerVote(authUser.getId(), restaurantId, LocalDate.now(clock), LocalTime.now(clock));
         return ResponseEntity.ok().body(registered);
     }
 }

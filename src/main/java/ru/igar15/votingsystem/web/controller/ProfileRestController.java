@@ -6,8 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import ru.igar15.votingsystem.AuthorizedUser;
 import ru.igar15.votingsystem.model.User;
 import ru.igar15.votingsystem.service.UserService;
 import ru.igar15.votingsystem.to.UserTo;
@@ -18,7 +20,6 @@ import java.net.URI;
 
 import static ru.igar15.votingsystem.util.ValidationUtil.assureIdConsistent;
 import static ru.igar15.votingsystem.util.ValidationUtil.checkNew;
-import static ru.igar15.votingsystem.web.SecurityUtil.authUserId;
 
 @RestController
 @RequestMapping(value = ProfileRestController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -30,18 +31,16 @@ public class ProfileRestController {
     private UserService service;
 
     @GetMapping
-    public User get() {
-        int userId = authUserId();
-        log.info("get {}", userId);
-        return service.get(userId);
+    public User get(@AuthenticationPrincipal AuthorizedUser authUser) {
+        log.info("get {}", authUser.getId());
+        return service.get(authUser.getId());
     }
 
     @DeleteMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete() {
-        int userId = authUserId();
-        log.info("delete {}", userId);
-        service.delete(userId);
+    public void delete(@AuthenticationPrincipal AuthorizedUser authUser) {
+        log.info("delete {}", authUser.getId());
+        service.delete(authUser.getId());
     }
 
     @PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -58,10 +57,9 @@ public class ProfileRestController {
 
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@Valid @RequestBody UserTo userTo) {
-        int userId = authUserId();
-        log.info("update {} with id={}", userTo, userId);
-        assureIdConsistent(userTo, userId);
+    public void update(@Valid @RequestBody UserTo userTo, @AuthenticationPrincipal AuthorizedUser authUser) {
+        log.info("update {} with id={}", userTo, authUser.getId());
+        assureIdConsistent(userTo, authUser.getId());
         service.update(userTo);
     }
 }
