@@ -19,7 +19,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static ru.igar15.votingsystem.TestUtil.readFromJson;
 import static ru.igar15.votingsystem.TestUtil.userHttpBasic;
 import static ru.igar15.votingsystem.UserTestData.*;
-import static ru.igar15.votingsystem.util.exception.ErrorType.VALIDATION_ERROR;
+import static ru.igar15.votingsystem.util.exception.ErrorType.*;
 import static ru.igar15.votingsystem.web.AppExceptionHandler.EXCEPTION_DUPLICATE_EMAIL;
 import static ru.igar15.votingsystem.web.controller.ProfileRestController.REST_URL;
 
@@ -40,7 +40,8 @@ class ProfileRestControllerTest extends AbstractControllerTest {
     @Test
     void getUnAuth() throws Exception {
         perform(MockMvcRequestBuilders.get(REST_URL))
-                .andExpect(status().isUnauthorized());
+                .andExpect(status().isUnauthorized())
+                .andExpect(errorType(UNAUTHORIZED_ERROR));
     }
 
     @Test
@@ -54,7 +55,8 @@ class ProfileRestControllerTest extends AbstractControllerTest {
     @Test
     void deleteUnAuth() throws Exception {
         perform(MockMvcRequestBuilders.delete(REST_URL))
-                .andExpect(status().isUnauthorized());
+                .andExpect(status().isUnauthorized())
+                .andExpect(errorType(UNAUTHORIZED_ERROR));
     }
 
     @Test
@@ -82,7 +84,8 @@ class ProfileRestControllerTest extends AbstractControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(newTo)))
                 .andDo(print())
-                .andExpect(status().isForbidden());
+                .andExpect(status().isForbidden())
+                .andExpect(errorType(ACCESS_DENIED_ERROR));
     }
 
     @Test
@@ -105,7 +108,8 @@ class ProfileRestControllerTest extends AbstractControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(updatedTo)))
                 .andDo(print())
-                .andExpect(status().isUnauthorized());
+                .andExpect(status().isUnauthorized())
+                .andExpect(errorType(UNAUTHORIZED_ERROR));
     }
 
     @Test

@@ -29,6 +29,9 @@ import static ru.igar15.votingsystem.TestUtil.userHttpBasic;
 import static ru.igar15.votingsystem.UserTestData.USER_ID;
 import static ru.igar15.votingsystem.UserTestData.user;
 import static ru.igar15.votingsystem.VoteTestData.*;
+import static ru.igar15.votingsystem.util.exception.ErrorType.UNAUTHORIZED_ERROR;
+import static ru.igar15.votingsystem.util.exception.ErrorType.VALIDATION_ERROR;
+import static ru.igar15.votingsystem.web.AppExceptionHandler.EXCEPTION_UPDATE_VOTE;
 import static ru.igar15.votingsystem.web.controller.VoteRestController.REST_URL;
 
 @ExtendWith(MockitoExtension.class)
@@ -64,7 +67,8 @@ class VoteRestControllerTest extends AbstractControllerTest {
     void createUnAuth() throws Exception {
         perform(MockMvcRequestBuilders.post(REST_URL)
                 .param("restaurantId", String.valueOf(RESTAURANT1_ID)))
-                .andExpect(status().isUnauthorized());
+                .andExpect(status().isUnauthorized())
+                .andExpect(errorType(UNAUTHORIZED_ERROR));
     }
 
     @Test
@@ -107,7 +111,9 @@ class VoteRestControllerTest extends AbstractControllerTest {
         perform(MockMvcRequestBuilders.post(REST_URL)
                 .with(userHttpBasic(user))
                 .param("restaurantId", String.valueOf(RESTAURANT2_ID)))
-                .andExpect(status().isUnprocessableEntity());
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(errorType(VALIDATION_ERROR))
+                .andExpect(detailMessage(EXCEPTION_UPDATE_VOTE));
     }
 
     private void setupClock(Clock clock, LocalDateTime dateTime) {
