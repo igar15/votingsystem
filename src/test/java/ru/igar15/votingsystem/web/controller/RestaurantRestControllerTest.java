@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import ru.igar15.votingsystem.UserTestData;
 import ru.igar15.votingsystem.model.Restaurant;
 import ru.igar15.votingsystem.service.RestaurantService;
@@ -20,6 +22,8 @@ import static ru.igar15.votingsystem.TestUtil.readFromJson;
 import static ru.igar15.votingsystem.TestUtil.userHttpBasic;
 import static ru.igar15.votingsystem.UserTestData.admin;
 import static ru.igar15.votingsystem.UserTestData.user;
+import static ru.igar15.votingsystem.util.exception.ErrorType.VALIDATION_ERROR;
+import static ru.igar15.votingsystem.web.AppExceptionHandler.EXCEPTION_DUPLICATE_RESTAURANT;
 
 class RestaurantRestControllerTest extends AbstractControllerTest {
     private static final String REST_URL = RestaurantRestController.REST_URL + '/';
@@ -85,7 +89,7 @@ class RestaurantRestControllerTest extends AbstractControllerTest {
     @Test
     void createNotAdmin() throws Exception {
         Restaurant newRestaurant = getNew();
-        ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL)
+        perform(MockMvcRequestBuilders.post(REST_URL)
                 .with(userHttpBasic(user))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(newRestaurant)))
@@ -95,7 +99,7 @@ class RestaurantRestControllerTest extends AbstractControllerTest {
     @Test
     void createUnAuth() throws Exception {
         Restaurant newRestaurant = getNew();
-        ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL)
+        perform(MockMvcRequestBuilders.post(REST_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(newRestaurant)))
                 .andExpect(status().isUnauthorized());
@@ -130,5 +134,59 @@ class RestaurantRestControllerTest extends AbstractControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(updated)))
                 .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void createInvalid() throws Exception {
+        Restaurant newRestaurant = getNew();
+        newRestaurant.setAddress(null);
+        perform(MockMvcRequestBuilders.post(REST_URL)
+                .with(userHttpBasic(admin))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(newRestaurant)))
+                .andDo(print())
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(errorType(VALIDATION_ERROR));
+    }
+
+    @Test
+    void updateInvalid() throws Exception {
+        Restaurant updated = getUpdated();
+        updated.setName(null);
+        perform(MockMvcRequestBuilders.put(REST_URL + RESTAURANT1_ID)
+                .with(userHttpBasic(admin))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(updated)))
+                .andDo(print())
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(errorType(VALIDATION_ERROR));
+    }
+
+    @Test
+    @Transactional(propagation = Propagation.NEVER)
+    void createDuplicateNameAddress() throws Exception {
+        Restaurant newRestaurant = new Restaurant(null, restaurant1.getName(), restaurant1.getAddress());
+        perform(MockMvcRequestBuilders.post(REST_URL)
+                .with(userHttpBasic(admin))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(newRestaurant)))
+                .andDo(print())
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(errorType(VALIDATION_ERROR))
+                .andExpect(detailMessage(EXCEPTION_DUPLICATE_RESTAURANT));
+    }
+
+    @Test
+    @Transactional(propagation = Propagation.NEVER)
+    void updateDuplicateNameAddress() throws Exception {
+        Restaurant updated = new Restaurant(RESTAURANT1_ID, restaurant2.getName(), restaurant2.getAddress());
+        perform(MockMvcRequestBuilders.put(REST_URL + RESTAURANT1_ID)
+                .with(userHttpBasic(admin))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(updated)))
+                .andDo(print())
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(errorType(VALIDATION_ERROR))
+                .andExpect(detailMessage(EXCEPTION_DUPLICATE_RESTAURANT));
     }
 }
