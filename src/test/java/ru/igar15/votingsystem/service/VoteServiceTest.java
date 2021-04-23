@@ -25,7 +25,7 @@ public class VoteServiceTest extends AbstractServiceTest {
     private VoteRepository repository;
 
     @Test
-    public void create() {
+    void create() {
         Vote created = service.registerVote(USER_ID, RESTAURANT1_ID, LocalDate.now(), LocalTime.now());
         Vote newVote = getNewWithRestaurant();
         int newId = created.getId();
@@ -34,19 +34,19 @@ public class VoteServiceTest extends AbstractServiceTest {
     }
 
     @Test
-    public void notExistedRestaurantCreate() {
+    void createBadRestaurant() {
         assertThrows(NotFoundException.class,
                 () -> service.registerVote(USER_ID, NOT_FOUND, LocalDate.now(), LocalTime.now()));
     }
 
     @Test
-    public void update() {
+    void update() {
         service.registerVote(USER_ID, RESTAURANT2_ID, VOTE_TEST_DATE, BEFORE_ELEVEN);
         VOTE_MATCHER.assertMatch(repository.find(VOTE1_ID, USER_ID), getUpdated());
     }
 
     @Test
-    public void updateFailed() {
+    void updateFailed() {
         assertThrows(VoteUpdateForbiddenException.class,
                 () -> service.registerVote(USER_ID, RESTAURANT2_ID, VOTE_TEST_DATE, AFTER_ELEVEN));
     }

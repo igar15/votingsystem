@@ -72,7 +72,7 @@ class VoteRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    void notExistedRestaurantCreate() throws Exception {
+    void createBadRestaurant() throws Exception {
         setupClock(clock, LocalDateTime.now());
 
         perform(MockMvcRequestBuilders.post(REST_URL)
@@ -94,7 +94,7 @@ class VoteRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    void notExistedRestaurantUpdate() throws Exception {
+    void updateBadRestaurant() throws Exception {
         setupClock(clock, LocalDateTime.of(VOTE_TEST_DATE, BEFORE_ELEVEN));
 
         perform(MockMvcRequestBuilders.post(REST_URL)

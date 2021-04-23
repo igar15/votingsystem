@@ -21,7 +21,7 @@ public class UserServiceTest extends AbstractServiceTest {
     private UserService service;
 
     @Test
-    public void create() {
+    void create() {
         User created = service.create(getNew());
         int newId = created.id();
         User newUser = getNew();
@@ -31,54 +31,54 @@ public class UserServiceTest extends AbstractServiceTest {
     }
 
     @Test
-    public void duplicateMailCreate() {
+    void duplicateMailCreate() {
         assertThrows(DataAccessException.class,
                 () -> service.create(new User(null, "Duplicate", "user@yandex.ru", "newPass", Role.USER)));
     }
 
     @Test
-    public void delete() {
+    void delete() {
         service.delete(USER_ID);
         assertThrows(NotFoundException.class, () -> service.get(USER_ID));
     }
 
     @Test
-    public void deleteNotFound() {
+    void deleteNotFound() {
         assertThrows(NotFoundException.class, () -> service.delete(NOT_FOUND));
     }
 
     @Test
-    public void get() {
+    void get() {
         User user = service.get(ADMIN_ID);
         USER_MATCHER.assertMatch(user, admin);
     }
 
     @Test
-    public void getNotFound() {
+    void getNotFound() {
         assertThrows(NotFoundException.class, () -> service.get(NOT_FOUND));
     }
 
     @Test
-    public void getByEmail() {
+    void getByEmail() {
         User user = service.getByEmail("admin@gmail.com");
         USER_MATCHER.assertMatch(user, admin);
     }
 
     @Test
-    public void getAll() {
+    void getAll() {
         List<User> users = service.getAll();
         USER_MATCHER.assertMatch(users, admin, user);
     }
 
     @Test
-    public void update() {
+    void update() {
         UserTo updatedTo = new UserTo(USER_ID, "newName", "newemail@ya.ru", "newPassword");
         service.update(updatedTo);
         USER_MATCHER.assertMatch(service.get(USER_ID), UserUtil.updateFromTo(new User(user), updatedTo));
     }
 
     @Test
-    public void createWithException() {
+    void createWithException() {
         validateRootCause(ConstraintViolationException.class, () -> service.create(new User(null, "  ", "mail@yandex.ru", "password", Role.USER)));
         validateRootCause(ConstraintViolationException.class, () -> service.create(new User(null, "User", "  ", "password", Role.USER)));
         validateRootCause(ConstraintViolationException.class, () -> service.create(new User(null, "User", "mail@yandex.ru", "  ", Role.USER)));

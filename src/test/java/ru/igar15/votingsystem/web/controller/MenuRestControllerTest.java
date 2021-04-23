@@ -147,7 +147,7 @@ class MenuRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    void createBadRestaurant() throws Exception {
+    void createTodayBadRestaurant() throws Exception {
         MenuTo newTo = getNewMenuTo();
         perform(MockMvcRequestBuilders.post(BAD_RESTAURANT_REST_URL)
                 .with(userHttpBasic(admin))
@@ -201,7 +201,7 @@ class MenuRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    void updateBadRestaurant() throws Exception {
+    void updateTodayBadRestaurant() throws Exception {
         createTodayMenu();
         MenuTo updatedTo = getUpdatedMenuTo();
         perform(MockMvcRequestBuilders.put(BAD_RESTAURANT_REST_URL)
