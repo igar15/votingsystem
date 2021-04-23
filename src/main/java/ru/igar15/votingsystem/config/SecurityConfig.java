@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import ru.igar15.votingsystem.RestAccessDeniedHandler;
 import ru.igar15.votingsystem.RestAuthenticationEntryPoint;
 import ru.igar15.votingsystem.service.UserService;
 
@@ -24,6 +25,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private RestAuthenticationEntryPoint restAuthenticationEntryPoint;
 
+    @Autowired
+    private RestAccessDeniedHandler restAccessDeniedHandler;
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userService).passwordEncoder(encoder());
@@ -36,12 +40,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                    .antMatchers(HttpMethod.GET,"/rest/restaurants/**").permitAll()
-                    .antMatchers("/rest/profile/register").anonymous()
-                    .anyRequest().authenticated()
+                .antMatchers(HttpMethod.GET, "/rest/restaurants/**").permitAll()
+                .antMatchers("/rest/profile/register").anonymous()
+                .anyRequest().authenticated()
                 .and()
                 .httpBasic()
-                .authenticationEntryPoint(restAuthenticationEntryPoint);
+                .authenticationEntryPoint(restAuthenticationEntryPoint)
+                .and()
+                .exceptionHandling().accessDeniedHandler(restAccessDeniedHandler);
     }
 
     @Bean
