@@ -10,7 +10,6 @@ import ru.igar15.votingsystem.util.UserUtil;
 import ru.igar15.votingsystem.util.exception.NotFoundException;
 
 import javax.validation.ConstraintViolationException;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static ru.igar15.votingsystem.UserTestData.*;
@@ -56,18 +55,6 @@ public class UserServiceTest extends AbstractServiceTest {
     @Test
     void getNotFound() {
         assertThrows(NotFoundException.class, () -> service.get(NOT_FOUND));
-    }
-
-    @Test
-    void getByEmail() {
-        User user = service.getByEmail("admin@gmail.com");
-        USER_MATCHER.assertMatch(user, admin);
-    }
-
-    @Test
-    void getAll() {
-        List<User> users = service.getAll();
-        USER_MATCHER.assertMatch(users, admin, user);
     }
 
     @Test

@@ -11,8 +11,10 @@ import ru.igar15.votingsystem.model.User;
 import ru.igar15.votingsystem.service.UserService;
 import ru.igar15.votingsystem.to.UserTo;
 import ru.igar15.votingsystem.util.UserUtil;
+import ru.igar15.votingsystem.util.exception.NotFoundException;
 import ru.igar15.votingsystem.web.json.JsonUtil;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -49,7 +51,7 @@ class ProfileRestControllerTest extends AbstractControllerTest {
         perform(MockMvcRequestBuilders.delete(REST_URL)
                 .with(userHttpBasic(user)))
                 .andExpect(status().isNoContent());
-        USER_MATCHER.assertMatch(userService.getAll(), admin);
+        assertThrows(NotFoundException.class, () -> userService.get(USER_ID));
     }
 
     @Test

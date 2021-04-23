@@ -16,8 +16,6 @@ import ru.igar15.votingsystem.to.UserTo;
 import ru.igar15.votingsystem.util.UserUtil;
 import ru.igar15.votingsystem.util.exception.NotFoundException;
 
-import java.util.List;
-
 import static ru.igar15.votingsystem.util.UserUtil.prepareToSave;
 
 @Service
@@ -44,15 +42,6 @@ public class UserService implements UserDetailsService {
 
     public User get(int id) {
         return repository.findById(id).orElseThrow(() -> new NotFoundException("Not found user with id=" + id));
-    }
-
-    public User getByEmail(String email) {
-        Assert.notNull(email, "email must not be null");
-        return repository.findByEmail(email).orElseThrow(() -> new NotFoundException("Not found user with email=" + email));
-    }
-
-    public List<User> getAll() {
-        return repository.findAllByOrderByNameAscEmailAsc();
     }
 
     @Transactional
