@@ -22,8 +22,6 @@
         <appender-ref ref="result"/>
     </logger>
 
-    <!--    <logger name="org.postgresql" level="debug"/>-->
-<!--    <logger name="org.springframework.jdbc" level="info"/>-->
     <logger name="ru.igar15.votingsystem" level="debug"/>
 
     <root level="INFO">
