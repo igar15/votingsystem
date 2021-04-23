@@ -44,10 +44,10 @@ This is the REST API implementation of voting system for deciding where to have 
 - PUT /rest/restaurants/{restaurantId} (update restaurant with id = restaurantId)
 - DELETE /rest/restaurants/{restaurantId} (delete restaurant with id = restaurantId)
 #### Menus
-- POST /rest/restaurants/{restaurantId}/menus/today (create today menu for restaurant with id = restaurantId)
-- GET /rest/restaurants/{restaurantId}/menus/today (get today menu for restaurant with id = restaurantId)
-- PUT /rest/restaurants/{restaurantId}/menus/{menuId} (update menu with id = menuId for restaurant with id = restaurantId)
-- DELETE /rest/restaurants/{restaurantId}/menus/{menuId} (delete menu with id = menuId for restaurant with id = restaurantId)
+- POST /rest/restaurants/{restaurantId}/menus/today (create today's menu for restaurant with id = restaurantId)
+- GET /rest/restaurants/{restaurantId}/menus/today (get today's menu for restaurant with id = restaurantId)
+- PUT /rest/restaurants/{restaurantId}/menus/today (update today's menu for restaurant with id = restaurantId)
+- DELETE /rest/restaurants/{restaurantId}/menus/today (delete today's menu for restaurant with id = restaurantId)
 #### Votes
 - POST /rest/votes?restaurantId={restaurantId} (register vote from user for restaurant with id = restaurantId)
 
@@ -70,14 +70,14 @@ This is the REST API implementation of voting system for deciding where to have 
 `curl -s -X PUT -d '{"name":"Updated Restaurant","address":"Updated address"}' -H 'Content-Type: application/json' http://localhost:8080/votingsystem/rest/restaurants/100002 --user admin@gmail.com:admin`
 #### delete Restaurant with id=100002
 `curl -s -X DELETE http://localhost:8080/votingsystem/rest/restaurants/100003 --user admin@gmail.com:admin`
-#### create a new today Menu for Restaurant with id=100003
+#### create today's Menu for Restaurant with id=100003
 `curl -s -i -X POST -d '{"dishes":[{"name": "Dish1","price":200},{"name": "Dish2","price":300}]}' -H 'Content-Type:application/json;charset=UTF-8' http://localhost:8080/votingsystem/rest/restaurants/100003/menus/today --user admin@gmail.com:admin`
-#### get today Menu for Restaurant with id=100003
+#### get today's Menu for Restaurant with id=100003
 `curl -s http://localhost:8080/votingsystem/rest/restaurants/100003/menus/today`
-#### update Menu today for Restaurant with id=100003
+#### update today's Menu for Restaurant with id=100003
 `curl -s -X PUT -d '{"dishes":[{"name": "Dish1 Updated","price":250},{"name": "Dish2 Updated","price":350}]}' -H 'Content-Type: application/json' http://localhost:8080/votingsystem/rest/restaurants/100003/menus/today --user admin@gmail.com:admin`
-#### delete Menu today for Restaurant with id=100003
+#### delete today's Menu for Restaurant with id=100003
 `curl -s -X DELETE http://localhost:8080/votingsystem/rest/restaurants/100003/menus/today --user admin@gmail.com:admin`
-#### vote for today menu of Restaurant with id=100003
+#### vote for today's menu of Restaurant with id=100003
 `curl -s -i -X POST -d 'restaurantId=100003' http://localhost:8080/votingsystem/rest/votes --user user@yandex.ru:password`
 

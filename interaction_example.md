@@ -5,17 +5,17 @@ The schematic example of interaction between frontend and backend parts of appli
 #### 1. User visits the website  
 When a user visits the website, the browser displays a page that contains a list of restaurants and today's lunch menu for the first restaurant on the list.    
 To do this the frontend sends HTTP GET request to get a list of restaurants and HTTP GET request to get today's lunch menu for the first restaurant on the list.  
-![0_user_view_app_open](https://user-images.githubusercontent.com/60218699/112733956-f1fed780-8f53-11eb-937d-0226ce4770b2.png)
+![0_user_view_app_open](https://user-images.githubusercontent.com/60218699/115920783-5180d200-a483-11eb-9ac6-ec71e731a78e.png)
 
 #### 2. User selects a restaurant  
 When a user selects a restaurant on the restaurants list, he will be presented today's lunch menu of that restaurant.  
 To do this the frontend sends HTTP GET request to get today's lunch menu for the selected restaurant.  
 If restaurant's today's lunch menu does not exist yet, a corresponding message will be displayed to the user.  
-![1_user_view_menu_does_not_exist_or_not_published](https://user-images.githubusercontent.com/60218699/112733992-1c509500-8f54-11eb-9f59-34258e7b2ab1.png)
+![1_user_view_menu_does_not_exist_or_not_published](https://user-images.githubusercontent.com/60218699/115920841-678e9280-a483-11eb-8009-f7ba8ca4f388.png)  
 Otherwise, the user will be presented today's lunch menu of the selected restaurant.  
 If restaurant's today's lunch menu presented, and the user is logged in, he can vote for restaurant by clicking the button "Vote!".  
 In this case frontend sends HTTP POST request to register user vote for the selected restaurant.  
-![2_user_view_menu_exists_published](https://user-images.githubusercontent.com/60218699/112734010-312d2880-8f54-11eb-8667-ce7ff9c823a7.png)
+![2_user_view_menu_exists_published](https://user-images.githubusercontent.com/60218699/115920914-812fda00-a483-11eb-8e9d-5f4ff57ec875.png)
 
 #### 3. Admin selects a restaurant  
 When an admin selects a restaurant on the restaurants list, he will be presented today's lunch menu of that restaurant.  
@@ -23,21 +23,21 @@ To do this the frontend sends HTTP GET request to get today's lunch menu for the
 If restaurant's today's lunch menu does not exist yet, a corresponding message will be displayed to the admin.  
 Admin can create today's lunch menu for the selected restaurant by clicking the button "Add Menu".  
 In this case frontend shows admin a frontend's form to create today's lunch menu for the selected restaurant.  
-![3_admin_view_menu_does_not_exist](https://user-images.githubusercontent.com/60218699/112734019-3e4a1780-8f54-11eb-9940-4afbc71a2d71.png)
+![3_admin_view_menu_does_not_exist](https://user-images.githubusercontent.com/60218699/115920956-8db43280-a483-11eb-8f2d-f97c91225c32.png)
 
 #### 4. Frontend's form to create a menu    
 Admin sees frontend's form to create a menu (no dishes have been added to the menu at the moment).   
-![4_admin_view_menu_exists_not_published_dishes_do_not_exist](https://user-images.githubusercontent.com/60218699/112734021-45712580-8f54-11eb-8f75-dcdb55f2fae6.png)
+![4_admin_view_menu_exists_not_published_dishes_do_not_exist](https://user-images.githubusercontent.com/60218699/115920976-9442aa00-a483-11eb-8df4-cc69a5056a23.png)
 
 #### 5. Admin creates a dish for the menu on frontend   
 When admin presses "Add Dish" or "Update" (on dish list) buttons, a frontend's form to create/update a dish appears.  
 After the admin creates or updates a dish he presses the "Save" button to save changes on frontend.   
-![5_admin_view_menu_exists_not_published_dish_create_form](https://user-images.githubusercontent.com/60218699/112734088-b6b0d880-8f54-11eb-9492-440331d90a33.png)
+![5_admin_view_menu_exists_not_published_dish_create_form](https://user-images.githubusercontent.com/60218699/115920994-9a388b00-a483-11eb-97b5-50a589073672.png)
 
 #### 6. Admin publishes the menu  
 After adding all dishes to the today's lunch menu of the selected restaurant, admin presses the "Publish Menu" button to create/update the menu on backend.  
 In this case frontend sends HTTP POST/PUT request to create/update the today's lunch menu with dishes for the selected restaurant.  
-![6_admin_view_menu_exists_not_published_dishes_exist](https://user-images.githubusercontent.com/60218699/112734027-55890500-8f54-11eb-8e71-374e9c237ec8.png)
+![6_admin_view_menu_exists_not_published_dishes_exist](https://user-images.githubusercontent.com/60218699/115921020-a15f9900-a483-11eb-837a-0bfbb83b12cc.png)
 
 #### 7. The menu has been created on backend  
 Menu has been created and returned to the frontend.  
@@ -45,7 +45,7 @@ To change the menu admin presses "Change Menu" button.
 In this case frontend shows admin a frontend's form to update menu.  
 To delete the menu admin presses "Delete Menu" button.  
 In this case frontend sends HTTP DELETE request to delete the menu.  
-![7_admin_view_menu_exists_published](https://user-images.githubusercontent.com/60218699/112750096-2368b900-8fcf-11eb-8000-a8865bc82e12.png)
+![7_admin_view_menu_exists_published](https://user-images.githubusercontent.com/60218699/115921043-aa506a80-a483-11eb-8750-02b3be9bc4d1.png)
 To change the menu admin presses "Change Menu" button.  
 In this case frontend shows admin a frontend's form to update menu.  
 
@@ -53,9 +53,32 @@ In this case frontend shows admin a frontend's form to update menu.
 When admin presses "Add Rest." or "Update Rest." buttons, a frontend's form to create/update a restaurant appears.  
 After the admin creates or updates a restaurant he presses the "Save" button to save changes.  
 In this case frontend sends HTTP POST or PUT request to create or update a restaurant.  
-![8_admin_view_restaurant_create_form](https://user-images.githubusercontent.com/60218699/112734038-63d72100-8f54-11eb-874f-791c4131da95.png)
+![8_admin_view_restaurant_create_form](https://user-images.githubusercontent.com/60218699/115921070-b1777880-a483-11eb-94d2-1267da758e70.png)
 
 #### 9. Admin deletes a restaurant  
 To delete a restaurant admin must press "Delete Rest." button.    
 In this case frontend sends HTTP DELETE request to delete the selected restaurant.  
-![9_admin_deletes_restaurant](https://user-images.githubusercontent.com/60218699/112734161-1e672380-8f55-11eb-89b8-6d5a0a2b067e.png)
+![9_admin_deletes_restaurant](https://user-images.githubusercontent.com/60218699/115921083-b6d4c300-a483-11eb-954d-383a1f62d363.png)
+
+#### 10. User not registered
+To open a registration form user must press "Register" button.  
+After that a frontend's form to register appears.   
+![10_show_register_form](https://user-images.githubusercontent.com/60218699/115921253-ea175200-a483-11eb-964e-4adff2b8df47.png)
+
+#### 11. User registers in application
+To register in application user must fill in the registration form and press "Register!" button.  
+In this case frontend sends HTTP POST request to register the user.  
+![11_register_user](https://user-images.githubusercontent.com/60218699/115921267-f00d3300-a483-11eb-8539-bc0303d927ad.png)
+
+#### 12. User views his profile
+To view his profile user must press "User Profile" button.  
+In this case frontend sends HTTP GET request to get user data.  
+To delete his profile user must press "Delete" button.  
+In this case frontend sends HTTP DELETE request to delete user profile.  
+![12_user_profile](https://user-images.githubusercontent.com/60218699/115921286-f56a7d80-a483-11eb-9c1b-bcb6b631b472.png)  
+To update his profile user must press "Update" button.  
+
+#### 13. User updates his profile
+To update his profile user must fill in the profile form and press "Save" button.  
+In this case frontend sends HTTP PUT request to update the user data.  
+![13_update_profile](https://user-images.githubusercontent.com/60218699/115921313-fc918b80-a483-11eb-874f-f5595f16e4f3.png)
