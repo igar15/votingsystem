@@ -14,6 +14,7 @@ import ru.igar15.votingsystem.service.MenuService;
 import ru.igar15.votingsystem.to.MenuTo;
 import ru.igar15.votingsystem.util.MenuUtil;
 
+import javax.validation.Valid;
 import java.net.URI;
 
 @RestController
@@ -41,7 +42,7 @@ public class MenuRestController {
 
     @Secured("ROLE_ADMIN")
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Menu> createTodayWithLocation(@RequestBody MenuTo menuTo, @PathVariable int restaurantId) {
+    public ResponseEntity<Menu> createTodayWithLocation(@Valid @RequestBody MenuTo menuTo, @PathVariable int restaurantId) {
         log.info("create today's {} for restaurant {}", menuTo, restaurantId);
         Menu created = service.create(MenuUtil.createNewTodayFromTo(menuTo), restaurantId);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
@@ -53,7 +54,7 @@ public class MenuRestController {
     @Secured("ROLE_ADMIN")
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void updateToday(@RequestBody MenuTo menuTo, @PathVariable int restaurantId) {
+    public void updateToday(@Valid @RequestBody MenuTo menuTo, @PathVariable int restaurantId) {
         log.info("update today's {} for restaurant {}", menuTo, restaurantId);
         service.updateToday(menuTo, restaurantId);
     }

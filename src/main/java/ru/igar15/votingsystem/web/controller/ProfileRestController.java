@@ -13,6 +13,7 @@ import ru.igar15.votingsystem.service.UserService;
 import ru.igar15.votingsystem.to.UserTo;
 import ru.igar15.votingsystem.util.UserUtil;
 
+import javax.validation.Valid;
 import java.net.URI;
 
 import static ru.igar15.votingsystem.util.ValidationUtil.assureIdConsistent;
@@ -45,7 +46,7 @@ public class ProfileRestController {
 
     @PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<User> register(@RequestBody UserTo userTo) {
+    public ResponseEntity<User> register(@Valid @RequestBody UserTo userTo) {
         log.info("create {}", userTo);
         checkNew(userTo);
         User created = service.create(UserUtil.createNewFromTo(userTo));
@@ -57,7 +58,7 @@ public class ProfileRestController {
 
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@RequestBody UserTo userTo) {
+    public void update(@Valid @RequestBody UserTo userTo) {
         int userId = authUserId();
         log.info("update {} with id={}", userTo, userId);
         assureIdConsistent(userTo, userId);
