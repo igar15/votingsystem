@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.igar15.votingsystem.model.Vote;
 import ru.igar15.votingsystem.repository.VoteRepository;
+import ru.igar15.votingsystem.util.exception.NotFoundException;
 import ru.igar15.votingsystem.util.exception.VoteUpdateForbiddenException;
 
 import java.time.LocalDate;
@@ -30,6 +31,12 @@ public class VoteServiceTest extends AbstractServiceTest {
         int newId = created.getId();
         newVote.setId(newId);
         VOTE_MATCHER.assertMatch(repository.find(newId, USER_ID), newVote);
+    }
+
+    @Test
+    public void notExistedRestaurantCreate() {
+        assertThrows(NotFoundException.class,
+                () -> service.registerVote(USER_ID, NOT_FOUND, LocalDate.now(), LocalTime.now()));
     }
 
     @Test

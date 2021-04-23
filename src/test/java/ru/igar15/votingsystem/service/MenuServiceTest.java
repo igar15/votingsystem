@@ -15,6 +15,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static ru.igar15.votingsystem.MenuTestData.*;
+import static ru.igar15.votingsystem.RestaurantTestData.NOT_FOUND;
 import static ru.igar15.votingsystem.RestaurantTestData.RESTAURANT1_ID;
 
 public class MenuServiceTest extends AbstractServiceTest {
@@ -30,6 +31,11 @@ public class MenuServiceTest extends AbstractServiceTest {
         newMenu.setId(newId);
         MENU_MATCHER.assertMatch(created, newMenu);
         MENU_MATCHER.assertMatch(service.getToday(RESTAURANT1_ID), newMenu);
+    }
+
+    @Test
+    public void notExistedRestaurantCreate() {
+        assertThrows(NotFoundException.class, () -> service.create(getNew(), NOT_FOUND));
     }
 
     @Test
