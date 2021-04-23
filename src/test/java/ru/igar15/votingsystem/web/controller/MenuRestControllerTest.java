@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import ru.igar15.votingsystem.MenuTestData;
 import ru.igar15.votingsystem.model.Dish;
 import ru.igar15.votingsystem.model.Menu;
@@ -27,6 +29,9 @@ import static ru.igar15.votingsystem.TestUtil.readFromJson;
 import static ru.igar15.votingsystem.TestUtil.userHttpBasic;
 import static ru.igar15.votingsystem.UserTestData.admin;
 import static ru.igar15.votingsystem.UserTestData.user;
+import static ru.igar15.votingsystem.util.exception.ErrorType.VALIDATION_ERROR;
+import static ru.igar15.votingsystem.web.AppExceptionHandler.EXCEPTION_DUPLICATE_DISH;
+import static ru.igar15.votingsystem.web.AppExceptionHandler.EXCEPTION_DUPLICATE_MENU;
 
 class MenuRestControllerTest extends AbstractControllerTest {
     private static final String REST_URL = "/rest/restaurants/" + RESTAURANT1_ID + "/menus/today";
@@ -129,6 +134,71 @@ class MenuRestControllerTest extends AbstractControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(getUpdatedMenuTo())))
                 .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void createTodayInvalid() throws Exception {
+        MenuTo newTo = new MenuTo(List.of());
+        perform(MockMvcRequestBuilders.post(REST_URL)
+                .with(userHttpBasic(admin))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(newTo)))
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(errorType(VALIDATION_ERROR));
+    }
+
+    @Test
+    void updateTodayInvalid() throws Exception {
+        MenuTo updatedTo = new MenuTo(null);
+        perform(MockMvcRequestBuilders.put(REST_URL)
+                .with(userHttpBasic(admin))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(updatedTo)))
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(errorType(VALIDATION_ERROR));
+    }
+
+    @Test
+    @Transactional(propagation = Propagation.NEVER)
+    void createTodayDuplicateDate() throws Exception {
+        createTodayMenu();
+        MenuTo newTo = getNewMenuTo();
+        perform(MockMvcRequestBuilders.post(REST_URL)
+                .with(userHttpBasic(admin))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(newTo)))
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(errorType(VALIDATION_ERROR))
+                .andExpect(detailMessage(EXCEPTION_DUPLICATE_MENU));
+        menuService.deleteToday(RESTAURANT1_ID);
+    }
+
+    @Test
+    @Transactional(propagation = Propagation.NEVER)
+    void createTodayDuplicateDish() throws Exception {
+        MenuTo newTo = new MenuTo(List.of(new Dish("dish1", 100), new Dish("dish1", 200)));
+        perform(MockMvcRequestBuilders.post(REST_URL)
+                .with(userHttpBasic(admin))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(newTo)))
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(errorType(VALIDATION_ERROR))
+                .andExpect(detailMessage(EXCEPTION_DUPLICATE_DISH));
+    }
+
+    @Test
+    @Transactional(propagation = Propagation.NEVER)
+    void updateTodayDuplicateDish() throws Exception {
+        createTodayMenu();
+        MenuTo updatedTo = new MenuTo(List.of(new Dish("dish1", 100), new Dish("dish1", 200)));
+        perform(MockMvcRequestBuilders.put(REST_URL)
+                .with(userHttpBasic(admin))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(updatedTo)))
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(errorType(VALIDATION_ERROR))
+                .andExpect(detailMessage(EXCEPTION_DUPLICATE_DISH));
+        menuService.deleteToday(RESTAURANT1_ID);
     }
 
     private Menu createTodayMenu() {
