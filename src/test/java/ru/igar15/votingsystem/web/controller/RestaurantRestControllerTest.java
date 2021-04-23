@@ -22,7 +22,7 @@ import static ru.igar15.votingsystem.TestUtil.readFromJson;
 import static ru.igar15.votingsystem.TestUtil.userHttpBasic;
 import static ru.igar15.votingsystem.UserTestData.admin;
 import static ru.igar15.votingsystem.UserTestData.user;
-import static ru.igar15.votingsystem.util.exception.ErrorType.VALIDATION_ERROR;
+import static ru.igar15.votingsystem.util.exception.ErrorType.*;
 import static ru.igar15.votingsystem.web.AppExceptionHandler.EXCEPTION_DUPLICATE_RESTAURANT;
 
 class RestaurantRestControllerTest extends AbstractControllerTest {
@@ -50,6 +50,14 @@ class RestaurantRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    void getNotFound() throws Exception {
+        perform(MockMvcRequestBuilders.get(REST_URL + NOT_FOUND))
+                .andDo(print())
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(errorType(DATA_NOT_FOUND));
+    }
+
+    @Test
     void delete() throws Exception {
         perform(MockMvcRequestBuilders.delete(REST_URL + RESTAURANT1_ID)
                 .with(userHttpBasic(admin)))
@@ -59,10 +67,20 @@ class RestaurantRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    void deleteNotAdmin() throws Exception {
+    void deleteNotFound() throws Exception {
+        perform(MockMvcRequestBuilders.delete(REST_URL + NOT_FOUND)
+                .with(userHttpBasic(admin)))
+                .andDo(print())
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(errorType(DATA_NOT_FOUND));
+    }
+
+    @Test
+    void deleteForbidden() throws Exception {
         perform(MockMvcRequestBuilders.delete(REST_URL + RESTAURANT1_ID)
                 .with(userHttpBasic(UserTestData.user)))
-                .andExpect(status().isForbidden());
+                .andExpect(status().isForbidden())
+                .andExpect(errorType(ACCESS_DENIED_ERROR));
     }
 
     @Test
@@ -87,13 +105,14 @@ class RestaurantRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    void createNotAdmin() throws Exception {
+    void createForbidden() throws Exception {
         Restaurant newRestaurant = getNew();
         perform(MockMvcRequestBuilders.post(REST_URL)
                 .with(userHttpBasic(user))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(newRestaurant)))
-                .andExpect(status().isForbidden());
+                .andExpect(status().isForbidden())
+                .andExpect(errorType(ACCESS_DENIED_ERROR));
     }
 
     @Test
@@ -118,13 +137,26 @@ class RestaurantRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    void updateNotAdmin() throws Exception {
+    void updateNotFound() throws Exception {
+        Restaurant updated = getUpdated();
+        updated.setId(null);
+        perform(MockMvcRequestBuilders.put(REST_URL + NOT_FOUND)
+                .with(userHttpBasic(admin))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(updated)))
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(errorType(DATA_NOT_FOUND));
+    }
+
+    @Test
+    void updateForbidden() throws Exception {
         Restaurant updated = getUpdated();
         perform(MockMvcRequestBuilders.put(REST_URL + RESTAURANT1_ID)
                 .with(userHttpBasic(user))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(updated)))
-                .andExpect(status().isForbidden());
+                .andExpect(status().isForbidden())
+                .andExpect(errorType(ACCESS_DENIED_ERROR));
     }
 
     @Test

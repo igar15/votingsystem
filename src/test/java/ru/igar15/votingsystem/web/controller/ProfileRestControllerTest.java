@@ -75,6 +75,17 @@ class ProfileRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    void registerNotAnonymous() throws Exception {
+        UserTo newTo = getTo();
+        perform(MockMvcRequestBuilders.post(REST_URL + "/register")
+                .with(userHttpBasic(user))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(newTo)))
+                .andDo(print())
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
     void update() throws Exception {
         UserTo updatedTo = getTo();
         perform(MockMvcRequestBuilders.put(REST_URL)

@@ -10,9 +10,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import ru.igar15.votingsystem.RestaurantTestData;
 import ru.igar15.votingsystem.model.Restaurant;
 import ru.igar15.votingsystem.model.Vote;
 import ru.igar15.votingsystem.repository.VoteRepository;
+import ru.igar15.votingsystem.util.exception.ErrorType;
 
 import java.time.Clock;
 import java.time.LocalDateTime;
@@ -43,7 +45,7 @@ class VoteRestControllerTest extends AbstractControllerTest {
     private Clock clock;
 
     @Test
-    void create() throws Exception{
+    void create() throws Exception {
         setupClock(clock, LocalDateTime.now());
 
         ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL)
@@ -59,10 +61,21 @@ class VoteRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    void createUnAuth() throws Exception{
+    void createUnAuth() throws Exception {
         perform(MockMvcRequestBuilders.post(REST_URL)
                 .param("restaurantId", String.valueOf(RESTAURANT1_ID)))
                 .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void notExistedRestaurantCreate() throws Exception {
+        setupClock(clock, LocalDateTime.now());
+
+        perform(MockMvcRequestBuilders.post(REST_URL)
+                .with(userHttpBasic(user))
+                .param("restaurantId", String.valueOf(RestaurantTestData.NOT_FOUND)))
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(errorType(ErrorType.DATA_NOT_FOUND));
     }
 
     @Test
@@ -74,6 +87,17 @@ class VoteRestControllerTest extends AbstractControllerTest {
                 .param("restaurantId", String.valueOf(RESTAURANT2_ID)))
                 .andExpect(status().isOk());
         VOTE_MATCHER.assertMatch(findVoteWithRestaurant(VOTE1_ID, USER_ID), getUpdated());
+    }
+
+    @Test
+    void notExistedRestaurantUpdate() throws Exception {
+        setupClock(clock, LocalDateTime.of(VOTE_TEST_DATE, BEFORE_ELEVEN));
+
+        perform(MockMvcRequestBuilders.post(REST_URL)
+                .with(userHttpBasic(user))
+                .param("restaurantId", String.valueOf(RestaurantTestData.NOT_FOUND)))
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(errorType(ErrorType.DATA_NOT_FOUND));
     }
 
     @Test

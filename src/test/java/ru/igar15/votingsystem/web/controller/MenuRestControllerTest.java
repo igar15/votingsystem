@@ -8,6 +8,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import ru.igar15.votingsystem.MenuTestData;
+import ru.igar15.votingsystem.RestaurantTestData;
 import ru.igar15.votingsystem.model.Dish;
 import ru.igar15.votingsystem.model.Menu;
 import ru.igar15.votingsystem.service.MenuService;
@@ -29,12 +30,13 @@ import static ru.igar15.votingsystem.TestUtil.readFromJson;
 import static ru.igar15.votingsystem.TestUtil.userHttpBasic;
 import static ru.igar15.votingsystem.UserTestData.admin;
 import static ru.igar15.votingsystem.UserTestData.user;
-import static ru.igar15.votingsystem.util.exception.ErrorType.VALIDATION_ERROR;
+import static ru.igar15.votingsystem.util.exception.ErrorType.*;
 import static ru.igar15.votingsystem.web.AppExceptionHandler.EXCEPTION_DUPLICATE_DISH;
 import static ru.igar15.votingsystem.web.AppExceptionHandler.EXCEPTION_DUPLICATE_MENU;
 
 class MenuRestControllerTest extends AbstractControllerTest {
     private static final String REST_URL = "/rest/restaurants/" + RESTAURANT1_ID + "/menus/today";
+    private static final String BAD_RESTAURANT_REST_URL = "/rest/restaurants/" + RestaurantTestData.NOT_FOUND + "/menus/today";
 
     @Autowired
     private MenuService menuService;
@@ -50,6 +52,22 @@ class MenuRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    void getTodayNotFound() throws Exception {
+        perform(MockMvcRequestBuilders.get(REST_URL))
+                .andDo(print())
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(errorType(DATA_NOT_FOUND));
+    }
+
+    @Test
+    void getTodayBadRestaurant() throws Exception {
+        perform(MockMvcRequestBuilders.get(BAD_RESTAURANT_REST_URL))
+                .andDo(print())
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(errorType(DATA_NOT_FOUND));
+    }
+
+    @Test
     void deleteToday() throws Exception {
         createTodayMenu();
         perform(MockMvcRequestBuilders.delete(REST_URL)
@@ -60,10 +78,29 @@ class MenuRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    void deleteTodayNotAdmin() throws Exception {
+    void deleteTodayNotFound() throws Exception {
+        perform(MockMvcRequestBuilders.delete(REST_URL)
+                .with(userHttpBasic(admin)))
+                .andDo(print())
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(errorType(DATA_NOT_FOUND));
+    }
+
+    @Test
+    void deleteTodayBadRestaurant() throws Exception {
+        perform(MockMvcRequestBuilders.delete(BAD_RESTAURANT_REST_URL)
+                .with(userHttpBasic(admin)))
+                .andDo(print())
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(errorType(DATA_NOT_FOUND));
+    }
+
+    @Test
+    void deleteTodayForbidden() throws Exception {
         perform(MockMvcRequestBuilders.delete(REST_URL)
                 .with(userHttpBasic(user)))
-                .andExpect(status().isForbidden());
+                .andExpect(status().isForbidden())
+                .andExpect(errorType(ACCESS_DENIED_ERROR));
     }
 
     @Test
@@ -90,12 +127,13 @@ class MenuRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    void createTodayNotAdmin() throws Exception {
+    void createTodayForbidden() throws Exception {
         perform(MockMvcRequestBuilders.post(REST_URL)
                 .with(userHttpBasic(user))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(getNewMenuTo())))
-                .andExpect(status().isForbidden());
+                .andExpect(status().isForbidden())
+                .andExpect(errorType(ACCESS_DENIED_ERROR));
     }
 
     @Test
@@ -104,6 +142,17 @@ class MenuRestControllerTest extends AbstractControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(getNewMenuTo())))
                 .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void createBadRestaurant() throws Exception {
+        MenuTo newTo = getNewMenuTo();
+        perform(MockMvcRequestBuilders.post(BAD_RESTAURANT_REST_URL)
+                .with(userHttpBasic(admin))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(newTo)))
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(errorType(DATA_NOT_FOUND));
     }
 
     @Test
@@ -120,12 +169,24 @@ class MenuRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    void updateTodayNotAdmin() throws Exception {
+    void updateTodayNotFound() throws Exception {
+        MenuTo updatedTo = getUpdatedMenuTo();
+        perform(MockMvcRequestBuilders.put(REST_URL)
+                .with(userHttpBasic(admin))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(updatedTo)))
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(errorType(DATA_NOT_FOUND));
+    }
+
+    @Test
+    void updateTodayForbidden() throws Exception {
         perform(MockMvcRequestBuilders.put(REST_URL)
                 .with(userHttpBasic(user))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(getUpdatedMenuTo())))
-                .andExpect(status().isForbidden());
+                .andExpect(status().isForbidden())
+                .andExpect(errorType(ACCESS_DENIED_ERROR));
     }
 
     @Test
@@ -134,6 +195,18 @@ class MenuRestControllerTest extends AbstractControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(getUpdatedMenuTo())))
                 .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void updateBadRestaurant() throws Exception {
+        createTodayMenu();
+        MenuTo updatedTo = getUpdatedMenuTo();
+        perform(MockMvcRequestBuilders.put(BAD_RESTAURANT_REST_URL)
+                .with(userHttpBasic(admin))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(updatedTo)))
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(errorType(DATA_NOT_FOUND));
     }
 
     @Test
