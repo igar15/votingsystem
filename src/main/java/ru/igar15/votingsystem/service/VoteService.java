@@ -5,7 +5,6 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.igar15.votingsystem.model.Restaurant;
 import ru.igar15.votingsystem.model.User;
 import ru.igar15.votingsystem.model.Vote;
-import ru.igar15.votingsystem.repository.RestaurantRepository;
 import ru.igar15.votingsystem.repository.UserRepository;
 import ru.igar15.votingsystem.repository.VoteRepository;
 import ru.igar15.votingsystem.util.exception.VoteUpdateForbiddenException;
@@ -19,12 +18,12 @@ public class VoteService {
     private static final LocalTime BOUNDARY_TIME = LocalTime.of(11, 0);
 
     private final VoteRepository voteRepository;
-    private final RestaurantRepository restaurantRepository;
+    private final RestaurantService restaurantService;
     private final UserRepository userRepository;
 
-    public VoteService(VoteRepository voteRepository, RestaurantRepository restaurantRepository, UserRepository userRepository) {
+    public VoteService(VoteRepository voteRepository, RestaurantService restaurantService, UserRepository userRepository) {
         this.voteRepository = voteRepository;
-        this.restaurantRepository = restaurantRepository;
+        this.restaurantService = restaurantService;
         this.userRepository = userRepository;
     }
 
@@ -36,7 +35,7 @@ public class VoteService {
 
     private Vote create(int userId, int restaurantId, LocalDate date) {
         Vote vote = new Vote(null, date);
-        Restaurant restaurant = restaurantRepository.getOne(restaurantId);
+        Restaurant restaurant = restaurantService.get(restaurantId);
         User user = userRepository.getOne(userId);
         vote.setRestaurant(restaurant);
         vote.setUser(user);
@@ -47,7 +46,7 @@ public class VoteService {
         if (isUpdateForbidden(time)) {
             throw new VoteUpdateForbiddenException("It is too late to change your vote");
         }
-        Restaurant restaurant = restaurantRepository.getOne(restaurantId);
+        Restaurant restaurant = restaurantService.get(restaurantId);
         vote.setRestaurant(restaurant);
         return voteRepository.save(vote);
     }
