@@ -13,11 +13,16 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import ru.igar15.votingsystem.web.json.JacksonObjectMapper;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.BasicAuth;
+import springfox.documentation.service.Contact;
+import springfox.documentation.service.VendorExtension;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.time.Clock;
+import java.util.ArrayList;
 import java.util.List;
 
 @Configuration
@@ -39,20 +44,6 @@ public class WebConfig implements WebMvcConfigurer {
         converters.add(messageConverter);
     }
 
-    @Bean
-    public Clock clock() {
-        return Clock.systemDefaultZone();
-    }
-
-    @Bean
-    public Docket api() {
-        return new Docket(DocumentationType.SWAGGER_2)
-                .select()
-                .apis(RequestHandlerSelectors.any())
-                .paths(PathSelectors.any())
-                .build();
-    }
-
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("swagger-ui.html")
@@ -60,5 +51,34 @@ public class WebConfig implements WebMvcConfigurer {
 
         registry.addResourceHandler("/webjars/**")
                 .addResourceLocations("classpath:/META-INF/resources/webjars/");
+    }
+
+    @Bean
+    public Clock clock() {
+        return Clock.systemDefaultZone();
+    }
+
+    @Bean
+    public Docket api() {
+        Contact contact = new Contact("Igor Shlyakhtenkov", "http://www.igar15.ru", "igar15@yandex.ru");
+        List<VendorExtension> vendorExtensions = new ArrayList<>();
+        ApiInfo apiInfo = new ApiInfo(
+                "Restaurant Voting System App Web Service Documentation",
+                "This page documents Restaurant Voting System RESTful Web Service endpoints",
+                "1.0",
+                "www.igar15.ru/service.html",
+                contact,
+                "Apache 2.0",
+                "http://www.apache.org/licenses/LICENSE-2.0",
+                vendorExtensions
+        );
+
+        return new Docket(DocumentationType.SWAGGER_2)
+                .apiInfo(apiInfo)
+                .select()
+                .apis(RequestHandlerSelectors.any())
+                .paths(PathSelectors.any())
+                .build()
+                .securitySchemes(List.of(new BasicAuth("basicAuth")));
     }
 }

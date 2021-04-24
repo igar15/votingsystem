@@ -1,5 +1,7 @@
 package ru.igar15.votingsystem.web.controller;
 
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.Authorization;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +33,7 @@ public class VoteRestController {
     @Autowired
     private Clock clock;
 
+    @ApiOperation(value = "Vote for restaurant", authorizations = @Authorization(value = "basicAuth"))
     @PostMapping
     public ResponseEntity<Vote> registerVote(@RequestParam int restaurantId, @AuthenticationPrincipal @ApiIgnore AuthorizedUser authUser) {
         log.info("register today's vote from user {} for restaurant {}", authUser.getId(), restaurantId);

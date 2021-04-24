@@ -1,5 +1,7 @@
 package ru.igar15.votingsystem.web.controller;
 
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.Authorization;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,12 +33,14 @@ public class ProfileRestController {
     @Autowired
     private UserService service;
 
+    @ApiOperation(value = "Get user profile data", authorizations = @Authorization(value = "basicAuth"))
     @GetMapping
     public User get(@AuthenticationPrincipal @ApiIgnore AuthorizedUser authUser) {
         log.info("get {}", authUser.getId());
         return service.get(authUser.getId());
     }
 
+    @ApiOperation(value = "Delete user profile", authorizations = @Authorization(value = "basicAuth"))
     @DeleteMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@AuthenticationPrincipal @ApiIgnore AuthorizedUser authUser) {
@@ -44,6 +48,7 @@ public class ProfileRestController {
         service.delete(authUser.getId());
     }
 
+    @ApiOperation(value = "Register new user")
     @PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<User> register(@Valid @RequestBody UserTo userTo) {
@@ -56,6 +61,7 @@ public class ProfileRestController {
     }
 
 
+    @ApiOperation(value = "Update user profile data", authorizations = @Authorization(value = "basicAuth"))
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void update(@Valid @RequestBody UserTo userTo, @AuthenticationPrincipal @ApiIgnore AuthorizedUser authUser) {

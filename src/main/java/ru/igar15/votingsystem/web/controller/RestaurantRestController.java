@@ -1,5 +1,7 @@
 package ru.igar15.votingsystem.web.controller;
 
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.Authorization;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,18 +30,21 @@ public class RestaurantRestController {
     @Autowired
     private RestaurantService service;
 
+    @ApiOperation("Get all restaurants")
     @GetMapping
     public List<Restaurant> getAll() {
         log.info("getAll");
         return service.getAll();
     }
 
+    @ApiOperation("Get restaurant")
     @GetMapping("/{id}")
     public Restaurant get(@PathVariable int id) {
         log.info("get {}", id);
         return service.get(id);
     }
 
+    @ApiOperation(value = "Delete restaurant (only admin)", authorizations = @Authorization(value = "basicAuth"))
     @Secured("ROLE_ADMIN")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -48,6 +53,7 @@ public class RestaurantRestController {
         service.delete(id);
     }
 
+    @ApiOperation(value = "Create new restaurant (only admin)", authorizations = @Authorization(value = "basicAuth"))
     @Secured("ROLE_ADMIN")
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Restaurant> createWithLocation(@Valid @RequestBody Restaurant restaurant) {
@@ -60,6 +66,7 @@ public class RestaurantRestController {
         return ResponseEntity.created(uriOfNewResource).body(created);
     }
 
+    @ApiOperation(value = "Update restaurant (only admin)", authorizations = @Authorization(value = "basicAuth"))
     @Secured("ROLE_ADMIN")
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)

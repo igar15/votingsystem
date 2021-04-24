@@ -1,5 +1,7 @@
 package ru.igar15.votingsystem.web.controller;
 
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.Authorization;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,12 +28,14 @@ public class MenuRestController {
     @Autowired
     private MenuService service;
 
+    @ApiOperation("Get today's menu")
     @GetMapping
     public Menu getToday(@PathVariable int restaurantId) {
         log.info("get today's menu for restaurant {}", restaurantId);
         return service.getToday(restaurantId);
     }
 
+    @ApiOperation(value = "Delete today's menu (only admin)", authorizations = @Authorization(value = "basicAuth"))
     @Secured("ROLE_ADMIN")
     @DeleteMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -40,6 +44,7 @@ public class MenuRestController {
         service.deleteToday(restaurantId);
     }
 
+    @ApiOperation(value = "Create today's menu (only admin)", authorizations = @Authorization(value = "basicAuth"))
     @Secured("ROLE_ADMIN")
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Menu> createTodayWithLocation(@Valid @RequestBody MenuTo menuTo, @PathVariable int restaurantId) {
@@ -51,6 +56,7 @@ public class MenuRestController {
         return ResponseEntity.created(uriOfNewResource).body(created);
     }
 
+    @ApiOperation(value = "Update today's menu (only admin)", authorizations = @Authorization(value = "basicAuth"))
     @Secured("ROLE_ADMIN")
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
