@@ -14,6 +14,7 @@ import ru.igar15.votingsystem.model.User;
 import ru.igar15.votingsystem.service.UserService;
 import ru.igar15.votingsystem.to.UserTo;
 import ru.igar15.votingsystem.util.UserUtil;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
 import java.net.URI;
@@ -31,14 +32,14 @@ public class ProfileRestController {
     private UserService service;
 
     @GetMapping
-    public User get(@AuthenticationPrincipal AuthorizedUser authUser) {
+    public User get(@AuthenticationPrincipal @ApiIgnore AuthorizedUser authUser) {
         log.info("get {}", authUser.getId());
         return service.get(authUser.getId());
     }
 
     @DeleteMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@AuthenticationPrincipal AuthorizedUser authUser) {
+    public void delete(@AuthenticationPrincipal @ApiIgnore AuthorizedUser authUser) {
         log.info("delete {}", authUser.getId());
         service.delete(authUser.getId());
     }
@@ -57,7 +58,7 @@ public class ProfileRestController {
 
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@Valid @RequestBody UserTo userTo, @AuthenticationPrincipal AuthorizedUser authUser) {
+    public void update(@Valid @RequestBody UserTo userTo, @AuthenticationPrincipal @ApiIgnore AuthorizedUser authUser) {
         log.info("update {} with id={}", userTo, authUser.getId());
         assureIdConsistent(userTo, authUser.getId());
         service.update(userTo);

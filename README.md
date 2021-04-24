@@ -32,6 +32,9 @@ This is the REST API implementation of voting system for deciding where to have 
 ### <a href="interaction_example.md">The schematic example of interaction between frontend and backend</a>
 
 ### API documentation:
+#### Swagger documentation
+- (/v2/api-docs)
+- (/swagger-ui.html)
 #### Users
 - POST /rest/profile/register (register a new user)
 - GET /rest/profile (get user profile)

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.igar15.votingsystem.AuthorizedUser;
 import ru.igar15.votingsystem.model.Vote;
 import ru.igar15.votingsystem.service.VoteService;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.time.Clock;
 import java.time.LocalDate;
@@ -31,7 +32,7 @@ public class VoteRestController {
     private Clock clock;
 
     @PostMapping
-    public ResponseEntity<Vote> registerVote(@RequestParam int restaurantId, @AuthenticationPrincipal AuthorizedUser authUser) {
+    public ResponseEntity<Vote> registerVote(@RequestParam int restaurantId, @AuthenticationPrincipal @ApiIgnore AuthorizedUser authUser) {
         log.info("register today's vote from user {} for restaurant {}", authUser.getId(), restaurantId);
         Vote registered = service.registerVote(authUser.getId(), restaurantId, LocalDate.now(clock), LocalTime.now(clock));
         return ResponseEntity.ok().body(registered);
