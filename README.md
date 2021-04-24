@@ -51,6 +51,14 @@ This is the REST API implementation of voting system for deciding where to have 
 #### Votes
 - POST /rest/votes?restaurantId={restaurantId} (register vote from authorized user for restaurant with id = restaurantId)
 
+### Caching strategy
+Spring caching (Ehcache provider):
+- Get all restaurants (singleNonExpiryCache, evicts when create/update/delete any restaurant)
+- Get today's menu for a restaurant (expiryCache, cache key = {restaurantId} + currentDate, evicts by key, when create/update/delete today's menu for the restaurant)  
+
+Hibernate second level cache:
+- Restaurant entity
+
 ### Curl commands to test API:
 #### register a new User
 `curl -s -i -X POST -d '{"name":"New User","email":"test@mail.ru","password":"test-password"}' -H 'Content-Type:application/json;charset=UTF-8' http://localhost:8080/votingsystem/rest/profile/register`
