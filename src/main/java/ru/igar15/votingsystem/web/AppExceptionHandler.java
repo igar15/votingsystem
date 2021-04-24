@@ -29,7 +29,7 @@ public class AppExceptionHandler {
     public static final String EXCEPTION_DUPLICATE_EMAIL = "User with this email already exists";
     public static final String EXCEPTION_DUPLICATE_RESTAURANT = "Restaurant with those name and address already exists";
     public static final String EXCEPTION_DUPLICATE_MENU = "Today's menu for this restaurant already exists";
-    public static final String EXCEPTION_DUPLICATE_DISH = "Dish with this name already exists in this menu";
+    public static final String EXCEPTION_DUPLICATE_DISH = "Duplicate dish names in this menu";
     public static final String EXCEPTION_DUPLICATE_VOTE = "Today's vote for this user already exists";
     public static final String EXCEPTION_UPDATE_VOTE = "It is too late to change your vote";
     public static final String EXCEPTION_ACCESS_DENIED = "You do not have enough permission";

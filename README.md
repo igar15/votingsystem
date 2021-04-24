@@ -40,7 +40,7 @@ This is the REST API implementation of voting system for deciding where to have 
 #### Restaurants
 - POST /rest/restaurants (create a new restaurant)
 - GET /rest/restaurants (get list of restaurants)
-- GET /restaurants/{restaurantId} (get restaurant with id = restaurantId)
+- GET /rest/restaurants/{restaurantId} (get restaurant with id = restaurantId)
 - PUT /rest/restaurants/{restaurantId} (update restaurant with id = restaurantId)
 - DELETE /rest/restaurants/{restaurantId} (delete restaurant with id = restaurantId)
 #### Menus
@@ -49,7 +49,7 @@ This is the REST API implementation of voting system for deciding where to have 
 - PUT /rest/restaurants/{restaurantId}/menus/today (update today's menu for restaurant with id = restaurantId)
 - DELETE /rest/restaurants/{restaurantId}/menus/today (delete today's menu for restaurant with id = restaurantId)
 #### Votes
-- POST /rest/votes?restaurantId={restaurantId} (register vote from user for restaurant with id = restaurantId)
+- POST /rest/votes?restaurantId={restaurantId} (register vote from authorized user for restaurant with id = restaurantId)
 
 ### Curl commands to test API:
 #### register a new User
@@ -59,7 +59,12 @@ This is the REST API implementation of voting system for deciding where to have 
 #### update User profile
 `curl -s -X PUT -d '{"name":"Updated User","email":"updated@mail.ru","password":"updated-password"}' -H 'Content-Type: application/json' http://localhost:8080/votingsystem/rest/profile --user test@mail.ru:test-password`
 #### delete User profile
-`curl -s -X DELETE http://localhost:8080/votingsystem/rest/profile --user updated@mail.ru:updated-password`
+`curl -s -X DELETE http://localhost:8080/votingsystem/rest/profile --user updated@mail.ru:updated-password`  
+#### register not valid user
+`curl -s -i -X POST -d '{"name":"New User","password":"test-password"}' -H 'Content-Type:application/json;charset=UTF-8' http://localhost:8080/votingsystem/rest/profile/register`
+#### get User profile unAuthorized
+`curl -s http://localhost:8080/votingsystem/rest/profile`
+
 #### create a new Restaurant
 `curl -s -i -X POST -d '{"name":"New Restaurant","address":"New address"}' -H 'Content-Type:application/json;charset=UTF-8' http://localhost:8080/votingsystem/rest/restaurants --user admin@gmail.com:admin`
 #### get all Restaurants 
@@ -69,7 +74,12 @@ This is the REST API implementation of voting system for deciding where to have 
 #### update Restaurant with id=100002
 `curl -s -X PUT -d '{"name":"Updated Restaurant","address":"Updated address"}' -H 'Content-Type: application/json' http://localhost:8080/votingsystem/rest/restaurants/100002 --user admin@gmail.com:admin`
 #### delete Restaurant with id=100002
-`curl -s -X DELETE http://localhost:8080/votingsystem/rest/restaurants/100003 --user admin@gmail.com:admin`
+`curl -s -X DELETE http://localhost:8080/votingsystem/rest/restaurants/100002 --user admin@gmail.com:admin`
+#### create not valid restaurant
+`curl -s -i -X POST -d '{"name":"","address":"New address"}' -H 'Content-Type:application/json;charset=UTF-8' http://localhost:8080/votingsystem/rest/restaurants --user admin@gmail.com:admin`
+#### delete restaurant forbidden
+`curl -s -X DELETE http://localhost:8080/votingsystem/rest/restaurants/100003 --user user@yandex.ru:password`
+
 #### create today's Menu for Restaurant with id=100003
 `curl -s -i -X POST -d '{"dishes":[{"name": "Dish1","price":200},{"name": "Dish2","price":300}]}' -H 'Content-Type:application/json;charset=UTF-8' http://localhost:8080/votingsystem/rest/restaurants/100003/menus/today --user admin@gmail.com:admin`
 #### get today's Menu for Restaurant with id=100003
@@ -78,6 +88,11 @@ This is the REST API implementation of voting system for deciding where to have 
 `curl -s -X PUT -d '{"dishes":[{"name": "Dish1 Updated","price":250},{"name": "Dish2 Updated","price":350}]}' -H 'Content-Type: application/json' http://localhost:8080/votingsystem/rest/restaurants/100003/menus/today --user admin@gmail.com:admin`
 #### delete today's Menu for Restaurant with id=100003
 `curl -s -X DELETE http://localhost:8080/votingsystem/rest/restaurants/100003/menus/today --user admin@gmail.com:admin`
+#### create not valid today's menu
+`curl -s -i -X POST -d '{"dishes":[{"name": "Dish1","price":200},{"name": "Dish1","price":300}]}' -H 'Content-Type:application/json;charset=UTF-8' http://localhost:8080/votingsystem/rest/restaurants/100003/menus/today --user admin@gmail.com:admin`
+#### delete today's menu unAuthorized
+`curl -s -X DELETE http://localhost:8080/votingsystem/rest/restaurants/100003/menus/today`
+
 #### vote for today's menu of Restaurant with id=100003
 `curl -s -i -X POST -d 'restaurantId=100003' http://localhost:8080/votingsystem/rest/votes --user user@yandex.ru:password`
 
