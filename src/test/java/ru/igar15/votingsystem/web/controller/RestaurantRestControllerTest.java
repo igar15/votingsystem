@@ -7,7 +7,6 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import ru.igar15.votingsystem.UserTestData;
 import ru.igar15.votingsystem.model.Restaurant;
 import ru.igar15.votingsystem.service.RestaurantService;
 import ru.igar15.votingsystem.util.exception.NotFoundException;
@@ -78,7 +77,7 @@ class RestaurantRestControllerTest extends AbstractControllerTest {
     @Test
     void deleteForbidden() throws Exception {
         perform(MockMvcRequestBuilders.delete(REST_URL + RESTAURANT1_ID)
-                .with(userHttpBasic(UserTestData.user)))
+                .with(userHttpBasic(user)))
                 .andExpect(status().isForbidden())
                 .andExpect(errorType(ACCESS_DENIED_ERROR));
     }

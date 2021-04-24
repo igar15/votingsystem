@@ -11,7 +11,6 @@ import static ru.igar15.votingsystem.web.json.JacksonObjectMapper.getMapper;
 public class JsonUtil {
     // Suppresses default constructor, ensuring non-instantiability.
     private JsonUtil() {
-
     }
 
     public static <T> List<T> readValues(String json, Class<T> clazz) {

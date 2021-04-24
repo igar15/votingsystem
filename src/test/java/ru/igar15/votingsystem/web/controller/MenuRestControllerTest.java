@@ -224,6 +224,17 @@ class MenuRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    void createTodayInvalidDishes() throws Exception {
+        MenuTo newTo = new MenuTo(List.of(new Dish("", 100)));
+        perform(MockMvcRequestBuilders.post(REST_URL)
+                .with(userHttpBasic(admin))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(newTo)))
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(errorType(VALIDATION_ERROR));
+    }
+
+    @Test
     void updateTodayInvalid() throws Exception {
         MenuTo updatedTo = new MenuTo(null);
         perform(MockMvcRequestBuilders.put(REST_URL)

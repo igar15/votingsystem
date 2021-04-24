@@ -6,7 +6,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.igar15.votingsystem.model.User;
 
-import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -15,6 +14,4 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     @EntityGraph(attributePaths = {"roles"})
     Optional<User> findByEmail(String email);
-
-    List<User> findAllByOrderByNameAscEmailAsc();
 }
