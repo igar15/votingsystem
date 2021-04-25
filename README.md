@@ -91,8 +91,8 @@ Hibernate second level cache:
 #### delete restaurant forbidden
 `curl -s -X DELETE http://localhost:8080/votingsystem/rest/restaurants/100003 --user user@yandex.ru:password`
 
-#### create today's Menu for Restaurant with id=100003
-`curl -s -i -X POST -d '{"dishes":[{"name": "Dish1","price":200},{"name": "Dish2","price":300}]}' -H 'Content-Type:application/json;charset=UTF-8' http://localhost:8080/votingsystem/rest/restaurants/100003/menus/today --user admin@gmail.com:admin`
+#### create today's Menu for Restaurant with id=100002
+`curl -s -i -X POST -d '{"dishes":[{"name": "Dish1","price":200},{"name": "Dish2","price":300}]}' -H 'Content-Type:application/json;charset=UTF-8' http://localhost:8080/votingsystem/rest/restaurants/100002/menus/today --user admin@gmail.com:admin`
 #### get today's Menu for Restaurant with id=100003
 `curl -s http://localhost:8080/votingsystem/rest/restaurants/100003/menus/today`
 #### update today's Menu for Restaurant with id=100003
