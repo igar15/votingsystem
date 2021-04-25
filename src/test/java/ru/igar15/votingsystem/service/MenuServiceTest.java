@@ -17,6 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static ru.igar15.votingsystem.MenuTestData.*;
 import static ru.igar15.votingsystem.RestaurantTestData.NOT_FOUND;
 import static ru.igar15.votingsystem.RestaurantTestData.RESTAURANT1_ID;
+import static ru.igar15.votingsystem.RestaurantTestData.RESTAURANT2_ID;
 
 public class MenuServiceTest extends AbstractServiceTest {
 
@@ -40,10 +41,8 @@ public class MenuServiceTest extends AbstractServiceTest {
 
     @Test
     void duplicateDateCreate() {
-        Menu menu = getNew();
-        menu.setDate(menu1.getDate());
         assertThrows(DataAccessException.class,
-                () -> service.create(menu, RESTAURANT1_ID));
+                () -> service.create(getNew(), RESTAURANT2_ID));
     }
 
     @Test
@@ -56,9 +55,8 @@ public class MenuServiceTest extends AbstractServiceTest {
 
     @Test
     void deleteToday() {
-        service.create(getNew(), RESTAURANT1_ID);
-        service.deleteToday(RESTAURANT1_ID);
-        assertThrows(NotFoundException.class, () -> service.getToday(RESTAURANT1_ID));
+        service.deleteToday(RESTAURANT2_ID);
+        assertThrows(NotFoundException.class, () -> service.getToday(RESTAURANT2_ID));
     }
 
     @Test
@@ -89,11 +87,7 @@ public class MenuServiceTest extends AbstractServiceTest {
 
     @Test
     void getToday() {
-        Menu createdToday = service.create(getNew(), RESTAURANT1_ID);
-        int newId = createdToday.id();
-        Menu newMenu = getNew();
-        newMenu.setId(newId);
-        MENU_MATCHER.assertMatch(service.getToday(RESTAURANT1_ID), newMenu);
+        MENU_MATCHER.assertMatch(service.getToday(RESTAURANT2_ID), menuToday);
     }
 
     @Test
@@ -108,10 +102,9 @@ public class MenuServiceTest extends AbstractServiceTest {
 
     @Test
     void updateToday() {
-        Menu createdToday = service.create(getNew(), RESTAURANT1_ID);
         MenuTo updatedTo = new MenuTo(List.of(new Dish("updated1", 50), new Dish("updated2", 100)));
-        service.updateToday(updatedTo, RESTAURANT1_ID);
-        MENU_MATCHER.assertMatch(service.getToday(RESTAURANT1_ID), new Menu(createdToday.id(), LocalDate.now(), updatedTo.getDishes()));
+        service.updateToday(updatedTo, RESTAURANT2_ID);
+        MENU_MATCHER.assertMatch(service.getToday(RESTAURANT2_ID), new Menu(MENU_TODAY_ID, LocalDate.now(), updatedTo.getDishes()));
     }
 
     @Test

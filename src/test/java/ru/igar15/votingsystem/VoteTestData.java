@@ -13,7 +13,7 @@ import static ru.igar15.votingsystem.model.AbstractBaseEntity.START_SEQ;
 public class VoteTestData {
     public static final TestMatcher<Vote> VOTE_MATCHER = TestMatcher.usingIgnoringFieldsComparator(Vote.class, "user");
 
-    public static final int VOTE1_ID = START_SEQ + 8;
+    public static final int VOTE1_ID = START_SEQ + 9;
 
     public static final LocalDate VOTE_TEST_DATE = LocalDate.of(2021, Month.FEBRUARY, 25);
     public static final LocalTime BEFORE_ELEVEN = LocalTime.of(10, 25);

@@ -76,34 +76,33 @@ Hibernate second level cache:
 #### get User profile unAuthorized
 `curl -s http://localhost:8080/votingsystem/rest/profile`
 
-#### create a new Restaurant
-`curl -s -i -X POST -d '{"name":"New Restaurant","address":"New address"}' -H 'Content-Type:application/json;charset=UTF-8' http://localhost:8080/votingsystem/rest/restaurants --user admin@gmail.com:admin`
 #### get all Restaurants 
 `curl -s http://localhost:8080/votingsystem/rest/restaurants`
 #### get Restaurant with id=100002
 `curl -s http://localhost:8080/votingsystem/rest/restaurants/100002`
+#### create a new Restaurant
+`curl -s -i -X POST -d '{"name":"New Restaurant","address":"New address"}' -H 'Content-Type:application/json;charset=UTF-8' http://localhost:8080/votingsystem/rest/restaurants --user admin@gmail.com:admin`
 #### update Restaurant with id=100002
 `curl -s -X PUT -d '{"name":"Updated Restaurant","address":"Updated address"}' -H 'Content-Type: application/json' http://localhost:8080/votingsystem/rest/restaurants/100002 --user admin@gmail.com:admin`
-#### delete Restaurant with id=100002
-`curl -s -X DELETE http://localhost:8080/votingsystem/rest/restaurants/100002 --user admin@gmail.com:admin`
+#### delete Restaurant with id=100004
+`curl -s -X DELETE http://localhost:8080/votingsystem/rest/restaurants/100004 --user admin@gmail.com:admin`
 #### create not valid restaurant
 `curl -s -i -X POST -d '{"name":"","address":"New address"}' -H 'Content-Type:application/json;charset=UTF-8' http://localhost:8080/votingsystem/rest/restaurants --user admin@gmail.com:admin`
 #### delete restaurant forbidden
-`curl -s -X DELETE http://localhost:8080/votingsystem/rest/restaurants/100003 --user user@yandex.ru:password`
+`curl -s -X DELETE http://localhost:8080/votingsystem/rest/restaurants/100002 --user user@yandex.ru:password`
 
-#### create today's Menu for Restaurant with id=100002
-`curl -s -i -X POST -d '{"dishes":[{"name": "Dish1","price":200},{"name": "Dish2","price":300}]}' -H 'Content-Type:application/json;charset=UTF-8' http://localhost:8080/votingsystem/rest/restaurants/100002/menus/today --user admin@gmail.com:admin`
 #### get today's Menu for Restaurant with id=100003
 `curl -s http://localhost:8080/votingsystem/rest/restaurants/100003/menus/today`
-#### update today's Menu for Restaurant with id=100003
-`curl -s -X PUT -d '{"dishes":[{"name": "Dish1 Updated","price":250},{"name": "Dish2 Updated","price":350}]}' -H 'Content-Type: application/json' http://localhost:8080/votingsystem/rest/restaurants/100003/menus/today --user admin@gmail.com:admin`
-#### delete today's Menu for Restaurant with id=100003
-`curl -s -X DELETE http://localhost:8080/votingsystem/rest/restaurants/100003/menus/today --user admin@gmail.com:admin`
-#### create not valid today's menu
-`curl -s -i -X POST -d '{"dishes":[{"name": "Dish1","price":200},{"name": "Dish1","price":300}]}' -H 'Content-Type:application/json;charset=UTF-8' http://localhost:8080/votingsystem/rest/restaurants/100003/menus/today --user admin@gmail.com:admin`
+#### create not valid today's menu for Restaurant with id=100002
+`curl -s -i -X POST -d '{"dishes":[{"name": "Dish1","price":200},{"name": "Dish1","price":300}]}' -H 'Content-Type:application/json;charset=UTF-8' http://localhost:8080/votingsystem/rest/restaurants/100002/menus/today --user admin@gmail.com:admin`
+#### create today's Menu for Restaurant with id=100002
+`curl -s -i -X POST -d '{"dishes":[{"name": "Dish1","price":200},{"name": "Dish2","price":300}]}' -H 'Content-Type:application/json;charset=UTF-8' http://localhost:8080/votingsystem/rest/restaurants/100002/menus/today --user admin@gmail.com:admin`
+#### update today's Menu for Restaurant with id=100002
+`curl -s -X PUT -d '{"dishes":[{"name": "Dish1 Updated","price":250},{"name": "Dish2 Updated","price":350}]}' -H 'Content-Type: application/json' http://localhost:8080/votingsystem/rest/restaurants/100002/menus/today --user admin@gmail.com:admin`
 #### delete today's menu unAuthorized
-`curl -s -X DELETE http://localhost:8080/votingsystem/rest/restaurants/100003/menus/today`
+`curl -s -X DELETE http://localhost:8080/votingsystem/rest/restaurants/100002/menus/today`
+#### delete today's Menu for Restaurant with id=100002
+`curl -s -X DELETE http://localhost:8080/votingsystem/rest/restaurants/100002/menus/today --user admin@gmail.com:admin`
 
 #### vote for today's menu of Restaurant with id=100003
 `curl -s -i -X POST -d 'restaurantId=100003' http://localhost:8080/votingsystem/rest/votes --user user@yandex.ru:password`
-

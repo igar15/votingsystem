@@ -7,7 +7,6 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import ru.igar15.votingsystem.MenuTestData;
 import ru.igar15.votingsystem.RestaurantTestData;
 import ru.igar15.votingsystem.model.Dish;
 import ru.igar15.votingsystem.model.Menu;
@@ -24,8 +23,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static ru.igar15.votingsystem.MenuTestData.MENU_MATCHER;
+import static ru.igar15.votingsystem.MenuTestData.*;
 import static ru.igar15.votingsystem.RestaurantTestData.RESTAURANT1_ID;
+import static ru.igar15.votingsystem.RestaurantTestData.RESTAURANT2_ID;
 import static ru.igar15.votingsystem.TestUtil.readFromJson;
 import static ru.igar15.votingsystem.TestUtil.userHttpBasic;
 import static ru.igar15.votingsystem.UserTestData.admin;
@@ -35,7 +35,8 @@ import static ru.igar15.votingsystem.web.AppExceptionHandler.EXCEPTION_DUPLICATE
 import static ru.igar15.votingsystem.web.AppExceptionHandler.EXCEPTION_DUPLICATE_MENU;
 
 class MenuRestControllerTest extends AbstractControllerTest {
-    private static final String REST_URL = "/rest/restaurants/" + RESTAURANT1_ID + "/menus/today";
+    private static final String REST_URL_RESTAURANT1 = "/rest/restaurants/" + RESTAURANT1_ID + "/menus/today";
+    private static final String REST_URL_RESTAURANT2 = "/rest/restaurants/" + RESTAURANT2_ID + "/menus/today";
     private static final String BAD_RESTAURANT_REST_URL = "/rest/restaurants/" + RestaurantTestData.NOT_FOUND + "/menus/today";
 
     @Autowired
@@ -43,17 +44,16 @@ class MenuRestControllerTest extends AbstractControllerTest {
 
     @Test
     void getToday() throws Exception {
-        Menu createdToday = createTodayMenu();
-        perform(MockMvcRequestBuilders.get(REST_URL))
+        perform(MockMvcRequestBuilders.get(REST_URL_RESTAURANT2))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(MENU_MATCHER.contentJson(createdToday));
+                .andExpect(MENU_MATCHER.contentJson(menuToday));
     }
 
     @Test
     void getTodayNotFound() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_URL))
+        perform(MockMvcRequestBuilders.get(REST_URL_RESTAURANT1))
                 .andDo(print())
                 .andExpect(status().isUnprocessableEntity())
                 .andExpect(errorType(DATA_NOT_FOUND));
@@ -69,17 +69,16 @@ class MenuRestControllerTest extends AbstractControllerTest {
 
     @Test
     void deleteToday() throws Exception {
-        createTodayMenu();
-        perform(MockMvcRequestBuilders.delete(REST_URL)
+        perform(MockMvcRequestBuilders.delete(REST_URL_RESTAURANT2)
                 .with(userHttpBasic(admin)))
                 .andExpect(status().isNoContent())
                 .andDo(print());
-        assertThrows(NotFoundException.class, () -> menuService.getToday(RESTAURANT1_ID));
+        assertThrows(NotFoundException.class, () -> menuService.getToday(RESTAURANT2_ID));
     }
 
     @Test
     void deleteTodayNotFound() throws Exception {
-        perform(MockMvcRequestBuilders.delete(REST_URL)
+        perform(MockMvcRequestBuilders.delete(REST_URL_RESTAURANT1)
                 .with(userHttpBasic(admin)))
                 .andDo(print())
                 .andExpect(status().isUnprocessableEntity())
@@ -97,7 +96,7 @@ class MenuRestControllerTest extends AbstractControllerTest {
 
     @Test
     void deleteTodayForbidden() throws Exception {
-        perform(MockMvcRequestBuilders.delete(REST_URL)
+        perform(MockMvcRequestBuilders.delete(REST_URL_RESTAURANT2)
                 .with(userHttpBasic(user)))
                 .andExpect(status().isForbidden())
                 .andExpect(errorType(ACCESS_DENIED_ERROR));
@@ -105,7 +104,7 @@ class MenuRestControllerTest extends AbstractControllerTest {
 
     @Test
     void deleteTodayUnAuth() throws Exception {
-        perform(MockMvcRequestBuilders.delete(REST_URL))
+        perform(MockMvcRequestBuilders.delete(REST_URL_RESTAURANT2))
                 .andExpect(status().isUnauthorized())
                 .andExpect(errorType(UNAUTHORIZED_ERROR));
     }
@@ -114,7 +113,7 @@ class MenuRestControllerTest extends AbstractControllerTest {
     void createTodayWithLocation() throws Exception {
         MenuTo newTo = getNewMenuTo();
         Menu newMenu = MenuUtil.createNewTodayFromTo(newTo);
-        ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL)
+        ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL_RESTAURANT1)
                 .with(userHttpBasic(admin))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(newTo)))
@@ -129,7 +128,7 @@ class MenuRestControllerTest extends AbstractControllerTest {
 
     @Test
     void createTodayForbidden() throws Exception {
-        perform(MockMvcRequestBuilders.post(REST_URL)
+        perform(MockMvcRequestBuilders.post(REST_URL_RESTAURANT1)
                 .with(userHttpBasic(user))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(getNewMenuTo())))
@@ -139,7 +138,7 @@ class MenuRestControllerTest extends AbstractControllerTest {
 
     @Test
     void createTodayUnAuth() throws Exception {
-        perform(MockMvcRequestBuilders.post(REST_URL)
+        perform(MockMvcRequestBuilders.post(REST_URL_RESTAURANT1)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(getNewMenuTo())))
                 .andExpect(status().isUnauthorized())
@@ -159,21 +158,20 @@ class MenuRestControllerTest extends AbstractControllerTest {
 
     @Test
     void updateToday() throws Exception {
-        Menu createdToday = createTodayMenu();
         MenuTo updatedTo = getUpdatedMenuTo();
-        perform(MockMvcRequestBuilders.put(REST_URL)
+        perform(MockMvcRequestBuilders.put(REST_URL_RESTAURANT2)
                 .with(userHttpBasic(admin))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(updatedTo)))
                 .andExpect(status().isNoContent());
 
-        MENU_MATCHER.assertMatch(menuService.getToday(RESTAURANT1_ID), new Menu(createdToday.id(), LocalDate.now(), updatedTo.getDishes()));
+        MENU_MATCHER.assertMatch(menuService.getToday(RESTAURANT2_ID), new Menu(MENU_TODAY_ID, LocalDate.now(), updatedTo.getDishes()));
     }
 
     @Test
     void updateTodayNotFound() throws Exception {
         MenuTo updatedTo = getUpdatedMenuTo();
-        perform(MockMvcRequestBuilders.put(REST_URL)
+        perform(MockMvcRequestBuilders.put(REST_URL_RESTAURANT1)
                 .with(userHttpBasic(admin))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(updatedTo)))
@@ -183,7 +181,7 @@ class MenuRestControllerTest extends AbstractControllerTest {
 
     @Test
     void updateTodayForbidden() throws Exception {
-        perform(MockMvcRequestBuilders.put(REST_URL)
+        perform(MockMvcRequestBuilders.put(REST_URL_RESTAURANT2)
                 .with(userHttpBasic(user))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(getUpdatedMenuTo())))
@@ -193,7 +191,7 @@ class MenuRestControllerTest extends AbstractControllerTest {
 
     @Test
     void updateTodayUnAuth() throws Exception {
-        perform(MockMvcRequestBuilders.put(REST_URL)
+        perform(MockMvcRequestBuilders.put(REST_URL_RESTAURANT2)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(getUpdatedMenuTo())))
                 .andExpect(status().isUnauthorized())
@@ -202,7 +200,6 @@ class MenuRestControllerTest extends AbstractControllerTest {
 
     @Test
     void updateTodayBadRestaurant() throws Exception {
-        createTodayMenu();
         MenuTo updatedTo = getUpdatedMenuTo();
         perform(MockMvcRequestBuilders.put(BAD_RESTAURANT_REST_URL)
                 .with(userHttpBasic(admin))
@@ -215,7 +212,7 @@ class MenuRestControllerTest extends AbstractControllerTest {
     @Test
     void createTodayInvalid() throws Exception {
         MenuTo newTo = new MenuTo(List.of());
-        perform(MockMvcRequestBuilders.post(REST_URL)
+        perform(MockMvcRequestBuilders.post(REST_URL_RESTAURANT1)
                 .with(userHttpBasic(admin))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(newTo)))
@@ -226,7 +223,7 @@ class MenuRestControllerTest extends AbstractControllerTest {
     @Test
     void createTodayInvalidDishes() throws Exception {
         MenuTo newTo = new MenuTo(List.of(new Dish("", 100)));
-        perform(MockMvcRequestBuilders.post(REST_URL)
+        perform(MockMvcRequestBuilders.post(REST_URL_RESTAURANT1)
                 .with(userHttpBasic(admin))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(newTo)))
@@ -237,7 +234,7 @@ class MenuRestControllerTest extends AbstractControllerTest {
     @Test
     void updateTodayInvalid() throws Exception {
         MenuTo updatedTo = new MenuTo(null);
-        perform(MockMvcRequestBuilders.put(REST_URL)
+        perform(MockMvcRequestBuilders.put(REST_URL_RESTAURANT2)
                 .with(userHttpBasic(admin))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(updatedTo)))
@@ -248,23 +245,21 @@ class MenuRestControllerTest extends AbstractControllerTest {
     @Test
     @Transactional(propagation = Propagation.NEVER)
     void createTodayDuplicateDate() throws Exception {
-        createTodayMenu();
         MenuTo newTo = getNewMenuTo();
-        perform(MockMvcRequestBuilders.post(REST_URL)
+        perform(MockMvcRequestBuilders.post(REST_URL_RESTAURANT2)
                 .with(userHttpBasic(admin))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(newTo)))
                 .andExpect(status().isUnprocessableEntity())
                 .andExpect(errorType(VALIDATION_ERROR))
                 .andExpect(detailMessage(EXCEPTION_DUPLICATE_MENU));
-        menuService.deleteToday(RESTAURANT1_ID);
     }
 
     @Test
     @Transactional(propagation = Propagation.NEVER)
     void createTodayDuplicateDish() throws Exception {
         MenuTo newTo = new MenuTo(List.of(new Dish("dish1", 100), new Dish("dish1", 200)));
-        perform(MockMvcRequestBuilders.post(REST_URL)
+        perform(MockMvcRequestBuilders.post(REST_URL_RESTAURANT1)
                 .with(userHttpBasic(admin))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(newTo)))
@@ -276,20 +271,14 @@ class MenuRestControllerTest extends AbstractControllerTest {
     @Test
     @Transactional(propagation = Propagation.NEVER)
     void updateTodayDuplicateDish() throws Exception {
-        createTodayMenu();
         MenuTo updatedTo = new MenuTo(List.of(new Dish("dish1", 100), new Dish("dish1", 200)));
-        perform(MockMvcRequestBuilders.put(REST_URL)
+        perform(MockMvcRequestBuilders.put(REST_URL_RESTAURANT2)
                 .with(userHttpBasic(admin))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(updatedTo)))
                 .andExpect(status().isUnprocessableEntity())
                 .andExpect(errorType(VALIDATION_ERROR))
                 .andExpect(detailMessage(EXCEPTION_DUPLICATE_DISH));
-        menuService.deleteToday(RESTAURANT1_ID);
-    }
-
-    private Menu createTodayMenu() {
-        return menuService.create(MenuTestData.getNew(), RESTAURANT1_ID);
     }
 
     private MenuTo getNewMenuTo() {
