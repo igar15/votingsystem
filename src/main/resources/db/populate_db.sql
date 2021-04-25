@@ -23,7 +23,7 @@ INSERT INTO menus (restaurant_id, date)
 VALUES (100002, '2021-02-25'),
        (100002, '2021-02-26'),
        (100003, '2021-02-26'),
-       (100003, '2021-02-27');
+       (100003, now());
 
 INSERT INTO dishes (menu_id, name, price)
 VALUES (100004, 'Суши', 250),
