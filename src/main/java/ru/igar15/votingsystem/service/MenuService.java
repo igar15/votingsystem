@@ -34,11 +34,13 @@ public class MenuService {
     }
     @CacheEvict(value = "menusToday", key = "#restaurantId + '_' + T(java.time.LocalDate).now().toString()")
     public void deleteToday(int restaurantId) {
+        restaurantService.get(restaurantId);
         Menu menu = getByDate(restaurantId, LocalDate.now());
         menuRepository.delete(menu);
     }
 
     public Menu getByDate(int restaurantId, LocalDate date) {
+        restaurantService.get(restaurantId);
         Assert.notNull(date, "date must not be null");
         return menuRepository.findByDate(restaurantId, date).orElseThrow(() -> new NotFoundException("Not found menu with date=" + date));
     }
@@ -51,6 +53,7 @@ public class MenuService {
     @CacheEvict(value = "menusToday", key = "#restaurantId + '_' + T(java.time.LocalDate).now().toString()")
     @Transactional
     public void updateToday(MenuTo menuTo, int restaurantId) {
+        restaurantService.get(restaurantId);
         Assert.notNull(menuTo, "menuTo must not be null");
         Menu menu = getByDate(restaurantId, LocalDate.now());
         menu.setDishes(menuTo.getDishes());
