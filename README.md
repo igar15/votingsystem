@@ -1,5 +1,5 @@
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/ddae95adbea54bed8afcc56f40b906ff)](https://www.codacy.com/gh/igar15/restaurant-voting-system/dashboard)
-[![Build Status](https://api.travis-ci.com/igar15/restaurant-voting-system.svg?branch=master)](https://travis-ci.com//igar15/restaurant-voting-system)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/ddae95adbea54bed8afcc56f40b906ff)](https://www.codacy.com/gh/igar15/votingsystem/dashboard)
+[![Build Status](https://api.travis-ci.com/igar15/restaurant-voting-system.svg?branch=master)](https://travis-ci.com//igar15/votingsystem)
 
 Restaurant Voting System Project 
 =================================
