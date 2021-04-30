@@ -24,6 +24,7 @@ import java.net.URI;
 import static ru.igar15.votingsystem.util.ValidationUtil.assureIdConsistent;
 import static ru.igar15.votingsystem.util.ValidationUtil.checkNew;
 
+@CrossOrigin("http://localhost:4200")
 @RestController
 @RequestMapping(value = ProfileRestController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class ProfileRestController {

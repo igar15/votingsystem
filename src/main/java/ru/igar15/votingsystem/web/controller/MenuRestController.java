@@ -19,6 +19,7 @@ import ru.igar15.votingsystem.util.MenuUtil;
 import javax.validation.Valid;
 import java.net.URI;
 
+@CrossOrigin("http://localhost:4200")
 @RestController
 @RequestMapping(value = MenuRestController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class MenuRestController {

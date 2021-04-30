@@ -21,6 +21,7 @@ import java.util.List;
 import static ru.igar15.votingsystem.util.ValidationUtil.assureIdConsistent;
 import static ru.igar15.votingsystem.util.ValidationUtil.checkNew;
 
+@CrossOrigin("http://localhost:4200")
 @RestController
 @RequestMapping(value = RestaurantRestController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class RestaurantRestController {
@@ -74,5 +75,12 @@ public class RestaurantRestController {
         log.info("update {} with id={}", restaurant, id);
         assureIdConsistent(restaurant, id);
         service.update(restaurant);
+    }
+
+    @ApiOperation("Get all restaurants by name")
+    @GetMapping("/by")
+    public List<Restaurant> getAllByName(@RequestParam String name) {
+        log.info("getAllByName {}", name);
+        return service.getAllByName(name);
     }
 }

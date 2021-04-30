@@ -8,10 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.igar15.votingsystem.AuthorizedUser;
 import ru.igar15.votingsystem.model.Vote;
 import ru.igar15.votingsystem.service.VoteService;
@@ -21,6 +18,7 @@ import java.time.Clock;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+@CrossOrigin("http://localhost:4200")
 @RestController
 @RequestMapping(value = VoteRestController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class VoteRestController {
