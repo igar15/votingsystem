@@ -46,4 +46,9 @@ public class RestaurantService {
         get(restaurant.id());
         repository.save(restaurant);
     }
+
+    public List<Restaurant> getAllByName(String name) {
+        Assert.notNull(name, "name must not be null");
+        return repository.findAllByNameContainingIgnoreCase(name);
+    }
 }
