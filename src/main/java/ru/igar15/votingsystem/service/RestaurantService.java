@@ -2,6 +2,7 @@ package ru.igar15.votingsystem.service;
 
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import ru.igar15.votingsystem.model.Restaurant;
@@ -25,7 +26,10 @@ public class RestaurantService {
         return repository.save(restaurant);
     }
 
-    @CacheEvict(value = "restaurants", allEntries = true)
+    @Caching(evict = {
+            @CacheEvict(value = "restaurants", allEntries = true),
+            @CacheEvict(value = "menusToday", key = "#id + '_' + T(java.time.LocalDate).now().toString()")
+    })
     public void delete(int id) {
         Restaurant restaurant = get(id);
         repository.delete(restaurant);
