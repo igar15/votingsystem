@@ -12,15 +12,15 @@ public class RestaurantTestData {
     public static final int RESTAURANT3_ID = START_SEQ + 4;
     public static final int NOT_FOUND = 10;
 
-    public static final Restaurant restaurant1 = new Restaurant(RESTAURANT1_ID, "Якитория", "Новый Арбат, 22");
-    public static final Restaurant restaurant2 = new Restaurant(RESTAURANT2_ID, "Бургер Кинг", "Авиамоторная, 34");
-    public static final Restaurant restaurant3 = new Restaurant(RESTAURANT3_ID, "Paulaner", "Невский, 89");
+    public static final Restaurant restaurant1 = new Restaurant(RESTAURANT1_ID, "Якитория", "Новый Арбат, 22", "assets/images/yakitoriya.jpeg");
+    public static final Restaurant restaurant2 = new Restaurant(RESTAURANT2_ID, "Бургер Кинг", "Авиамоторная, 34", "assets/images/burger-king.jpeg");
+    public static final Restaurant restaurant3 = new Restaurant(RESTAURANT3_ID, "Paulaner", "Невский, 89", "assets/images/paulaner.jpg");
 
     public static Restaurant getNew() {
-        return new Restaurant(null, "New", "NewAddress");
+        return new Restaurant(null, "New", "NewAddress", "newImageUrl");
     }
 
     public static Restaurant getUpdated() {
-        return new Restaurant(RESTAURANT1_ID, "UpdatedName", "UpdatedAddress");
+        return new Restaurant(RESTAURANT1_ID, "UpdatedName", "UpdatedAddress", "updatedImageUrl");
     }
 }

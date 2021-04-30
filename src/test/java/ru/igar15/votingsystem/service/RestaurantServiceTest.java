@@ -29,7 +29,7 @@ public class RestaurantServiceTest extends AbstractServiceTest {
 
     @Test
     void duplicateNameCreate() {
-        Restaurant duplicateName = new Restaurant(null, "Якитория", "Тверская, 45");
+        Restaurant duplicateName = new Restaurant(null, "Якитория", "Тверская, 45", "newImageUrl");
         Restaurant created = service.create(duplicateName);
         int newId = created.id();
         duplicateName.setId(newId);
@@ -40,7 +40,7 @@ public class RestaurantServiceTest extends AbstractServiceTest {
     @Test
     void duplicateNameAddressCreate() {
         assertThrows(DataAccessException.class,
-                () -> service.create(new Restaurant(null, "Якитория", "Новый Арбат, 22")));
+                () -> service.create(new Restaurant(null, "Якитория", "Новый Арбат, 22", "newImageUrl")));
     }
 
     @Test
@@ -80,7 +80,8 @@ public class RestaurantServiceTest extends AbstractServiceTest {
 
     @Test
     void createWithException() {
-        validateRootCause(ConstraintViolationException.class, () -> service.create(new Restaurant(null, " ", "restaurantAddress")));
-        validateRootCause(ConstraintViolationException.class, () -> service.create(new Restaurant(null, "restaurantName", " ")));
+        validateRootCause(ConstraintViolationException.class, () -> service.create(new Restaurant(null, " ", "restaurantAddress", "newImageUrl")));
+        validateRootCause(ConstraintViolationException.class, () -> service.create(new Restaurant(null, "restaurantName", " ", "newImageUrl")));
+        validateRootCause(ConstraintViolationException.class, () -> service.create(new Restaurant(null, "restaurantName", "restaurantAddress", " ")));
     }
 }

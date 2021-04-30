@@ -15,10 +15,10 @@ VALUES ('USER', 100000),
        ('ADMIN', 100001),
        ('USER', 100001);
 
-INSERT INTO restaurants (name, address)
-VALUES ('Якитория', 'Новый Арбат, 22'),
-       ('Бургер Кинг', 'Авиамоторная, 34'),
-       ('Paulaner', 'Невский, 89');
+INSERT INTO restaurants (name, address, imageUrl)
+VALUES ('Якитория', 'Новый Арбат, 22', 'assets/images/yakitoriya.jpeg'),
+       ('Бургер Кинг', 'Авиамоторная, 34', 'assets/images/burger-king.jpeg'),
+       ('Paulaner', 'Невский, 89', 'assets/images/paulaner.jpg');
 
 INSERT INTO menus (restaurant_id, date)
 VALUES (100002, '2021-02-25'),

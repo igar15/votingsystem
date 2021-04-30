@@ -19,12 +19,17 @@ public class Restaurant extends AbstractNamedEntity {
     @Column(name = "address")
     private String address;
 
+    @NotBlank
+    @Column(name = "imageUrl")
+    private String imageUrl;
+
     public Restaurant() {
     }
 
-    public Restaurant(Integer id, String name, String address) {
+    public Restaurant(Integer id, String name, String address, String imageUrl) {
         super(id, name);
         this.address = address;
+        this.imageUrl = imageUrl;
     }
 
     public String getAddress() {
@@ -35,12 +40,21 @@ public class Restaurant extends AbstractNamedEntity {
         this.address = address;
     }
 
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
     @Override
     public String toString() {
         return "Restaurant{" +
                 "id=" + id +
                 ", name=" + name +
                 ", address=" + address +
+                ", imageUrl=" + imageUrl +
                 '}';
     }
 }
