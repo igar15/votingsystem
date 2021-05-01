@@ -57,7 +57,7 @@ This is the REST API implementation of voting system for deciding where to have 
 ### Caching strategy
 Spring caching (Ehcache provider):
 - Get all restaurants (singleNonExpiryCache, evicts when create/update/delete any restaurant)
-- Get today's menu for a restaurant (expiryCache, cache key = {restaurantId} + currentDate, evicts by key, when create/update/delete today's menu for the restaurant)  
+- Get today's menu for a restaurant (expiryCache, cache key = {restaurantId} + currentDate, evicts by key, when create/update/delete today's menu for the restaurant, and when the restaurant deletes)  
 
 Hibernate second level cache:
 - Restaurant entity
