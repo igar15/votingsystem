@@ -18,8 +18,8 @@ public class RestaurantTestData {
     public static final Restaurant restaurant1 = new Restaurant(RESTAURANT1_ID, "Якитория", "Новый Арбат, 22", "assets/images/yakitoriya.jpeg");
     public static final Restaurant restaurant2 = new Restaurant(RESTAURANT2_ID, "Бургер Кинг", "Авиамоторная, 34", "assets/images/burger-king.jpeg");
     public static final Restaurant restaurant3 = new Restaurant(RESTAURANT3_ID, "Paulaner", "Невский, 89", "assets/images/paulaner.jpg");
-    public static final Restaurant restaurant4 = new Restaurant(RESTAURANT4_ID, "Орда", "Мясницкая, 43, стр. 2", "assets/images/orda.jpeg");
-    public static final Restaurant restaurant5 = new Restaurant(RESTAURANT5_ID, "Plov Project", "Малая Дмитровка, 20", "assets/images/plov-project.jpeg");
+    public static final Restaurant restaurant4 = new Restaurant(RESTAURANT4_ID, "Орда", "Мясницкая, 43, стр. 2", "assets/images/orda.jpg");
+    public static final Restaurant restaurant5 = new Restaurant(RESTAURANT5_ID, "Plov Project", "Малая Дмитровка, 20", "assets/images/plov-project.jpg");
     public static final Restaurant restaurant6 = new Restaurant(RESTAURANT6_ID, "Venting Cafe", "Цветной бульвар, 34", "assets/images/venting-cafe.jpg");
 
     public static Restaurant getNew() {

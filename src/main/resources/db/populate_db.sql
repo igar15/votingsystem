@@ -44,6 +44,6 @@ VALUES (100000, 100002, '2021-02-25'),
        (100001, 100003, '2021-02-27');
 
 INSERT INTO restaurants (name, address, imageUrl)
-VALUES ('Орда', 'Мясницкая, 43, стр. 2', 'assets/images/orda.jpeg'),
-       ('Plov Project', 'Малая Дмитровка, 20', 'assets/images/plov-project.jpeg'),
+VALUES ('Орда', 'Мясницкая, 43, стр. 2', 'assets/images/orda.jpg'),
+       ('Plov Project', 'Малая Дмитровка, 20', 'assets/images/plov-project.jpg'),
        ('Venting Cafe', 'Цветной бульвар, 34', 'assets/images/venting-cafe.jpg');
