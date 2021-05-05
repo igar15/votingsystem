@@ -13,5 +13,5 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Integer>
 
     List<Restaurant> findAllByOrderByNameAscAddressAsc();
 
-    List<Restaurant> findAllByNameContainingIgnoreCase(String name);
+    List<Restaurant> findAllByNameContainingIgnoreCaseOrderByNameAscAddressAsc(String name);
 }

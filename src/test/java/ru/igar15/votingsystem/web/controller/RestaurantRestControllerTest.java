@@ -40,6 +40,16 @@ class RestaurantRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    void getAllByName() throws Exception {
+        perform(MockMvcRequestBuilders.get(REST_URL + "by")
+                .param("name", "p"))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(RESTAURANT_MATCHER.contentJson(restaurant3, restaurant5));
+    }
+
+    @Test
     void get() throws Exception {
         perform(MockMvcRequestBuilders.get(REST_URL + RESTAURANT1_ID))
                 .andExpect(status().isOk())

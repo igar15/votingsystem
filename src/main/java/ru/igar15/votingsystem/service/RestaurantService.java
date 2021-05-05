@@ -49,6 +49,6 @@ public class RestaurantService {
 
     public List<Restaurant> getAllByName(String name) {
         Assert.notNull(name, "name must not be null");
-        return repository.findAllByNameContainingIgnoreCase(name);
+        return repository.findAllByNameContainingIgnoreCaseOrderByNameAscAddressAsc(name);
     }
 }
