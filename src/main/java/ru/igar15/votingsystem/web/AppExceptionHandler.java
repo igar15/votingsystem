@@ -8,6 +8,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -33,6 +34,7 @@ public class AppExceptionHandler {
     public static final String EXCEPTION_DUPLICATE_VOTE = "Today's vote for this user already exists";
     public static final String EXCEPTION_UPDATE_VOTE = "It is too late to change your vote";
     public static final String EXCEPTION_ACCESS_DENIED = "You do not have enough permission";
+    public static final String EXCEPTION_BAD_CREDENTIALS = "Email / password incorrect. Please try again";
 
     private static final Map<String, String> CONSTRAINS_MAP = Map.of(
             "users_unique_email_idx", EXCEPTION_DUPLICATE_EMAIL,
@@ -86,6 +88,11 @@ public class AppExceptionHandler {
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<ErrorInfo> forbiddenRequestError(HttpServletRequest req, AccessDeniedException e) {
         return logAndGetErrorInfo(req, e, false, ACCESS_DENIED_ERROR, EXCEPTION_ACCESS_DENIED);
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<ErrorInfo> forbiddenRequestError(HttpServletRequest req, BadCredentialsException e) {
+        return logAndGetErrorInfo(req, e, false, BAD_CREDENTIALS_ERROR, EXCEPTION_BAD_CREDENTIALS);
     }
 
     @ExceptionHandler(Exception.class)
