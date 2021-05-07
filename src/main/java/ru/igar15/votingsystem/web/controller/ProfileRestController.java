@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -33,6 +35,9 @@ public class ProfileRestController {
 
     @Autowired
     private UserService service;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
     @ApiOperation(value = "Get user profile data", authorizations = @Authorization(value = "basicAuth"))
     @GetMapping
@@ -69,5 +74,13 @@ public class ProfileRestController {
         log.info("update {} with id={}", userTo, authUser.getId());
         assureIdConsistent(userTo, authUser.getId());
         service.update(userTo);
+    }
+
+    @ApiOperation(value = "Login user")
+    @PostMapping("/login")
+    public User login(@RequestParam String email, @RequestParam String password) {
+        log.info("login user {}", email);
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email.toLowerCase(), password));
+        return service.getByEmail(email);
     }
 }
