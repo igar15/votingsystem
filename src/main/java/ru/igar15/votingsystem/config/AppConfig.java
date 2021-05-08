@@ -21,7 +21,7 @@ import java.util.Properties;
 @ComponentScan(basePackages = "ru.igar15.votingsystem",
         excludeFilters = {@ComponentScan.Filter(type = FilterType.REGEX, pattern = "ru.igar15.votingsystem.web.*"),
                           @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, value = WebConfig.class)})
-@PropertySource(value = "classpath:db/hsqldb.properties")
+@PropertySource(value = "classpath:db/postgres.properties")
 @EnableTransactionManagement
 @EnableJpaRepositories(basePackages = "ru.igar15.votingsystem.repository")
 public class AppConfig {

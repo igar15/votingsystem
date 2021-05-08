@@ -20,7 +20,7 @@ public class Restaurant extends AbstractNamedEntity {
     private String address;
 
     @NotBlank
-    @Column(name = "imageUrl")
+    @Column(name = "image_url")
     private String imageUrl;
 
     public Restaurant() {

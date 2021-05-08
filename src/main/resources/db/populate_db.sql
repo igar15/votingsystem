@@ -15,7 +15,7 @@ VALUES ('USER', 100000),
        ('ADMIN', 100001),
        ('USER', 100001);
 
-INSERT INTO restaurants (name, address, imageUrl)
+INSERT INTO restaurants (name, address, image_url)
 VALUES ('Якитория', 'Новый Арбат, 22', 'assets/images/yakitoriya.jpeg'),
        ('Бургер Кинг', 'Авиамоторная, 34', 'assets/images/burger-king.jpeg'),
        ('Paulaner', 'Невский, 89', 'assets/images/paulaner.jpg');
@@ -43,7 +43,7 @@ VALUES (100000, 100002, '2021-02-25'),
        (100001, 100002, '2021-02-26'),
        (100001, 100003, '2021-02-27');
 
-INSERT INTO restaurants (name, address, imageUrl)
+INSERT INTO restaurants (name, address, image_url)
 VALUES ('Орда', 'Мясницкая, 43, стр. 2', 'assets/images/orda.jpg'),
        ('Plov Project', 'Малая Дмитровка, 20', 'assets/images/plov-project.jpg'),
        ('Venting Cafe', 'Цветной бульвар, 34', 'assets/images/venting-cafe.jpg');
