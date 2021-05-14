@@ -18,7 +18,6 @@ import java.time.Clock;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-@CrossOrigin("http://localhost:4200")
 @RestController
 @RequestMapping(value = VoteRestController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class VoteRestController {
