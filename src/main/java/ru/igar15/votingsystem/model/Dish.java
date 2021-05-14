@@ -12,11 +12,11 @@ public class Dish {
 
     @NotBlank
     @Size(min = 2, max = 100)
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     private String name;
 
     @Min(1)
-    @Column(name = "price")
+    @Column(name = "price", nullable = false)
     private int price;
 
     public Dish() {

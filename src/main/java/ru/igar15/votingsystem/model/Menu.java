@@ -12,16 +12,17 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Entity
-@Table(name = "menus")
+@Table(name = "menus", uniqueConstraints = {@UniqueConstraint(columnNames = {"restaurant_id", "date"}, name = "menus_unique_restaurant_date_idx")})
 public class Menu extends AbstractBaseEntity {
 
     @NotNull
-    @Column(name = "date")
+    @Column(name = "date", nullable = false, columnDefinition = "date default now()")
     private LocalDate date = LocalDate.now();
 
     @NotEmpty
     @Valid
-    @CollectionTable(name = "dishes", joinColumns = @JoinColumn(name = "menu_id"))
+    @CollectionTable(name = "dishes", joinColumns = @JoinColumn(name = "menu_id"),
+            uniqueConstraints = {@UniqueConstraint(columnNames = {"menu_id", "name"}, name = "dishes_unique_menu_name_idx")})
     @ElementCollection(fetch = FetchType.EAGER)
     @BatchSize(size = 200)
     @JoinColumn(name = "menu_id") //https://stackoverflow.com/a/62848296/548473
@@ -30,7 +31,7 @@ public class Menu extends AbstractBaseEntity {
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "restaurant_id")
+    @JoinColumn(name = "restaurant_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Restaurant restaurant;
 
