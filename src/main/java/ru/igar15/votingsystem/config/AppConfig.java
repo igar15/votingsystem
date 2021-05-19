@@ -1,11 +1,11 @@
 package ru.igar15.votingsystem.config;
 
+import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.*;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.jdbc.datasource.init.DataSourceInitializer;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.orm.jpa.JpaTransactionManager;
@@ -21,7 +21,7 @@ import java.util.Properties;
 @ComponentScan(basePackages = "ru.igar15.votingsystem",
         excludeFilters = {@ComponentScan.Filter(type = FilterType.REGEX, pattern = "ru.igar15.votingsystem.web.*"),
                           @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, value = WebConfig.class)})
-@PropertySource(value = "classpath:db/hsqldb.properties")
+@PropertySource(value = "classpath:db/postgres.properties")
 @EnableTransactionManagement
 @EnableJpaRepositories(basePackages = "ru.igar15.votingsystem.repository")
 public class AppConfig {
@@ -31,9 +31,9 @@ public class AppConfig {
 
     @Bean
     public DataSource dataSource() {
-        DriverManagerDataSource dataSource = new DriverManagerDataSource();
+        HikariDataSource dataSource = new HikariDataSource();
         dataSource.setDriverClassName(environment.getProperty("database.driverClassName"));
-        dataSource.setUrl(environment.getProperty("database.url"));
+        dataSource.setJdbcUrl(environment.getProperty("database.url"));
         dataSource.setUsername(environment.getProperty("database.username"));
         dataSource.setPassword(environment.getProperty("database.password"));
         return dataSource;

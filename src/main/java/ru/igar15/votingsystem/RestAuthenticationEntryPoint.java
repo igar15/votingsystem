@@ -19,7 +19,7 @@ import static ru.igar15.votingsystem.util.exception.ErrorType.UNAUTHORIZED_ERROR
 
 @Component
 public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
-    public static final String NOT_AUTHORIZED = "Not authorized";
+    public static final String NOT_AUTHORIZED = "You are not authorized";
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException e) throws IOException, ServletException {

@@ -3,6 +3,7 @@ package ru.igar15.votingsystem.service;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import ru.igar15.votingsystem.UserTestData;
 import ru.igar15.votingsystem.model.Role;
 import ru.igar15.votingsystem.model.User;
 import ru.igar15.votingsystem.to.UserTo;
@@ -56,6 +57,18 @@ public class UserServiceTest extends AbstractServiceTest {
     void getNotFound() {
         assertThrows(NotFoundException.class, () -> service.get(NOT_FOUND));
     }
+
+    @Test
+    void getByEmail() {
+        User user = service.getByEmail(UserTestData.user.getEmail());
+        USER_MATCHER.assertMatch(user, UserTestData.user);
+    }
+
+    @Test
+    void getByEmailNotFound() {
+        assertThrows(NotFoundException.class, () -> service.getByEmail("notExistedEmail@yandex.ru"));
+    }
+
 
     @Test
     void update() {

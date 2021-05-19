@@ -36,7 +36,17 @@ class RestaurantRestControllerTest extends AbstractControllerTest {
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(RESTAURANT_MATCHER.contentJson(restaurant3, restaurant2, restaurant1));
+                .andExpect(RESTAURANT_MATCHER.contentJson(restaurant3, restaurant5, restaurant6, restaurant2, restaurant4, restaurant1));
+    }
+
+    @Test
+    void getAllByName() throws Exception {
+        perform(MockMvcRequestBuilders.get(REST_URL + "by")
+                .param("name", "p"))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(RESTAURANT_MATCHER.contentJson(restaurant3, restaurant5));
     }
 
     @Test
@@ -199,7 +209,7 @@ class RestaurantRestControllerTest extends AbstractControllerTest {
     @Test
     @Transactional(propagation = Propagation.NEVER)
     void createDuplicateNameAddress() throws Exception {
-        Restaurant newRestaurant = new Restaurant(null, restaurant1.getName(), restaurant1.getAddress());
+        Restaurant newRestaurant = new Restaurant(null, restaurant1.getName(), restaurant1.getAddress(), "newImageUrl");
         perform(MockMvcRequestBuilders.post(REST_URL)
                 .with(userHttpBasic(admin))
                 .contentType(MediaType.APPLICATION_JSON)
@@ -213,7 +223,7 @@ class RestaurantRestControllerTest extends AbstractControllerTest {
     @Test
     @Transactional(propagation = Propagation.NEVER)
     void updateDuplicateNameAddress() throws Exception {
-        Restaurant updated = new Restaurant(RESTAURANT1_ID, restaurant2.getName(), restaurant2.getAddress());
+        Restaurant updated = new Restaurant(RESTAURANT1_ID, restaurant2.getName(), restaurant2.getAddress(), restaurant1.getImageUrl());
         perform(MockMvcRequestBuilders.put(REST_URL + RESTAURANT1_ID)
                 .with(userHttpBasic(admin))
                 .contentType(MediaType.APPLICATION_JSON)

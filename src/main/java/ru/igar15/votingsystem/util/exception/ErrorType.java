@@ -10,6 +10,7 @@ public enum ErrorType {
     VALIDATION_ERROR("Validation error", HttpStatus.UNPROCESSABLE_ENTITY),
     UNAUTHORIZED_ERROR("Unauthorized error", HttpStatus.UNAUTHORIZED),
     ACCESS_DENIED_ERROR("Access denied error", HttpStatus.FORBIDDEN),
+    BAD_CREDENTIALS_ERROR("Bad credentials error", HttpStatus.BAD_REQUEST),
     WRONG_REQUEST("Wrong request", HttpStatus.BAD_REQUEST);
 
     private final String errorCode;

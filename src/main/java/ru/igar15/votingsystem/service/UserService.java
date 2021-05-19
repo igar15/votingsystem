@@ -44,6 +44,10 @@ public class UserService implements UserDetailsService {
         return repository.findById(id).orElseThrow(() -> new NotFoundException("Not found user with id=" + id));
     }
 
+    public User getByEmail(String email) {
+        return repository.findByEmail(email).orElseThrow(() -> new NotFoundException("Not found user with email=" + email));
+    }
+
     @Transactional
     public void update(UserTo userTo) {
         Assert.notNull(userTo, "userTo must not be null");

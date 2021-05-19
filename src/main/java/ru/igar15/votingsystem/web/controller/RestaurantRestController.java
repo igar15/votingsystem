@@ -75,4 +75,11 @@ public class RestaurantRestController {
         assureIdConsistent(restaurant, id);
         service.update(restaurant);
     }
+
+    @ApiOperation("Get all restaurants by name")
+    @GetMapping("/by")
+    public List<Restaurant> getAllByName(@RequestParam String name) {
+        log.info("getAllByName {}", name);
+        return service.getAllByName(name);
+    }
 }

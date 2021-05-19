@@ -62,6 +62,25 @@ class ProfileRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    void login() throws Exception {
+        perform(MockMvcRequestBuilders.post(REST_URL + "/login")
+                .param("email", user.getEmail())
+                .param("password", user.getPassword()))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(USER_MATCHER.contentJson(user));
+    }
+
+    @Test
+    void loginFailed() throws Exception {
+        perform(MockMvcRequestBuilders.post(REST_URL + "/login")
+                .param("email", user.getEmail())
+                .param("password", "wrongPassword"))
+                .andExpect(status().isBadRequest())
+                .andExpect(errorType(BAD_CREDENTIALS_ERROR));
+    }
+
+    @Test
     void register() throws Exception {
         UserTo newTo = getTo();
         User newUser = UserUtil.createNewFromTo(newTo);

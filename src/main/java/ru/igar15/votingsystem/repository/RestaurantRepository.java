@@ -12,4 +12,6 @@ import java.util.List;
 public interface RestaurantRepository extends JpaRepository<Restaurant, Integer> {
 
     List<Restaurant> findAllByOrderByNameAscAddressAsc();
+
+    List<Restaurant> findAllByNameContainingIgnoreCaseOrderByNameAscAddressAsc(String name);
 }
