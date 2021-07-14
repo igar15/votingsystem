@@ -35,9 +35,9 @@ import static ru.igar15.votingsystem.web.AppExceptionHandler.EXCEPTION_DUPLICATE
 import static ru.igar15.votingsystem.web.AppExceptionHandler.EXCEPTION_DUPLICATE_MENU;
 
 class MenuRestControllerTest extends AbstractControllerTest {
-    private static final String REST_URL_RESTAURANT1 = "/rest/restaurants/" + RESTAURANT1_ID + "/menus";
-    private static final String REST_URL_RESTAURANT2 = "/rest/restaurants/" + RESTAURANT2_ID + "/menus";
-    private static final String BAD_RESTAURANT_REST_URL = "/rest/restaurants/" + RestaurantTestData.NOT_FOUND + "/menus";
+    private static final String REST_URL_RESTAURANT1 = "/rest/restaurants/" + RESTAURANT1_ID + "/menus/today";
+    private static final String REST_URL_RESTAURANT2 = "/rest/restaurants/" + RESTAURANT2_ID + "/menus/today";
+    private static final String BAD_RESTAURANT_REST_URL = "/rest/restaurants/" + RestaurantTestData.NOT_FOUND + "/menus/today";
 
     @Autowired
     private MenuService menuService;

@@ -23,7 +23,7 @@ import java.net.URI;
 @RequestMapping(value = MenuRestController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class MenuRestController {
     private final Logger log = LoggerFactory.getLogger(getClass());
-    static final String REST_URL = "/rest/restaurants/{restaurantId}/menus";
+    static final String REST_URL = "/rest/restaurants/{restaurantId}/menus/today";
 
     @Autowired
     private MenuService service;
