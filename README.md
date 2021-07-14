@@ -9,10 +9,12 @@ This is the REST API implementation of voting system for deciding where to have 
 ### Technology stack used: 
 * Maven
 * Spring MVC
+* Spring Data JPA (Hibernate)
 * Spring Security
-* JPA(Hibernate)
-* REST(Jackson)
-* JUnit
+* Ehcache
+* REST (Jackson)
+* JUnit 5
+* OpenAPI 2
 
 ### Project key logic:
 * There are 2 types of users: admin and regular users.
@@ -27,9 +29,8 @@ This is the REST API implementation of voting system for deciding where to have 
 * If user is not authorized, he can only view restaurants and their menus.  
 * User must be authorized to work with his profile and vote for the restaurant.  
 
-### <a href="domain_model.md">Application domain model schema</a>
-
-### <a href="interaction_example.md">The schematic example of interaction between frontend and backend</a>
+###Application Domain Model Schema
+![App Domain Model](https://user-images.githubusercontent.com/60218699/125639808-d707b978-3737-4a7b-be97-b3c6b28a7b81.png)
 
 ### API documentation:
 #### Swagger documentation
@@ -47,62 +48,17 @@ This is the REST API implementation of voting system for deciding where to have 
 - PUT /rest/restaurants/{restaurantId} (update restaurant with id = restaurantId)
 - DELETE /rest/restaurants/{restaurantId} (delete restaurant with id = restaurantId)
 #### Menus
-- POST /rest/restaurants/{restaurantId}/menus (create today's menu for restaurant with id = restaurantId)
-- GET /rest/restaurants/{restaurantId}/menus (get today's menu for restaurant with id = restaurantId)
-- PUT /rest/restaurants/{restaurantId}/menus (update today's menu for restaurant with id = restaurantId)
-- DELETE /rest/restaurants/{restaurantId}/menus (delete today's menu for restaurant with id = restaurantId)
+- POST /rest/restaurants/{restaurantId}/menus/today (create today's menu for restaurant with id = restaurantId)
+- GET /rest/restaurants/{restaurantId}/menus/today (get today's menu for restaurant with id = restaurantId)
+- PUT /rest/restaurants/{restaurantId}/menus/today (update today's menu for restaurant with id = restaurantId)
+- DELETE /rest/restaurants/{restaurantId}/menus/today (delete today's menu for restaurant with id = restaurantId)
 #### Votes
 - POST /rest/votes?restaurantId={restaurantId} (register vote from authorized user for restaurant with id = restaurantId)
 
 ### Caching strategy
 Spring caching (Ehcache provider):
 - Get all restaurants (singleNonExpiryCache, evicts when create/update/delete any restaurant)
-- Get today's menu for a restaurant (expiryCache, cache key = {restaurantId} + currentDate, evicts by key, when create/update/delete today's menu for the restaurant, and when the restaurant deletes)  
+- Get today's menu for a restaurant (multiExpiryCache, cache key = {restaurantId} + currentDate, evicts by key, when create/update/delete today's menu for the restaurant, and when the restaurant deletes)  
 
 Hibernate second level cache:
-- Restaurant entity
-
-### Curl commands to test API:
-#### register a new User
-`curl -s -i -X POST -d '{"name":"New User","email":"test@mail.ru","password":"test-password"}' -H 'Content-Type:application/json;charset=UTF-8' http://localhost:8080/votingsystem/rest/profile/register`
-#### get User profile
-`curl -s http://localhost:8080/votingsystem/rest/profile --user test@mail.ru:test-password`
-#### update User profile
-`curl -s -X PUT -d '{"name":"Updated User","email":"updated@mail.ru","password":"updated-password"}' -H 'Content-Type: application/json' http://localhost:8080/votingsystem/rest/profile --user test@mail.ru:test-password`
-#### delete User profile
-`curl -s -X DELETE http://localhost:8080/votingsystem/rest/profile --user updated@mail.ru:updated-password`  
-#### register not valid user
-`curl -s -i -X POST -d '{"name":"New User","password":"test-password"}' -H 'Content-Type:application/json;charset=UTF-8' http://localhost:8080/votingsystem/rest/profile/register`
-#### get User profile unAuthorized
-`curl -s http://localhost:8080/votingsystem/rest/profile`
-
-#### get all Restaurants 
-`curl -s http://localhost:8080/votingsystem/rest/restaurants`
-#### get Restaurant with id=100002
-`curl -s http://localhost:8080/votingsystem/rest/restaurants/100002`
-#### create a new Restaurant
-`curl -s -i -X POST -d '{"name":"New Restaurant","address":"New address"}' -H 'Content-Type:application/json;charset=UTF-8' http://localhost:8080/votingsystem/rest/restaurants --user admin@gmail.com:admin`
-#### update Restaurant with id=100002
-`curl -s -X PUT -d '{"name":"Updated Restaurant","address":"Updated address"}' -H 'Content-Type: application/json' http://localhost:8080/votingsystem/rest/restaurants/100002 --user admin@gmail.com:admin`
-#### delete Restaurant with id=100004
-`curl -s -X DELETE http://localhost:8080/votingsystem/rest/restaurants/100004 --user admin@gmail.com:admin`
-#### create not valid restaurant
-`curl -s -i -X POST -d '{"name":"","address":"New address"}' -H 'Content-Type:application/json;charset=UTF-8' http://localhost:8080/votingsystem/rest/restaurants --user admin@gmail.com:admin`
-#### delete restaurant forbidden
-`curl -s -X DELETE http://localhost:8080/votingsystem/rest/restaurants/100002 --user user@yandex.ru:password`
-
-#### get today's Menu for Restaurant with id=100003
-`curl -s http://localhost:8080/votingsystem/rest/restaurants/100003/menus`
-#### create not valid today's menu for Restaurant with id=100002
-`curl -s -i -X POST -d '{"dishes":[{"name": "Dish1","price":200},{"name": "Dish1","price":300}]}' -H 'Content-Type:application/json;charset=UTF-8' http://localhost:8080/votingsystem/rest/restaurants/100002/menus --user admin@gmail.com:admin`
-#### create today's Menu for Restaurant with id=100002
-`curl -s -i -X POST -d '{"dishes":[{"name": "Dish1","price":200},{"name": "Dish2","price":300}]}' -H 'Content-Type:application/json;charset=UTF-8' http://localhost:8080/votingsystem/rest/restaurants/100002/menus --user admin@gmail.com:admin`
-#### update today's Menu for Restaurant with id=100002
-`curl -s -X PUT -d '{"dishes":[{"name": "Dish1 Updated","price":250},{"name": "Dish2 Updated","price":350}]}' -H 'Content-Type: application/json' http://localhost:8080/votingsystem/rest/restaurants/100002/menus --user admin@gmail.com:admin`
-#### delete today's menu unAuthorized
-`curl -s -X DELETE http://localhost:8080/votingsystem/rest/restaurants/100002/menus`
-#### delete today's Menu for Restaurant with id=100002
-`curl -s -X DELETE http://localhost:8080/votingsystem/rest/restaurants/100002/menus --user admin@gmail.com:admin`
-
-#### vote for today's menu of Restaurant with id=100003
-`curl -s -i -X POST -d 'restaurantId=100003' http://localhost:8080/votingsystem/rest/votes --user user@yandex.ru:password`
+- Restaurant entity (CacheConcurrencyStrategy: NONSTRICT_READ_WRITE)
