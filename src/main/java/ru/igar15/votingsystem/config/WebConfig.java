@@ -60,13 +60,13 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Bean
     public Docket api() {
-        Contact contact = new Contact("Igor Shlyakhtenkov", "http://www.igar15.ru", "igar15@yandex.ru");
+        Contact contact = new Contact("Igor Shlyakhtenkov", "https://javaprojects.ru", "ishlyakhtenkov@yandex.ru");
         List<VendorExtension> vendorExtensions = new ArrayList<>();
         ApiInfo apiInfo = new ApiInfo(
                 "Restaurant Voting System App Web Service Documentation",
                 "This page documents Restaurant Voting System RESTful Web Service endpoints",
                 "1.0",
-                "www.igar15.ru/service.html",
+                "https://javaprojects.ru/service.html",
                 contact,
                 "Apache 2.0",
                 "http://www.apache.org/licenses/LICENSE-2.0",
