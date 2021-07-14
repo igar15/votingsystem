@@ -64,7 +64,8 @@ public class WebConfig implements WebMvcConfigurer {
         List<VendorExtension> vendorExtensions = new ArrayList<>();
         ApiInfo apiInfo = new ApiInfo(
                 "Restaurant Voting System App Web Service Documentation",
-                "This page documents Restaurant Voting System RESTful Web Service endpoints",
+                "This page documents Restaurant Voting System RESTful Web Service endpoints<br><br>" +
+                        "Basic Authorization credentials: admin@gmail.com/admin",
                 "1.0",
                 "https://javaprojects.ru/service.html",
                 contact,
