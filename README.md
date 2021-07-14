@@ -29,7 +29,7 @@ This is the REST API implementation of voting system for deciding where to have 
 * If user is not authorized, he can only view restaurants and their menus.  
 * User must be authorized to work with his profile and vote for the restaurant.  
 
-###Application Domain Model Schema
+### Application Domain Model Schema
 ![App Domain Model](https://user-images.githubusercontent.com/60218699/125639808-d707b978-3737-4a7b-be97-b3c6b28a7b81.png)
 
 ### API documentation:
